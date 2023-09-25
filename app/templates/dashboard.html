@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask App</title>
+    <!-- Add any necessary CSS or JavaScript here -->
+    <!-- Include Plotly JavaScript library -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+    <h1>Scatter Plot</h1>
+    <div id="scatter-plot">
+        <!-- The Plotly scatter plot will be inserted here -->
+        {{ plotly_plot|safe }}
+    </div>
+
+</body>
+</html>

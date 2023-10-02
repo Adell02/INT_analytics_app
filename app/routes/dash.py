@@ -14,3 +14,7 @@ def index():
     print(plotly_plot)
     return render_template('dashboard.html', plotly_plot=plotly_plot)
     
+@dash_bp.route('/prueba')
+def index_prueba():
+    return render_template('template.html')
+    

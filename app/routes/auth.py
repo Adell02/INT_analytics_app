@@ -13,4 +13,4 @@ def logout():
     a = 2
     b = 3
     z = a+b
-    return(z)
+    return(str(z))

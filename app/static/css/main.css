@@ -1,0 +1,80 @@
+/* Estilo base de la barra */
+.barra {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 6rem; /* Ancho inicial */
+    height: 100%;
+    background-color: #189bec;
+    transition: width 0.3s; /* Transición para suavizar el cambio de ancho */
+    z-index: 999; /* Asegura que esté en la parte superior de otros elementos */
+}
+/* Estilo cuando se pasa el cursor por encima */
+.barra:hover {
+    width: 15rem; /* Ancho al pasar el cursor por encima */
+    
+}
+
+.user{
+    height: 25%;
+    width:auto;
+}
+
+.menu{
+    height: 75%;
+}
+
+
+.dashboard-box{
+    display: flex;
+    align-items: center;
+    justify-content: initial;
+    height: 20%;
+}
+
+.dashboard-box-icon{
+    width: 6rem;
+    text-align: center;
+}
+
+.dashboard-box-text{
+    text-align: left;
+    height: max-content;
+}
+
+
+.analytics-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 20%;
+}
+
+/* Estilo para el texto dentro de la barra cuando está expandida */
+.barra:hover .texto-dentro {
+    display: block;
+    opacity: 100%;
+}
+
+/* Estilo del elemento que contiene el texto */
+.texto-dentro {
+    opacity: 0%;
+    display: none;
+    color: white;
+    z-index: 998; /* Coloca este elemento detrás de la barra */
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+.texto-dentro a{
+    color:white;
+    text-decoration: none;
+}
+    
+/* Comentarios */
+.icono-dashboard{
+    color: white;
+}
+
+.icono-analytics{
+    color:white;
+}

@@ -12,14 +12,14 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)    
     
-    # db_config= {
-    # 'host':app.config["MYSQL_HOST"],
-    # 'user':app.config["MYSQL_USER"],
-    # 'password':app.config["MYSQL_PASSWORD"],
-    # 'database':app.config["MYSQL_DB"]
-    # }
-    # conn = mysql.connector.connect(**db_config)
-    # cursor = conn.cursor()
+    """ db_config= {
+    'host':app.config["MYSQL_HOST"],
+    'user':app.config["MYSQL_USER"],
+    'password':app.config["MYSQL_PASSWORD"],
+    'database':app.config["MYSQL_DB"]
+    }
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor() """
 
     # Import and register Blueprint(s)
     from app.routes.main import main_bp

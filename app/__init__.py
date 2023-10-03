@@ -8,7 +8,7 @@ cursor = None
 
 def create_app(config_class=Config):
     global conn,cursor
-    
+    print(Config.MYSQL_HOST)
     app = Flask(__name__)
     app.config.from_object(config_class)    
     

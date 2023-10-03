@@ -1,7 +1,7 @@
 
 from flask import Blueprint
 
-from app.app import conn,cursor
+from app import conn,cursor
 
 seeder_bp = Blueprint('seeder', __name__)
 

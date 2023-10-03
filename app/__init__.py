@@ -5,12 +5,11 @@ from app.config import Config
 
 conn = None
 cursor = None
-app = Flask(__name__)
 
 def create_app(config_class=Config):
     global conn,cursor
     print(Config.MYSQL_HOST)
-    
+    app = Flask(__name__)
     app.config.from_object(config_class)    
     
     """ db_config= {
@@ -34,6 +33,3 @@ def create_app(config_class=Config):
     app.register_blueprint(seeder_bp)
     return app
 
-if __name__ == "__main__":
-    # Run the Flask app
-    app.run()

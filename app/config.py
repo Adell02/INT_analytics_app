@@ -3,11 +3,9 @@ from dotenv import load_dotenv
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv("dev.env")
+load_dotenv("prod.env")
 
 class Config:
-    DEBUG = os.getenv("DEBUG")
-    SECRET_KEY = os.getenv('SECRET_KEY')
 
     MYSQL_HOST = os.getenv("MYSQL_HOST")
     MYSQL_USER = os.getenv("MYSQL_USER")

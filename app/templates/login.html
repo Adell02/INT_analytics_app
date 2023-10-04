@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Flask App</title>
-    <!-- Add any necessary CSS or JavaScript here -->
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Scatter</h1>
-    <div id="scatter-plot", style="width: 50%;">
-        <!-- The Plotly scatter plot will be inserted here -->
-        {{ plotly_plot|safe }}
+    <div class="container mt-5">
+        <h2>Login</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="Email">Email:</label>
+                <input type="text" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
-
 </body>
 </html>

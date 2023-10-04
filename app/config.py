@@ -14,5 +14,8 @@ class Config:
     MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
     MYSQL_DB = os.getenv("MYSQL_DB")
 
+    SESSION_TYPE= os.getenv("SESSION_TYPE")
+    SESSION_PERMANENT= os.getenv("SESSION_PERMANENT")
+    SESSION_USE_SIGNER=os.getenv("SESSION_USE_SIGNER")
     
     template_folder="app/templates"

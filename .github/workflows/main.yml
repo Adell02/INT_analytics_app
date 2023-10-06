@@ -1,9 +1,6 @@
 name: Auto Pull
 
-on:
-  push:
-    branches:
-      - prod_branch
+on: workflow_dispatch
 
 jobs:
   job_one:
@@ -15,17 +12,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.5
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: SSH into Server & Run Commands
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@ec2-13-49-21-198.eu-north-1.compute.amazonaws.com 
-          cd INT_analytics_app 
-          git pull origin prod_branch
-          pip install -r requirements.txt          
-          sudo systemctl restart flaskapp
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script:            
+            cd INT_analytics_app 
+            git pull origin prod_branch
+            pip install -r requirements.txt          
+            sudo systemctl restart flaskapp
           
           
           

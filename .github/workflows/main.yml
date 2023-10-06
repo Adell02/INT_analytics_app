@@ -1,6 +1,9 @@
-name: Auto Pull
+name: Deploy to Production - Auto Pull
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  push:
+  
 
 jobs:
   job_one:
@@ -19,9 +22,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |            
             cd INT_analytics_app 
+            source venv/bin/activate
             git pull origin prod_branch
             pip install -r requirements.txt          
-            sudo systemctl restart flaskapp
+            sudo systemctl daemon-reload
           
           
           

@@ -33,3 +33,4 @@ def create_app(config_class=Config):
     app.register_blueprint(seeder_bp)
     return app
 
+

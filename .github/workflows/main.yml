@@ -1,0 +1,19 @@
+name: Auto Pull
+
+on:
+  push:
+    branches:
+      - prod_branch
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Push to bare repository
+        run: |
+          git remote add server ssh://ec2-13-49-21-198.eu-north-1.compute.amazonaws.com:INT_analytics_app/
+          git push server prod_branch

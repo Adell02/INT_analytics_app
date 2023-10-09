@@ -7,7 +7,7 @@ from app.graph_functions.generate_scatter import generate_scatter_plot
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard')
-@login_required
+#@login_required
 def dashboard():
     x_data = [1, 2, 3, 4, 5]
     y_data = [10, 11, 12, 13, 14]
@@ -19,4 +19,23 @@ def dashboard():
 @login_required
 def index_prueba():
     return render_template('template.html')
-    
+
+@dash_bp.route('/mapview')
+#@login_required
+def mapview():
+    return render_template('dashboard.html')
+
+
+@dash_bp.route('/analytics')
+#@login_required
+def analytics():
+    return render_template('analytics.html')
+
+
+@dash_bp.route('/settings')
+#@login_required
+def settings():
+    return render_template('settings.html')
+
+
+

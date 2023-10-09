@@ -1,0 +1,31 @@
+name: Deploy to Production - Auto Pull
+
+on: 
+  workflow_dispatch:
+  push:
+  
+
+jobs:
+  job_one:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |            
+            cd INT_analytics_app 
+            source venv/bin/activate
+            git pull origin prod_branch
+            pip install -r requirements.txt          
+            sudo systemctl daemon-reload
+          
+          
+          

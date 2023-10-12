@@ -27,8 +27,8 @@ def create_app(config_class=Config):
     'password':app.config["MYSQL_PASSWORD"],
     'database':app.config["MYSQL_DB"]
     }
-    #conn = mysql.connector.connect(**db_config)
-    #cursor = conn.cursor()
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
 
     # Import and register Blueprint(s)
     from app.routes.auth import auth_bp

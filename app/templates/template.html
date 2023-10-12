@@ -3,49 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barra Vertical Expandible</title>
+    <title>{% block title %} {% endblock %} </title>
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 
     <!-- Barra Vertical -->
     <div class="barra">
-        <div class="user">
-
+        <div class="dashboard-box">
+            <div class="dashboard-box-icon">
+                <a href="/private/user"> <i class="fa fa-user-circle fa-3x icono-user"> </i> </a>
+            </div>
+            <div class="dashboard-box-text">
+                <!-- Texto dentro de la barra -->
+                 <a class="texto-dentro" href="/private/user"> User</a> 
+            </div>
         </div>
 
         <div class="menu">
             <div class="dashboard-box">
                 <div class="dashboard-box-icon">
-                    <a href="#"> <i class="fa fa-home fa-3x icono-dashboard"> </i> </a>
+                    <a href="/private/dashboard"> <i class="fa fa-home fa-3x icono-dashboard"> </i> </a>
                 </div>
                 <div class="dashboard-box-text">
                     <!-- Texto dentro de la barra -->
-                     <a class="texto-dentro" href="#"> Dashboard </a> 
+                     <a class="texto-dentro" href="/private/dashboard"> Dashboard</a> 
                 </div>
             </div>
-            <div class="analytics-box">
-                <a href="#"> <i class="fa fa-bar-chart fa-3x icono-analytics" aria-hidden="true"> </i> </a>
-                        <!-- Texto dentro de la barra -->
-                <a class="texto-dentro" href="#"> Analytics </a> 
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/analytics"> <i class="fa fa-bar-chart fa-3x icono-analytics"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/private/analytics"> Analytics</a> 
+                </div>
             </div>
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/mapview"> <i class="fa fa-map-marker fa-3x icono-mapview"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/private/mapview"> Mapview</a> 
+                </div>
+            </div>
+            
         </div>
+
 
         <div class="settings">
-
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/settings"> <i class="fa fa-cogs fa-3x icono-settings"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/private/settings"> Settings</a> 
+                </div>
+            </div>
         </div>
-
-        
-        
 
     </div>
 
     <!-- Contenido de la página -->
-    <div style="margin-left: 6rem;">
-        <h1>Efecto de Barra Vertical Expandible</h1>
-        <p>Pasa el cursor por encima de la barra a la izquierda para ver el texto dentro de la barra.</p>
+    <div class="content">
+        {% block content %} 
+        {% endblock %}
     </div>
+
 </body>
 </html>
 

@@ -26,3 +26,22 @@ def dashboard():
 @login_required
 def index_prueba():
     return render_template('template.html')
+@dash_bp.route('/mapview')
+#@login_required
+def mapview():
+    return render_template('dashboard.html')
+
+
+@dash_bp.route('/analytics')
+#@login_required
+def analytics():
+    return render_template('analytics.html')
+
+
+@dash_bp.route('/settings')
+#@login_required
+def settings():
+    return render_template('settings.html')
+
+
+

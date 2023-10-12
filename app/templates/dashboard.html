@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Flask App</title>
-    <!-- Add any necessary CSS or JavaScript here -->
-    <!-- Include Plotly JavaScript library -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% extends 'template.html' %}
 
-</head>
-<body>
-    <h1>Scatter</h1>
-    <div id="scatter-plot", style="width: 50%;">
-        <!-- The Plotly scatter plot will be inserted here -->
-        {{ plotly_plot|safe }}
-    </div>
+{% block content %} 
+        <div class="margen">
+        </div>
+        <div class="recuadro-superior" >
+            Recuadro Superior
+        </div>
+        <div class="recuadro-inferior" >
+            Recuadro Inferior
+        </div>
 
-</body>
-</html>
-
-
-
+{% endblock %}

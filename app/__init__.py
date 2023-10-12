@@ -1,20 +1,25 @@
 from flask import Flask
+from flask_mail import Mail
 from flask_session import Session
 import mysql.connector
 
 from app.config import Config
 
 
+
 conn = None
 cursor = None
+mail = None
 
 def create_app(config_class=Config):
-    global conn,cursor
+    global conn,cursor,mail
     
     app = Flask(__name__)
     app.config.from_object(config_class) 
 
     Session(app)   
+    mail = Mail(app)
+    
     
     db_config= {
     'host':app.config["MYSQL_HOST"],

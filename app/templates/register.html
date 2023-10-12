@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form method="POST">
+
+        <!-- Email -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <!-- Password -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <!-- Password Confirmation -->
+        <label for="password_confirmation">Confirm Password:</label>
+        <input type="password" id="password_confirmation" name="password_confirmation" required><br><br>
+
+        <!-- Company -->
+        <label for="company">Company:</label>
+        <input type="company" id="company" name="company" required><br><br>
+
+        <!-- Submit Button -->
+        <input type="submit" value="Register">
+    </form>
+    {{ error | safe}}
+</body>
+</html>

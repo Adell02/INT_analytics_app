@@ -100,7 +100,7 @@ def login():
 @login_required
 def logout():
     session.clear()
-    return render_template('login.html')
+    return redirect(url_for('login'))
 
 @auth_bp.route("/confirm/<token>")
 @login_required

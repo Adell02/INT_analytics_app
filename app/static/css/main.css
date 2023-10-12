@@ -13,12 +13,14 @@
 /* Estilo cuando se pasa el cursor por encima */
 .barra:hover {
     width: 15rem; /* Ancho al pasar el cursor por encima */
-    opacity: 80%;
+    opacity: 100%;
 }
 
 .user{
     height: 20%;
-    width:auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .menu{
@@ -33,6 +35,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: min-content;
+    pointer-events: none;
 }
 
 .dashboard-box{
@@ -40,6 +44,9 @@
     align-items: center;
     justify-content: initial;
     height: 20%;
+    min-width: min-content;
+    pointer-events: none;
+    white-space: nowrap;
 }
 
 .dashboard-box-icon{
@@ -54,15 +61,18 @@
 
 /* Estilo para el texto dentro de la barra cuando está expandida */
 .barra:hover .texto-dentro {
-    display: block;
     opacity: 100%;
+    z-index: 1000;
+}
+.barra:hover .dashboard-box{
+    pointer-events: all;
 }
 /* Estilo del elemento que contiene el texto */
 .texto-dentro {
     opacity: 0%;
-    display: none;
+    display: block;
     color: white;
-    z-index: 998; /* Coloca este elemento detrás de la barra */
+    z-index: -1; /* Coloca este elemento detrás de la barra */
     text-decoration: none;
     font-size: 1.5rem;
 }

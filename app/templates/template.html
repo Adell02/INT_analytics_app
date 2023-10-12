@@ -12,13 +12,15 @@
 
     <!-- Barra Vertical -->
     <div class="barra">
-        <div class="dashboard-box">
-            <div class="dashboard-box-icon">
-                <a href="/private/user"> <i class="fa fa-user-circle fa-3x icono-user"> </i> </a>
-            </div>
-            <div class="dashboard-box-text">
-                <!-- Texto dentro de la barra -->
-                 <a class="texto-dentro" href="/private/user"> User</a> 
+        <div class="user">
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/user"> <i class="fa fa-user-circle fa-3x icono-user"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/private/user"> Hello, <b>{{username | safe}}</b></a> 
+                </div>
             </div>
         </div>
 

@@ -8,6 +8,7 @@ load_dotenv("dev.env")
 class Config:
     DEBUG = os.getenv("DEBUG")
     SECRET_KEY = os.getenv("SECRET_KEY")
+    SECRET_KEY_PERSONAL_TOKEN = os.getenv("SECRET_KEY_PERSONAL_TOKEN")
     MYSQL_HOST = os.getenv("MYSQL_HOST")
     MYSQL_USER = os.getenv("MYSQL_USER")
     MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")

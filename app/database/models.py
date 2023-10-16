@@ -7,17 +7,19 @@ class User():
         self.id = fetched_query[0]
         self.email = fetched_query[1]
         self.password = fetched_query[2]
-        self.company = fetched_query[3]
-        self.role = fetched_query[4]
-        self.is_confirmed = fetched_query[5]
+        self.personal_token = fetched_query[3]
+        self.org_name = fetched_query[4]
+        self.external_token = fetched_query[5]
+        self.role = fetched_query[6]
+        self.is_confirmed = fetched_query[7]
     
     def __repr__(self) -> str:
         string = '<pre>'
         string += f"""
 ID: {str(self.id)}
     email: {self.email}
-    company: {self.company}
-    is_confirmed: {str(self.is_confirmed)}
+    personal token: {self.personal_token}
+    org. name: {str(self.org_name)}
 """
         string+="</pre>"
         return(string)
@@ -27,8 +29,8 @@ ID: {str(self.id)}
         string = f"""
 ID: {str(self.id)}
     email: {self.email}
-    company: {self.company}
-    is_confirmed: {str(self.is_confirmed)}
+    personal token: {self.personal_token}
+    org. name: {str(self.org_name)}
 """
         
         return(string)

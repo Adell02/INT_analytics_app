@@ -6,7 +6,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv("prod.env")
 
 class Config:
-    DEBUG = os.getenv("DEBUG")
     SECRET_KEY = os.getenv("SECRET_KEY")
     SECRET_KEY_PERSONAL_TOKEN = os.getenv("SECRET_KEY_PERSONAL_TOKEN")
     MYSQL_HOST = os.getenv("MYSQL_HOST")

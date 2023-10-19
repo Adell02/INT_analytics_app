@@ -1,5 +1,6 @@
 {% extends 'template.html' %}
 
+{% block title %} Analytics {% endblock %}
 {% block content %} 
         <div class="margen">
         </div>
@@ -11,11 +12,30 @@
 
             </div>
             <div class="visualise-options">
-                
+                <i class="fa fa-bars fa-2x icono-boton-options" aria-hidden="true"></i>
             </div>
         </div>
-        <div class="recuadro-inferior" >
-            Recuadro Inferior
+        <div class="recuadro-inferior-analytics" >
+            <div class="recuadro-inferior-analytics-top">
+                <div class="view-4" >
+                    {{plots[0] | safe}}
+                </div>
+                <div class="view-4" >
+                    {{plots[1] | safe}}
+                </div>
+            </div>
+            <div class="recuadro-inferior-analytics-bottom">
+                <div class="view-4" >
+                    {{plots[2] | safe}}
+                </div>
+
+                <div class="view-4" >
+                    {{plots[3] | safe}}
+                </div>
+            </div>
+            
+            
+
         </div>
 
 {% endblock %}

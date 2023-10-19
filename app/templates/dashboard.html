@@ -1,5 +1,6 @@
 {% extends 'template.html' %}
 
+{% block title %} Dashboard {% endblock %}
 {% block content %} 
         <div class="margen">
         </div>
@@ -7,7 +8,12 @@
             Recuadro Superior
         </div>
         <div class="recuadro-inferior" >
-            Recuadro Inferior
+            <div class="view-2-left" >
+                {{plots[0] | safe}}
+            </div>
+            <div class="view-2-right" >
+                {{plots[1] | safe}}
+            </div>
         </div>
 
 {% endblock %}

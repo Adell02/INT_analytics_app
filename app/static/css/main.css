@@ -12,8 +12,9 @@
 }
 
 .barra:hover {
-    width: 15rem; /* Ancho al pasar el cursor por encima */
+    width: min-content; /* Ancho al pasar el cursor por encima */
     opacity: 100%;
+    margin-right: 2rem;
 }
 
 .user{
@@ -377,4 +378,9 @@ body{
 
 .save-button:hover {
     background-color: #094f7a; 
+}
+
+
+.modebar{
+    display: none !important;
 }

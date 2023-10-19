@@ -9,7 +9,7 @@ from app.utils.graph_functions.generate_scatter import generate_scatter_plot
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard')
-#@login_required
+@login_required
 def dashboard():
     #df = pd.read_excel("E:/GitCode/INT_data_analysis/Ray 7.7_statistics_23-07.xlsx","G2")
 
@@ -32,8 +32,8 @@ def dashboard():
     plotly_plot2 = generate_scatter_plot(x_prueba2, y_prueba2, title_prueba2)
     plots.append(plotly_plot2)
     
-    return render_template('dashboard.html', username = "Ari",plots=plots)
-    #session['user_email'].split("@")[0]
+    return render_template('dashboard.html', username = session['user_email'].split("@")[0],plots=plots)
+    
 
 @dash_bp.route('/prueba')
 @login_required

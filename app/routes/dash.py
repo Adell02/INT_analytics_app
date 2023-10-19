@@ -41,7 +41,7 @@ def analytics():
 @dash_bp.route('/settings')
 #@login_required
 def settings():
-    return render_template('settings.html')
+    return render_template('settings.html',email=session['user_email'], personal_token=session['personal_token'] , entity_name=session['org_name'], entity_token=session['external_token'])
 
 
 

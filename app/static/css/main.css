@@ -189,3 +189,107 @@ body{
 .icono-settings{
     color: white
 }
+
+/*Settings*/
+.sets{
+    margin-left: 6rem;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+        
+}
+.box-user {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+}
+
+
+.set-user {
+    margin-left: 10rem; 
+}
+
+
+
+.contenedor-correo {
+    width: 50%;
+    font-size: 18px;
+    margin: 0 auto; 
+    text-align: center;
+}
+
+
+.fila {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    margin: 5% 0;
+}
+
+
+.texto {
+    width: 25%;
+    font-weight: bold;
+    margin-right: 20px;
+    text-align: left;
+}
+
+
+.recuadro {
+    border: 1px solid #000000;
+    border-radius: 10px; 
+    background-color: #ffffff;
+    padding: 10px; 
+    flex: 1; 
+    min-width: 100px; 
+    overflow: hidden;
+}
+
+
+.form-control {
+    border: none; 
+    background: none; 
+    font-size: 18px; 
+    width: 100%; 
+    outline: none; 
+    text-align: center; 
+}
+
+/* Estilos para el botón "copy" */
+.bot-copy {
+    margin-left: 1rem;
+    background-color: #45b3f7; 
+    color: white; 
+    border: none; 
+    border-radius: 7px;
+    cursor: pointer; 
+    font-size: 16px; 
+    padding: 10px 20px; 
+    box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
+}
+
+.bot-copy:hover {
+    background-color: #094f7a; 
+}
+
+/* Estilos para el botón "Save" */
+.save-button {
+    background-color: #45b3f7;
+    color: white; 
+    padding: 15px 30px; 
+    border-radius: 7px; 
+    cursor: pointer; 
+    font-size: 20px; 
+    display: block; 
+    margin-left: 23.5rem; 
+    box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
+    border: none;
+}
+
+.save-button:hover {
+    background-color: #094f7a; 
+}

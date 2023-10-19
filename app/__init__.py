@@ -1,16 +1,25 @@
 from flask import Flask
+from flask_mail import Mail
+from flask_session import Session
 import mysql.connector
 
 from app.config import Config
 
+
+
 conn = None
 cursor = None
+mail = None
 
 def create_app(config_class=Config):
-    global conn,cursor
-    print(Config.MYSQL_HOST)
+    global conn,cursor,mail
+    
     app = Flask(__name__)
-    app.config.from_object(config_class)    
+    app.config.from_object(config_class) 
+
+    Session(app)   
+    mail = Mail(app)
+    
     
     db_config= {
     'host':app.config["MYSQL_HOST"],
@@ -22,12 +31,10 @@ def create_app(config_class=Config):
     cursor = conn.cursor()
 
     # Import and register Blueprint(s)
-    from app.routes.main import main_bp
     from app.routes.auth import auth_bp
     from app.routes.dash import dash_bp
     from app.database.seeder import seeder_bp
 
-    app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(dash_bp, url_prefix='/private')
     app.register_blueprint(seeder_bp)

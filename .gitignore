@@ -25,6 +25,7 @@ build/
 .idea/
 docs/_build/
 .vscode
+flask_session/
 
 # Coverage reports
 htmlcov/

@@ -1,0 +1,54 @@
+{% extends 'template.html' %}
+
+{% block title %} Settings {% endblock %}
+
+{% block content %}
+<div class="sets">
+    <div class="box-user">
+        <i class="fa fa-user-circle fa-5x set-user"> </i>
+    </div>
+    <div class="contenedor-correo">
+        <div class="fila">
+            <span class="texto">Mail:</span>
+            <span class="recuadro">{{email | safe}}</span>
+        </div>
+        
+        <div class="fila">
+            <span class="texto">Personal Token:</span>
+            <span class="recuadro">{{ personal_token | safe}}</span>
+            <button class="bot-copy" onclick="copytoken()">Copy</button>
+        </div>
+        <!--input para nombre empressa y token entity-->
+        <form method="POST">
+        <div class="fila">
+            <span class="texto">Entity Name:</span>
+            <span class="recuadro">
+                <input type="text" class="form-control" placeholder="Enter Entity Name" value="{{ entity_name }}">
+            </span>
+            
+        </div>
+        <div class="fila">
+            <span class="texto">Entity Token:</span>
+            <span class="recuadro">
+                <input type="text" class="form-control" placeholder="Enter Entity Token" value="{{ entity_token }}">
+            </span>
+        </div>
+        <div class="mensaje">
+            <p>Forgotten Pasword? <a class="enlace" href="#">Click Here</a>.</p>
+        </div>
+        <button type="submit"  class="save-button">Save</button>
+    </form>
+    </div>
+</div>
+
+<script>
+    function copytoken(){
+        var token = '{{personal_token}}';
+        navigator.clipboard.writeText(token);
+        alert("Token Copied!");
+
+    }
+
+</script>
+
+{% endblock %}

@@ -8,12 +8,19 @@
             Recuadro Superior
         </div>
         <div class="recuadro-inferior" >
-            <div class="view-2-left" >
-                {{plots[0] | safe}}
-            </div>
-            <div class="view-2-right" >
-                {{plots[1] | safe}}
-            </div>
+            <div class="view-2 view-2-left" ></div>
+            <div class="view-2 view-2-right" ></div>
         </div>
+
+        <script>
+            const plot = {{ plots | tojson | safe }};   
+            const containers = document.getElementsByClassName("view-2"); 
+            var graph_divs = [];           
+            
+            create_all();
+            window.onload = load_all;
+            window.addEventListener('resize',load_all);
+
+        </script>
 
 {% endblock %}

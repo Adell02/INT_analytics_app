@@ -6,7 +6,11 @@
     <title>{% block title %} {% endblock %} </title>
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://fonts.cdnfonts.com/css/montserrat" rel="stylesheet">
+    
+    <script src="../static/js/load_graphs.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.26.0.min.js'></script>
+    
 </head>
 <body>
 
@@ -19,7 +23,7 @@
                 </div>
                 <div class="dashboard-box-text">
                     <!-- Texto dentro de la barra -->
-                     <a class="texto-dentro" href="/private/user"> Hello, <b>{{username | safe}}</b></a> 
+                     <a class="texto-dentro" href="/private/user"> Hello, <b>{{session['user_email'].split("@")[0] | safe}}</b></a> 
                 </div>
             </div>
         </div>

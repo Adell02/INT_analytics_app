@@ -1,3 +1,59 @@
+/* FONT & STYLE FOR ALL PAGES*/ 
+body{
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+}
+
+/* UNDERLINE EFFECT WHEN HOVER*/
+.dashboard-box-text a {
+    display: inline-block;
+    position: relative;
+}
+
+.dashboard-box-text a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+  
+.dashboard-box-text a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.enlace{
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: #45b3f7;
+    font-weight: 600;
+}
+
+.enlace::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #45b3f7;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+  
+.enlace:hover::after{
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
 
 /* BARRA */
 .barra {
@@ -7,14 +63,13 @@
     width: 6rem; /* Ancho inicial */
     height: 100%;
     background-color: #45b3f7;
-    transition: width 0.15s; /* Transición para suavizar el cambio de ancho */
+    transition: all 0.15s; /* Transición para suavizar el cambio de ancho */
     z-index: 999; /* Asegura que esté en la parte superior de otros elementos */
 }
 
 .barra:hover {
     width: min-content; /* Ancho al pasar el cursor por encima */
-    opacity: 100%;
-    margin-right: 2rem;
+    padding-right: 2rem;
 }
 
 .user{
@@ -76,6 +131,7 @@
     z-index: -1; /* Elemento detrás de la barra */
     text-decoration: none;
     font-size: 1.5rem;
+    transition: opacity 0.15s;
 }
 .texto-dentro a{
     color:white;
@@ -109,11 +165,10 @@ body{
 /* DASHBOARD */
 
 .recuadro-superior{
-    left: 0;
-    top: 0;
     margin-top: 0rem;
-    margin-right: 1rem;
-    width: calc(100%-5rem); 
+    margin-right: 2rem;
+    margin-left: 2rem;
+    width: calc(100%-4rem); 
     height: 6rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -124,16 +179,15 @@ body{
 .recuadro-inferior{
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
     height: calc(100vh - 9rem);
-
     opacity: 90%;
     border-radius: 15px 15px 15px 15px;
     box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);;
     margin-top: 1rem;
-    margin-right: 1rem;
-    width: calc(100% - 8rem);
-    margin-left: 7rem;
+    margin-bottom: 1rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    width: calc(100% - 4rem);
 }
 
 
@@ -181,27 +235,25 @@ body{
 .recuadro-inferior-analytics{
     display: flex;
     flex-direction: column;
-    margin-top: 1rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem;
     height: calc(100vh - 4rem);
+    justify-content: space-evenly;
+    align-items: stretch;
 }
 .recuadro-inferior-analytics-top{
     display: flex;
     align-items: center;
-    height: calc(100vh - 9rem)/2;
+    justify-content: space-between;
+    height: calc((100vh - 9rem)/2);
     width: 100%;
 }
 .recuadro-inferior-analytics-bottom{
     display: flex;
     align-items: center;
-    height: calc(100vh - 9rem)/2;
+    justify-content: space-between;
+    height: calc((100vh - 9rem)/2);
     width: 100%;
 }
-
-
-
 
 
 
@@ -245,7 +297,7 @@ body{
     opacity:90%;
     border-radius: 15px 15px 15px 15px;
     box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);;
-    width: calc(50vw - 1rem);
+    width: calc(50vw - 6rem);
 }
 
 
@@ -290,13 +342,10 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 20%;
+    height: min-content;
+    margin-bottom: 2rem;
 }
 
-
-.set-user {
-    margin-left: 10rem; 
-}
 
 
 
@@ -305,6 +354,8 @@ body{
     font-size: 18px;
     margin: 0 auto; 
     text-align: center;
+    padding-top: 2rem;
+    border-top:0.2rem solid #45b3f7;
 }
 
 
@@ -313,12 +364,12 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center; 
-    margin: 5% 0;
+    margin: 1rem 0;
 }
 
 
 .texto {
-    width: 25%;
+    width: 10rem;
     font-weight: bold;
     margin-right: 20px;
     text-align: left;
@@ -363,6 +414,10 @@ body{
 }
 
 /* Estilos para el botón "Save" */
+.contenedor-correo form{
+    display: flex;
+    flex-direction: column;    
+}
 .save-button {
     background-color: #45b3f7;
     color: white; 
@@ -371,7 +426,6 @@ body{
     cursor: pointer; 
     font-size: 20px; 
     display: block; 
-    margin-left: 23.5rem; 
     box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
     border: none;
 }

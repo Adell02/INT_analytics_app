@@ -32,7 +32,7 @@ def dashboard():
     plotly_plot2 = generate_scatter_plot(x_prueba2, y_prueba2, title_prueba2)
     plots.append(plotly_plot2)
     
-    return render_template('dashboard.html', username = session['user_email'].split("@")[0],plots=plots)
+    return render_template('dashboard.html', plots=plots)
     
 
 @dash_bp.route('/prueba')
@@ -78,12 +78,6 @@ def analytics():
     plots.append(plotly_plot4)
 
     return render_template('analytics.html',plots=plots)
-
-
-@dash_bp.route('/settings')
-#@login_required
-def settings():
-    return render_template('settings.html',email=session['user_email'], personal_token=session['personal_token'] , entity_name=session['org_name'], entity_token=session['external_token'])
 
 
 

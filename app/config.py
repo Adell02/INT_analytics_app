@@ -26,5 +26,7 @@ class Config:
     MAIL_DEBUG = False
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-    
+
+    OPENAI_KEY = os.getenv("OPENAI_KEY")
+
     template_folder="app/templates"

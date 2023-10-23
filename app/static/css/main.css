@@ -137,7 +137,7 @@ body{
     color:white;
     text-decoration: none;
 }
-    
+
 
 
 
@@ -164,30 +164,65 @@ body{
 
 /* DASHBOARD */
 
-.recuadro-superior{
-    margin-top: 0rem;
-    margin-right: 2rem;
-    margin-left: 2rem;
-    width: calc(100%-4rem); 
-    height: 6rem;
+.recuadro-superior-dashboard{
+    display: flex;
+    flex-direction: row;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 23vh;
+}
+
+.recuadro-medio-dashboard{
+    display: flex;
+    flex-direction: row;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 43vh;
+}
+
+.recuadro-inferior-dashboard{
+    display: flex;
+    flex-direction: row;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 23vh;
+}
+
+
+.recuadro-dashboard-33{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width:33%;
     background-color: #ffffff;
     opacity: 90%;
     border-radius: 15px 15px 15px 15px;
-    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
 }
 
-.recuadro-inferior{
-    display: flex;
-    align-items: center;
-    height: calc(100vh - 9rem);
+.recuadro-dashboard-66{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width:69%;
+    background-color: #ffffff;
     opacity: 90%;
     border-radius: 15px 15px 15px 15px;
-    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-right: 2rem;
-    margin-left: 2rem;
-    width: calc(100% - 4rem);
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+}
+
+.recuadro-dashboard-50{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width:50%;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
 }
 
 
@@ -303,32 +338,8 @@ body{
 
 
 
-/* ICONOS */
-.icono-dashboard{
-    color: white;
-}
-.icono-user{
-    color:white;
-}
-.icono-analytics{
-    color:white;
-}
-.icono-mapview{
-    color:white;
-}
-.icono-settings{
-    color: white
-}
+/*      SETTINGS        */
 
-.icono-boton-options{
-    color:#0b1f3f;
-
-}
-
-
-
-
-/*Settings*/
 .sets{
     margin-left: 6rem;
     text-align: center;
@@ -338,6 +349,7 @@ body{
     justify-content: center;
         
 }
+
 .box-user {
     display: flex;
     justify-content: center;
@@ -358,7 +370,6 @@ body{
     border-top:0.2rem solid #45b3f7;
 }
 
-
 .fila {
     width: 100%;
     display: flex;
@@ -367,14 +378,12 @@ body{
     margin: 1rem 0;
 }
 
-
 .texto {
     width: 10rem;
     font-weight: bold;
     margin-right: 20px;
     text-align: left;
 }
-
 
 .recuadro {
     border: 1px solid #000000;
@@ -386,7 +395,6 @@ body{
     overflow: hidden;
 }
 
-
 .form-control {
     border: none; 
     background: none; 
@@ -396,7 +404,7 @@ body{
     text-align: center; 
 }
 
-/* Estilos para el botón "copy" */
+/*      BOTONES     */
 .bot-copy {
     margin-left: 1rem;
     background-color: #45b3f7; 
@@ -437,4 +445,28 @@ body{
 
 .modebar{
     display: none !important;
+}
+
+
+
+/*      ICONOS      */
+
+.icono-dashboard{
+    color: white;
+}
+.icono-user{
+    color:white;
+}
+.icono-analytics{
+    color:white;
+}
+.icono-mapview{
+    color:white;
+}
+.icono-settings{
+    color: white
+}
+.icono-boton-options{
+    color:#0b1f3f;
+
 }

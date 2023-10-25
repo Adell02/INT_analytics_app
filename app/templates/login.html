@@ -18,37 +18,14 @@
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" name="password" required>
-            </div>      
-            <input type="hidden" name="change_password" value="False" id="change_password_input">      
+            </div>           
             <button type="submit" class="btn btn-primary" id='login_button'>Login</button>
         </form>
         <br>
-        <p>Lost your password? Enter the email and click <a id="change_password_href" href="#">here</a>.</p>
         <p>Are you new? <a href={{ sign_up_url }}>Sign up</a></p>
         
         {{ error | safe}}
     </div>
 </body>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Get references to the form, input field, and anchor tag
-            const form = document.getElementById("login_form");
-            const input = document.getElementById("change_password_input");
-            const link = document.getElementById("change_password_href");
-            const login_button = document.getElementById("login_button");
-
-            // Add a click event listener to the anchor tag
-            link.addEventListener("click", function (e) {
-              e.preventDefault(); // Prevent the default behavior of the anchor tag    
-              input.value = "True";
-              form.submit();
-            });
-            login_button.addEventListener('click',function(f){
-                f.preventDefault();
-                input.value = "False";
-                form.submit();
-            })
-            
-          });
-    </script>
+    
 </html>

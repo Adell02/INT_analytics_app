@@ -1,14 +1,16 @@
 # dash.py
-from flask import Blueprint, render_template,Response,session
+import os
+from flask import Blueprint, render_template,request
 import pandas as pd
 import zlib
 
 from app.routes.auth import login_required
 from app.utils.graph_functions.generate_scatter import generate_scatter_plot
+from app.utils.graph_functions.generate_dasboard_graphics import generate_dashboard_graphics
 
 dash_bp = Blueprint('dash', __name__)
 
-@dash_bp.route('/dashboard')
+@dash_bp.route('/dashboard',methods=['POST','GET'])
 @login_required
 def dashboard():
     #df = pd.read_excel("E:/GitCode/INT_data_analysis/Ray 7.7_statistics_23-07.xlsx","G2")
@@ -18,21 +20,21 @@ def dashboard():
     #title = 'Max Speed vs Timestamp'
     #plotly_plot = generate_scatter_plot(x_data, y_data, title)
     #compressed_plot = zlib.compress(plotly_plot.encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
-    plots = []
-
-    x_prueba=[1,2,3,4,5]
-    y_prueba=[1,2,3,4,5]
-    title_prueba='Prueba 1'
-    plotly_plot = generate_scatter_plot(x_prueba, y_prueba, title_prueba)
-    plots.append(plotly_plot)
-
-    x_prueba2=[1,2,3,4,5]
-    y_prueba2=[5,4,3,2,1]
-    title_prueba2='Prueba 2'
-    plotly_plot2 = generate_scatter_plot(x_prueba2, y_prueba2, title_prueba2)
-    plots.append(plotly_plot2)
-    
-    return render_template('dashboard.html', plots=plots)
+    cached_path = "app/database/cached_dashboard.zlib"
+    cached = ""
+    plots = ""
+    if os.path.isfile(cached_path):
+        with open(cached_path, "rb") as file:
+            cached = file.read()
+        cached = zlib.decompress(cached).decode('utf-8')
+    else:
+        plots = generate_dashboard_graphics()
+        if request.method == 'POST':
+            code = request.form.get('code')
+            #compressed_dashboard = zlib.compress(code.encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
+            #with open(cached_path, "wb") as file:
+            #    file.write(compressed_dashboard)
+    return render_template('dashboard.html', plots=plots,cached=cached)
     
 
 @dash_bp.route('/prueba')

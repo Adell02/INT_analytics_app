@@ -21,7 +21,7 @@ def seeder(email=None,password=None):
     else:
         password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     role = 'user'
-    confirmed = '1'
+    confirmed = '0'
     personal_token = generate_personal_token(email)
     external_token = ""
     org_name = ""
@@ -39,7 +39,7 @@ def new_table(table):
     if table == 'user' or table == 'all':
         cursor.execute(''' CREATE TABLE user (userid INT NOT NULL AUTO_INCREMENT, email VARCHAR(50) NOT NULL, password VARCHAR(100) NOT NULL, personal_token VARCHAR(100) NOT NULL, org_name VARCHAR(50), external_token VARCHAR(100),role VARCHAR(50) NOT NULL DEFAULT 'user', is_confirmed BOOLEAN NOT NULL, PRIMARY KEY(userid)); ''')
     elif table == 'dashboard' or 'all':
-        cursor.execute(''' CREATE TABLE dashboard (token_id VARCHAR(100), org_name VARCHAR(50), configuration JSON,PRIMARY KEY(token_id),FOREIGN KEY (token_id) REFERENCES user(personal_token)); ''')
+        cursor.execute(''' CREATE TABLE dashboard (token_id VARCHAR(100) NOT NULL, org_name VARCHAR(50), configuration JSON,PRIMARY KEY(token_id),FOREIGN KEY (token_id) REFERENCES user(personal_token)); ''')
     elif table == 'data' or 'all':
         #cursor.execute(''' CREATE TABLE user (userid INT NOT NULL AUTO_INCREMENT, email VARCHAR(50) NOT NULL, password VARCHAR(100) NOT NULL, personal_token VARCHAR(100) NOT NULL, org_name VARCHAR(50), external_token VARCHAR(100),role VARCHAR(50) NOT NULL DEFAULT 'user', is_confirmed BOOLEAN NOT NULL, PRIMARY KEY(userid)); ''')
         pass
@@ -101,8 +101,7 @@ def check_existance(field,value):
     return fetch
 
 @seeder_bp.route("/confirm_user")
-def confirm_user(email=None,is_send = 'y'):
-    from app.utils.communication.mailing import send_email
+def confirm_user(email=None):
 
     if not email:
         print(fetch_all())
@@ -110,16 +109,9 @@ def confirm_user(email=None,is_send = 'y'):
         print("Enter Email: ",end="")
         email = input()
 
-        print("Send email? [y/n]: ", end="")
-        is_send = input()
-
-    if is_send == 'y':
-        send_email(email,"Confirm Email",render_template("confirm_email.html",confirm_url = "confirm_url"))
-        return "Confirmation email sent successfully"
-    elif is_send == 'n':      
-        cursor.execute(''' UPDATE user SET is_confirmed=1 WHERE email=%s''',(email,))
-        conn.commit()
-        return "User confirmed successfully"
+    cursor.execute(''' UPDATE user SET is_confirmed=1 WHERE email=%s''',(email,))
+    conn.commit()
+    return "User confirmed successfully"
 
 
 

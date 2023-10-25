@@ -2,7 +2,6 @@ function load_graph(div_id,idx) {
     var figure = JSON.parse(plot[idx]);
     figure.layout.width = containers[idx].offsetWidth;
     figure.layout.height = containers[idx].offsetHeight;
-    console.log(figure.layout.width)
 
     Plotly.newPlot(div_id,figure.data,figure.layout);
 }

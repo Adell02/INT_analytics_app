@@ -19,6 +19,7 @@ build/
 docs/_build/
 .vscode
 flask_session/
+*.xlsx
 
 # Coverage reports
 htmlcov/

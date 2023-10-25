@@ -43,50 +43,39 @@ def logout_required(route_function):
 def login():
     sign_up_url = url_for('auth.register')
     if request.method == 'POST':                   
-        if request.form['change_password'] == 'False':
-            email = request.form['email']
-            password = request.form['password']
-
-            fetched_user = fetch_user(email) 
-
-            # Check if the username exists in the users dictionary
-            if fetched_user != -1:  
-                user_id = fetched_user.id
-                user_password = fetched_user.password
-                user_email = fetched_user.email
-                user_personal_token = fetched_user.personal_token
-                user_org_name = fetched_user.org_name
-                user_external_token = fetched_user.external_token
-                user_confirmed = fetched_user.is_confirmed  
-                user_role = fetched_user.role
-                # Check if user is confirmed
-                if not user_confirmed:
-                    resend_url = ''
-                    return render_template('login.html', error='User is not confirmed. Use this link to send the code again: '+resend_url,sign_up_url=sign_up_url)
-                # Check if the entered password matches the stored hash
-                if bcrypt.checkpw(password.encode('utf-8'), user_password.encode('utf-8')):
-                    session['user_id'] = user_id
-                    session['user_email'] = user_email
-                    session['personal_token'] = user_personal_token
-                    session['org_name'] = user_org_name
-                    session['external_token'] = user_external_token
-                    session['role'] = user_role
-                    session['confirmed'] = user_confirmed
-                    # Redirect to a success page or dashboard
-                    return redirect(url_for('dash.dashboard'))
-                else:
-                    # Display an error message if authentication fails
-                    return render_template('login.html', error='Invalid credentials',sign_up_url=sign_up_url)
-
-            # Display an error message if the username doesn't exist
-            return render_template('login.html', error='User is not registered',sign_up_url=sign_up_url)
-        elif request.form['change_password'] == 'True':
-            email = request.form['email']
-            if check_existance('email',email):
-                url_change_password = url_for("auth.change_password",token_user=generate_token(email) )
-                return redirect(url_change_password)
+        
+        email = request.form['email']
+        password = request.form['password']
+        fetched_user = fetch_user(email) 
+        # Check if the username exists in the users dictionary
+        if fetched_user != -1:  
+            user_id = fetched_user.id
+            user_password = fetched_user.password
+            user_email = fetched_user.email
+            user_personal_token = fetched_user.personal_token
+            user_org_name = fetched_user.org_name
+            user_external_token = fetched_user.external_token
+            user_confirmed = fetched_user.is_confirmed  
+            user_role = fetched_user.role
+            # Check if user is confirmed
+            if not user_confirmed:
+                return render_template('login.html', error='User is not confirmed. Contact an Admin to request the confirmation.',sign_up_url=sign_up_url)
+            # Check if the entered password matches the stored hash
+            if bcrypt.checkpw(password.encode('utf-8'), user_password.encode('utf-8')):
+                session['user_id'] = user_id
+                session['user_email'] = user_email
+                session['personal_token'] = user_personal_token
+                session['org_name'] = user_org_name
+                session['external_token'] = user_external_token
+                session['role'] = user_role
+                session['confirmed'] = user_confirmed
+                # Redirect to a success page or dashboard
+                return redirect(url_for('dash.dashboard'))
             else:
-                return render_template('login.html', error='This email is not registered. Please check that field.',sign_up_url=sign_up_url)
+                # Display an error message if authentication fails
+                return render_template('login.html', error='Invalid credentials',sign_up_url=sign_up_url)
+        # Display an error message if the username doesn't exist
+        return render_template('login.html', error='User is not registered',sign_up_url=sign_up_url)
 
     return render_template('login.html',sign_up_url=sign_up_url)
 

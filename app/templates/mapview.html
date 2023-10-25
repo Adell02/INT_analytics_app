@@ -1,0 +1,44 @@
+{% extends 'template.html' %}
+
+{% block title %} Mapview {% endblock %}
+{% block content %} 
+    <div class="contenido">
+        <div class="a">
+            <div class="recuadro-superior-analytics" >
+                <div class="new-graphic">
+    
+                </div>
+                <div class="search-graphic">
+    
+                </div>
+                <div class="visualise-options">
+                    <i class="fa fa-bars fa-2x icono-boton-options" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+        
+        <head>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+            
+        </head>
+        <body>
+            <div id="map"></div>
+            
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+            <script>
+                // Crea un mapa interactivo con Leaflet
+                var map = L.map('map').setView([41.373349, 2.06085], 10);
+
+                // Agrega una capa de OpenStreetMap al mapa
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '©️ <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Agrega un marcador al mapa
+                L.marker([41.373349851846285, 2.060854795286366]).addTo(map)
+                    .bindPopup('RAY').openPopup();
+            </script>
+        </body>
+    </div>
+{% endblock %}

@@ -39,17 +39,17 @@
 
             window.onload = function() {
                 load_all();
-                var div_to_save = document.getElementsByClassName("content");                
-                if(div_to_save)
-                {
-                    var codeInsideDiv = div_to_save[0].innerHTML;
-                    codeInsideDiv = codeInsideDiv.replace(/\n/g, '').replace(/\s{2,}/g, ' ');                    
-                    $.ajax({
-                        type: "POST",
-                        url: "/private/dashboard",
-                        data: { code: codeInsideDiv}                
-                    });
-                }   
+                //var div_to_save = document.getElementsByClassName("content");                
+                //if(div_to_save)
+                //{
+                //    var codeInsideDiv = div_to_save[0].innerHTML;
+                //    codeInsideDiv = codeInsideDiv.replace(/\n/g, '').replace(/\s{2,}/g, ' ');                    
+                //    $.ajax({
+                //        type: "POST",
+                //        url: "/private/dashboard",
+                //        data: { code: codeInsideDiv}                
+                //    });
+                //}   
             };
             
             window.addEventListener('resize',load_all);

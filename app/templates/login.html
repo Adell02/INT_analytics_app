@@ -5,22 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
 </head>
 <body>
     <div class="container mt-5">
         <h2>Login</h2>
-        <form method="POST">
+        <form method="POST" id="login_form">
             <div class="form-group">
-                <label for="Email">Email:</label>
+                <label for="email">Email:</label>
                 <input type="text" class="form-control" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            </div>           
+            <button type="submit" class="btn btn-primary" id='login_button'>Login</button>
         </form>
+        <br>
+        <p>Are you new? <a href={{ sign_up_url }}>Sign up</a></p>
+        
         {{ error | safe}}
     </div>
 </body>
+    
 </html>

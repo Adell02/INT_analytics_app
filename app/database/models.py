@@ -4,14 +4,14 @@ class User():
         self.parse_SQL(fetched_query)        
 
     def parse_SQL(self,fetched_query):
-        self.id = fetched_query[0]
-        self.email = fetched_query[1]
-        self.password = fetched_query[2]
-        self.personal_token = fetched_query[3]
-        self.org_name = fetched_query[4]
-        self.external_token = fetched_query[5]
-        self.role = fetched_query[6]
-        self.is_confirmed = fetched_query[7]
+        self.id = fetched_query['userid']
+        self.email = fetched_query['email']
+        self.password = fetched_query['password']
+        self.personal_token = fetched_query['personal_token']
+        self.org_name = fetched_query["org_name"]
+        self.external_token = fetched_query["external_token"]
+        self.role = fetched_query["role"]
+        self.is_confirmed = fetched_query["is_confirmed"]
     
     def __repr__(self) -> str:
         string = '<pre>'

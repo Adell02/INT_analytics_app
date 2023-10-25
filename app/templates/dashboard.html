@@ -2,18 +2,62 @@
 
 {% block title %} Dashboard {% endblock %}
 {% block content %} 
+    {% if cached == "" %}
         <div class="margen">
         </div>
-        <div class="recuadro-superior" >
-            Recuadro Superior
-        </div>
-        <div class="recuadro-inferior" >
-            <div class="view-2-left" >
-                {{plots[0] | safe}}
+        <div class="recuadro-superior-dashboard" >
+            <div class="graph-container recuadro-dashboard-33">
             </div>
-            <div class="view-2-right" >
-                {{plots[1] | safe}}
+            <div class="graph-container recuadro-dashboard-33">
+            </div>
+            <div class="graph-container recuadro-dashboard-33">
             </div>
         </div>
+        <div class="recuadro-medio-dashboard" >
+            <div class="graph-container recuadro-dashboard-66" >
+
+            </div>
+            <div class="graph-container recuadro-dashboard-33" >
+
+            </div>
+        </div>
+        <div class="recuadro-inferior-dashboard" >
+            <div class="graph-container recuadro-dashboard-50">
+            </div>
+            <div class="graph-container recuadro-dashboard-50">
+            </div>
+        </div>
+
+        <script>
+            const plot = {{ plots | tojson | safe }}; 
+            const containers = document.getElementsByClassName("graph-container"); 
+            var graph_divs = [];              
+            
+            if (containers[0].childElementCount == 0){
+                create_all(); 
+            }               
+
+            window.onload = function() {
+                load_all();
+                var div_to_save = document.getElementsByClassName("content");                
+                if(div_to_save)
+                {
+                    var codeInsideDiv = div_to_save[0].innerHTML;
+                    codeInsideDiv = codeInsideDiv.replace(/\n/g, '').replace(/\s{2,}/g, ' ');                    
+                    $.ajax({
+                        type: "POST",
+                        url: "/private/dashboard",
+                        data: { code: codeInsideDiv}                
+                    });
+                }   
+            };
+            
+            window.addEventListener('resize',load_all);
+
+        </script>
+    {% else %}
+        {{ cached | safe}}
+    {% endif %}
+
 
 {% endblock %}

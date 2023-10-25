@@ -17,25 +17,27 @@
         </div>
         <div class="recuadro-inferior-analytics" >
             <div class="recuadro-inferior-analytics-top">
-                <div class="view-4" >
-                    {{plots[0] | safe}}
-                </div>
-                <div class="view-4" >
-                    {{plots[1] | safe}}
-                </div>
+                <div class="view-4" ></div>
+                <div class="view-4" ></div>
             </div>
             <div class="recuadro-inferior-analytics-bottom">
-                <div class="view-4" >
-                    {{plots[2] | safe}}
-                </div>
-
-                <div class="view-4" >
-                    {{plots[3] | safe}}
-                </div>
+                <div class="view-4" ></div>
+                <div class="view-4" ></div>
             </div>
             
             
 
         </div>
+
+        <script>
+            const plot = {{ plots | tojson | safe }};   
+            const containers = document.getElementsByClassName("view-4"); 
+            var graph_divs = [];           
+            
+            create_all();
+            window.onload = load_all;
+            window.addEventListener('resize',load_all);
+
+        </script>
 
 {% endblock %}

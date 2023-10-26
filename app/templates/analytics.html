@@ -17,21 +17,18 @@
         </div>
         <div class="recuadro-inferior-analytics" >
             <div class="recuadro-inferior-analytics-top">
-                <div class="view-4" ></div>
-                <div class="view-4" ></div>
+                <div class="graph-container recuadro-w50" ></div>
+                <div class="graph-container recuadro-w50" ></div>
             </div>
             <div class="recuadro-inferior-analytics-bottom">
-                <div class="view-4" ></div>
-                <div class="view-4" ></div>
+                <div class="graph-container recuadro-w50" ></div>
+                <div class="graph-container recuadro-w50" ></div>
             </div>
-            
-            
-
         </div>
 
         <script>
             const plot = {{ plots | tojson | safe }};   
-            const containers = document.getElementsByClassName("view-4"); 
+            const containers = document.getElementsByClassName("graph-container"); 
             var graph_divs = [];           
             
             create_all();

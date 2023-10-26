@@ -1,0 +1,37 @@
+{% extends 'template.html' %}
+
+{% block title %} New Graphic {% endblock %}
+{% block content %} 
+        <div class="margen">
+        </div>
+        <div class="recuadro-superior-analytics" >
+            <div class="new-graphic-superior">
+                Graph Type
+                <div class="custom-select" style="width:3rem;">
+                    <select>
+                      <option value="0">Select Graph Type:</option>
+                      <option value="1">Histogram</option>
+                      <option value="2">Py Chart</option>
+                      <option value="3">Graph 3</option>
+                      <option value="4">Graph 4</option>
+                      
+                    </select>
+                </div>
+            </div>
+            <div class="new-graphic-superior">
+                Graph Title
+            </div>
+            <div class="new-graphic-superior">
+                Graph Data "x"
+            </div>
+            <div class="new-graphic-superior">
+                Graph Data "y"
+            </div>
+        </div>
+        <div class="recuadro-inferior-analytics" >
+            <div class="recuadro-w100" >
+
+            </div>
+        </div>
+
+{% endblock %}

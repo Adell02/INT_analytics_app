@@ -43,9 +43,9 @@ def index_prueba():
     return render_template('template.html')
 
 @dash_bp.route('/mapview')
-#@login_required
+@login_required
 def mapview():
-    return render_template('dashboard.html')
+    return render_template('mapview.html')
 
 @dash_bp.route('/newgraphic')
 @login_required

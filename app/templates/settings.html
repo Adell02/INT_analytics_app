@@ -43,10 +43,9 @@
 
 <script>
     function copytoken(){
-        var token = '{{personal_token}}';
+        var token = "{{ session['personal_token'] }}";
         navigator.clipboard.writeText(token);
         alert("Token Copied!");
-
     }
 
 </script>

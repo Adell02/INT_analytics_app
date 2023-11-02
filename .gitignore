@@ -20,6 +20,8 @@ docs/_build/
 .vscode
 flask_session/
 *.xlsx
+*.zlib
+
 
 # Coverage reports
 htmlcov/

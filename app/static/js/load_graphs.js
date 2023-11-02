@@ -6,6 +6,15 @@ function load_graph(div_id,idx) {
     Plotly.newPlot(div_id,figure.data,figure.layout);
 }
 
+function resize_graph(div_id,idx){
+    var figure = document.getElementById(div_id)
+
+    figure.layout.width = containers[idx].offsetWidth;
+    figure.layout.height = containers[idx].offsetHeight;
+
+    Plotly.react(figure,figure.data,figure.layout);
+}
+
 function create_all(){
                 
     // Iterate through each container
@@ -26,4 +35,27 @@ function load_all(){
     for (let i = 0; i < graph_divs.length; i++) {    
         load_graph(graph_divs[i].id,i)
     }  
+}
+
+function resize_all(){
+    // Iterate through each container
+    for (let i = 0; i < graph_divs.length; i++) {    
+        resize_graph(graph_divs[i].id,i)
+    }  
+}
+
+function resize_cached_graph(figure,idx){
+    figure.layout.width = containers[idx].offsetWidth;
+    figure.layout.height = containers[idx].offsetHeight;
+
+    Plotly.react(figure,figure.data,figure.layout);
+}
+
+function resize_cached_all(){
+    // Iterate through each container
+    for (let i = 0; i < containers.length; i++) {    
+        var children_div = containers[i].children[0]
+        resize_cached_graph(children_div,i)
+    } 
+
 }

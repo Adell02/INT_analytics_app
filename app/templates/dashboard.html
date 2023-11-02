@@ -2,7 +2,6 @@
 
 {% block title %} Dashboard {% endblock %}
 {% block content %} 
-    {% if cached == "" %}
         <div class="margen">
         </div>
         <div class="recuadro-superior-dashboard" >
@@ -31,33 +30,14 @@
         <script>
             const plot = {{ plots | tojson | safe }}; 
             const containers = document.getElementsByClassName("graph-container"); 
-            var graph_divs = [];              
+            var graph_divs = []; 
             
             if (containers[0].childElementCount == 0){
                 create_all(); 
             }               
 
-            window.onload = function() {
-                load_all();
-                var div_to_save = document.getElementsByClassName("content");                
-                if(div_to_save)
-                {
-                    var codeInsideDiv = div_to_save[0].innerHTML;
-                    codeInsideDiv = codeInsideDiv.replace(/\n/g, '').replace(/\s{2,}/g, ' ');                    
-                    $.ajax({
-                        type: "POST",
-                        url: "/private/dashboard",
-                        data: { code: codeInsideDiv}                
-                    });
-                }   
-            };
-            
-            window.addEventListener('resize',load_all);
+            window.onload = load_all;
+            window.addEventListener('resize',resize_all);            
 
         </script>
-    {% else %}
-        {{ cached | safe}}
-    {% endif %}
-
-
 {% endblock %}

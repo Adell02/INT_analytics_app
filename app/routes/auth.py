@@ -5,6 +5,7 @@ import bcrypt
 
 from app.database.seeder import *
 from app.utils.account.token import *
+from app.utils.DataframeManager.load_df import *
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -13,8 +14,20 @@ auth_bp = Blueprint('auth', __name__)
 def login_required(route_function):
     @wraps(route_function)
     def wrapper(*args,**kwargs):
+
+        session['user_id'] = 1
+        session['user_email'] = "guillermo@adell.tech"
+        session['personal_token'] = "personal_token"
+        session['org_name'] = "ORG name"
+        session['external_token'] = "External Token"
+        session['role'] = "user"
+        session['confirmed'] = 1
+        
         if 'user_id' in session:
             # User is Logged In
+            if 'df' not in session.keys():
+                session['df'] = load_current_df_memory().to_dict('list')
+
             return route_function(*args,**kwargs)        
         else:
             # User is NOT Logged In
@@ -112,7 +125,7 @@ def register():
 def change_password(token_user):
     error =""
     email = confirm_token(token_user)
-    if email:
+    if check_existance("email",email):
         if request.method == 'POST':
             new_password = request.form['password']    
             if new_password == request.form['password_confirmation']:

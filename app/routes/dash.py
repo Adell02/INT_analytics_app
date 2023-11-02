@@ -1,40 +1,34 @@
 # dash.py
 import os
-from flask import Blueprint, render_template,request
-import pandas as pd
+from flask import Blueprint, render_template,session,url_for
+import json
 import zlib
+import requests
 
 from app.routes.auth import login_required
 from app.utils.graph_functions.generate_scatter import generate_scatter_plot
-from app.utils.graph_functions.generate_dasboard_graphics import generate_dashboard_graphics
+from app.utils.account.token import generate_token
+from app.utils.DataframeManager.load_df import generate_cache_dash_name
+
 
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard',methods=['POST','GET'])
 @login_required
 def dashboard():
-    #df = pd.read_excel("E:/GitCode/INT_data_analysis/Ray 7.7_statistics_23-07.xlsx","G2")
+    cached_path = generate_cache_dash_name()
 
-    #y_data = df['Max speed']
-    #x_data = df['Timestamp']
-    #title = 'Max Speed vs Timestamp'
-    #plotly_plot = generate_scatter_plot(x_data, y_data, title)
-    #compressed_plot = zlib.compress(plotly_plot.encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
-    cached_path = "app/database/cached_dashboard.zlib"
-    cached = ""
-    plots = ""
     if os.path.isfile(cached_path):
         with open(cached_path, "rb") as file:
             cached = file.read()
         cached = zlib.decompress(cached).decode('utf-8')
-    else:
-        plots = generate_dashboard_graphics()
-        if request.method == 'POST':
-            code = request.form.get('code')
-            #compressed_dashboard = zlib.compress(code.encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
-            #with open(cached_path, "wb") as file:
-            #    file.write(compressed_dashboard)
-    return render_template('dashboard.html', plots=plots,cached=cached)
+        plots = json.loads(cached)
+    else:        
+        token_cache = generate_token("cache_dashboard_admin")
+        url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
+        plots = requests.get(url_cache_dashboard)
+
+    return render_template('dashboard.html', plots=plots)
     
 
 @dash_bp.route('/prueba')

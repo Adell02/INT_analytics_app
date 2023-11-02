@@ -150,6 +150,7 @@ body{
     margin:0;
 }
 .content{
+    overflow-x:hidden;
     margin-top: 0 !important;
     padding-left: 6rem;
     background-color: #dde4e8;

@@ -26,7 +26,8 @@ def dashboard():
     else:        
         token_cache = generate_token("cache_dashboard_admin")
         url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
-        plots = requests.get(url_cache_dashboard)
+        returned = requests.get(url_cache_dashboard).content
+        plots = json.loads(returned)
 
     return render_template('dashboard.html', plots=plots)
     

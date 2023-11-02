@@ -25,7 +25,7 @@ def cache_dashboard(token):
         compressed_dashboard = zlib.compress(str_plots,level=zlib.Z_BEST_COMPRESSION)
         with open(cache_path, "wb") as file:
             file.write(compressed_dashboard)
-
-        return plots.to_json()
+        plots = json.dumps(plots)
+        return plots
 
     return "Authentication error"

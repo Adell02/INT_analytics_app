@@ -27,3 +27,25 @@ function load_all(){
         load_graph(graph_divs[i].id,i)
     }  
 }
+
+function load_graph_analytics(div_id,idx,idx_page) {        
+    var figure = JSON.parse(plot[idx_page]);
+    figure.layout.width = containers[idx].offsetWidth;
+    figure.layout.height = containers[idx].offsetHeight;
+
+    Plotly.newPlot(div_id,figure.data,figure.layout);
+}
+
+function load_4(){
+
+    // Iterate through each container
+    for (let i = 0; i < 4; i++) {    
+        if (pageIndex*4+i<plot.length){
+            load_graph_analytics(graph_divs[i].id,i,pageIndex*4+i);
+        }
+        else{
+            Plotly.purge(graph_divs[i]);
+        }
+        
+    }  
+}

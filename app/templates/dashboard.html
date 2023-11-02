@@ -3,6 +3,8 @@
 {% block title %} Dashboard {% endblock %}
 {% block content %} 
     {% if cached == "" %}
+    
+    <div id="content">
         <div class="margen">
         </div>
         <div class="recuadro-superior-dashboard" >
@@ -27,8 +29,9 @@
             <div class="graph-container recuadro-w50">
             </div>
         </div>
+    </div>
 
-        <script>
+        <script>    
             const plot = {{ plots | tojson | safe }}; 
             const containers = document.getElementsByClassName("graph-container"); 
             var graph_divs = [];              

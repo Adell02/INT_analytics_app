@@ -11,7 +11,7 @@ from app.utils.graph_functions.generate_dasboard_graphics import generate_dashbo
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard',methods=['POST','GET'])
-@login_required
+#@login_required
 def dashboard():
     #df = pd.read_excel("E:/GitCode/INT_data_analysis/Ray 7.7_statistics_23-07.xlsx","G2")
 
@@ -38,17 +38,17 @@ def dashboard():
     
 
 @dash_bp.route('/prueba')
-@login_required
+#@login_required
 def index_prueba():
     return render_template('template.html')
 
 @dash_bp.route('/mapview')
-@login_required
+#@login_required
 def mapview():
     return render_template('mapview.html')
 
 @dash_bp.route('/newgraphic')
-@login_required
+#@login_required
 def newgraphic():
     return render_template('newgraphic.html')
 
@@ -76,6 +76,11 @@ def analytics():
     x_prueba4=[1,2,3,4,5]
     y_prueba4=[5,4,3,4,5]
     title_prueba4='Prueba 4'
+    plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
+    plots.append(plotly_plot4)
+    x_prueba4=[1,2,3,4,5]
+    y_prueba4=[1,1,1,1,1]
+    title_prueba4='Prueba 5'
     plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
     plots.append(plotly_plot4)
 

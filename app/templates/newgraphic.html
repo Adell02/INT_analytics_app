@@ -25,13 +25,44 @@
                 Graph Data "x"
             </div>
             <div class="new-graphic-superior">
-                Graph Data "y"
+                <button class="dropdown-button" onclick="toggleDropdown()">Graph Data 'y'</button> <!--llamamos a la función que hace desplegar menu-->
+                <div class="dropdown-content" id="myDropdown">
+                    
+                    <a href="#">Opción 1</a>
+                    <a href="#">Opción 2</a>
+                    <a href="#">Opción 3</a>
+                </div>
             </div>
+            <script>
+                function toggleDropdown() { //Si es block significa que el menu está desplegado y a la inversa
+                    var dropdown = document.getElementById("myDropdown");
+                    if (dropdown.style.display === "block") {
+                        dropdown.style.display = "none";
+                    } else {
+                        dropdown.style.display = "block";
+                        var button = document.querySelector(".dropdown-button");
+                        var rect = button.getBoundingClientRect(); //con esta función se obtiene la posición del botón y las opciones se pone debajo
+                        dropdown.style.left = rect.left + "px";
+                        dropdown.style.top = rect.bottom + "px";
+                    }
+                }
+        
+                // Cerramos el menú desplegable si se hace clic fuera de él
+                window.addEventListener("click", function(event) {
+                    var dropdown = document.getElementById("myDropdown");
+                    if (!event.target.matches(".dropdown-button")) {
+                        if (dropdown.style.display === "block") {
+                            dropdown.style.display = "none";
+                        }
+                    }
+                });
+            </script>
         </div>
-        <div class="recuadro-inferior-analytics" >
-            <div class="recuadro-w100" >
+        
 
-            </div>
-        </div>
 
+
+
+
+        
 {% endblock %}

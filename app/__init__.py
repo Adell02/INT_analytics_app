@@ -28,9 +28,9 @@ def create_app(config_class=Config):
     'password':app.config["MYSQL_PASSWORD"],
     'database':app.config["MYSQL_DB"]
     }
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor(buffered=True,dictionary=True)
-
+    #conn = mysql.connector.connect(**db_config)
+    #cursor = conn.cursor(buffered=True,dictionary=True)
+    
     openai.api_key = Config.OPENAI_KEY
     #test()
 
@@ -45,8 +45,16 @@ def create_app(config_class=Config):
     app.register_blueprint(dash_bp, url_prefix='/private')
     app.register_blueprint(seeder_bp)
 
+    
     @app.route("/")
     def redirect_home():
+        session['user_id'] = 1
+        session['user_email'] = "pau.munoz.baranco@est.edu"
+        session['personal_token'] = "user_personal_token"
+        session['org_name'] = "user_org_name"
+        session['external_token'] = "user_external_token"
+        session['role'] ="user"
+        session['confirmed'] = 1
         return redirect(url_for("dash.dashboard"))
     
     @app.context_processor

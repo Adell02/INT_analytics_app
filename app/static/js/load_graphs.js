@@ -37,25 +37,31 @@ function load_all(){
     }  
 }
 
+function load_graph_analytics(div_id,idx,idx_page) {        
+    var figure = JSON.parse(plot[idx_page]);
+    figure.layout.width = containers[idx].offsetWidth;
+    figure.layout.height = containers[idx].offsetHeight;
+
+    Plotly.newPlot(div_id,figure.data,figure.layout);
+}
+
+function load_4(){
+
+    // Iterate through each container
+    for (let i = 0; i < 4; i++) {    
+        if (pageIndex*4+i<plot.length){
+            load_graph_analytics(graph_divs[i].id,i,pageIndex*4+i);
+        }
+        else{
+            Plotly.purge(graph_divs[i]);
+        }
+        
+    }  
+}
+
 function resize_all(){
     // Iterate through each container
     for (let i = 0; i < graph_divs.length; i++) {    
         resize_graph(graph_divs[i].id,i)
     }  
-}
-
-function resize_cached_graph(figure,idx){
-    figure.layout.width = containers[idx].offsetWidth;
-    figure.layout.height = containers[idx].offsetHeight;
-
-    Plotly.react(figure,figure.data,figure.layout);
-}
-
-function resize_cached_all(){
-    // Iterate through each container
-    for (let i = 0; i < containers.length; i++) {    
-        var children_div = containers[i].children[0]
-        resize_cached_graph(children_div,i)
-    } 
-
 }

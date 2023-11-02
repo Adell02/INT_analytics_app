@@ -19,7 +19,7 @@
             <button class="bot-copy" onclick="copytoken()">Copy</button>
         </div>
         <!--input para nombre empressa y token entity-->
-        <form method="POST">
+        <form name="formsettings" method="POST">
             <div class="fila">
                 <span class="texto">Entity Name:</span>
                 <span class="recuadro">
@@ -32,13 +32,39 @@
                 <span class="recuadro">
                     <input type="text" class="form-control" name ="entity_token" placeholder="Enter Entity Token" value="{{ session['external_token'] | safe }}">
                 </span>
-            </div>        
-            <button type="submit"  class="save-button">Save</button>
+            </div>  
+            <div class="contenedorsave">      
+                <button type="submit"  class="save-button">Save</button>
+            </div>
         </form>
-    <div class="mensaje">
-        <p>Click <a class="enlace" href={{ url_change_password | safe }}>here</a> to change your password.</p>
+        <div class="mensaje">
+            <p>Click <a class="enlace" href={{ url_change_password | safe }}>here</a> to change your password.</p>
+        </div>
     </div>
-    </div>    
+    <div class="contenedor-correo">
+        
+        
+        
+        <!--input para nombre info-->
+        <form name="formsettings" method="POST">
+            <div class="fila">
+                <span class="texto">Number of rows:</span>
+                <span class="recuadro">
+                    <input type="text" class="form-control" name="number_rows" placeholder="Enter Number of rows" value="1.000" readonly>
+                </span>
+            </div> 
+            <div class="fila">
+                <span class="texto">Data Reading:</span>
+                <div class="opciones">
+                    
+                </div>
+            </div> 
+            <div class="contenedorsave">      
+                <button type="submit"  class="save-button">Save Settings</button>
+            </div>
+        </form>
+        
+    </div>      
 </div>
 
 <script>

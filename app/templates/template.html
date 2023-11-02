@@ -14,7 +14,11 @@
     
 </head>
 <body>
-
+    <div id="loading">
+        <div class="loading-gif">
+            <img src="/static/R.gif">
+        </div>
+    </div>
     <!-- Barra Vertical -->
     <div class="barra">
         <div class="user">
@@ -98,7 +102,16 @@
         {% block content %} 
         {% endblock %}
     </div>
+    
+    <script>
+        // Función para ocultar el GIF de carga y mostrar el contenido
+        function hideLoading() {
+            document.getElementById("loading").style.display = "none";
+        }
 
+        // Espera a que el contenido de la página esté completamente cargado
+        window.addEventListener("load", hideLoading);
+    </script>
     
 
     

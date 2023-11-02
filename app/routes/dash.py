@@ -14,7 +14,7 @@ from app.utils.DataframeManager.load_df import generate_cache_dash_name
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard',methods=['POST','GET'])
-@login_required
+#@login_required
 def dashboard():
     cached_path = generate_cache_dash_name()
 
@@ -32,19 +32,14 @@ def dashboard():
     
 
 @dash_bp.route('/prueba')
-@login_required
+#@login_required
 def index_prueba():
     return render_template('template.html')
 
 @dash_bp.route('/mapview')
-@login_required
+#@login_required
 def mapview():
     return render_template('mapview.html')
-
-@dash_bp.route('/newgraphic')
-@login_required
-def newgraphic():
-    return render_template('newgraphic.html')
 
 
 @dash_bp.route('/analytics')
@@ -70,6 +65,11 @@ def analytics():
     x_prueba4=[1,2,3,4,5]
     y_prueba4=[5,4,3,4,5]
     title_prueba4='Prueba 4'
+    plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
+    plots.append(plotly_plot4)
+    x_prueba4=[1,2,3,4,5]
+    y_prueba4=[1,1,1,1,1]
+    title_prueba4='Prueba 5'
     plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
     plots.append(plotly_plot4)
 

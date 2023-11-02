@@ -2,39 +2,73 @@
 
 {% block title %} Analytics {% endblock %}
 {% block content %} 
-        <div class="margen">
-        </div>
-        <div class="recuadro-superior-analytics" >
-            <div class="new-graphic">
+<div class="margen"></div>
+<div class="recuadro-superior-analytics">
+    <button class="go-left" onclick="moveLeft()">
+        <i class="fa fa-arrow-left fa-2x icono-boton-options" aria-hidden="true"></i>
+    </button>
+    <div class="search-graphic"></div>
+    <button class="go-right" onclick="moveRight()">
+        <i class="fa fa-arrow-right fa-2x icono-boton-options" aria-hidden="true"></i>
+    </button>
+</div>
+<div class="recuadro-inferior-analytics">
+    <div class="recuadro-inferior-analytics-top">
+        <div class="graph-container recuadro-w50"></div>
+        <div class="graph-container recuadro-w50"></div>
+    </div>
+    <div class="recuadro-inferior-analytics-bottom">
+        <div class="graph-container recuadro-w50"></div>
+        <div class="graph-container recuadro-w50"></div>
+    </div>
+</div>
 
-            </div>
-            <div class="search-graphic">
+<script>
+    const plot = {{ plots | tojson | safe }};
+    const containers = document.getElementsByClassName("graph-container");
+    var graph_divs = [];
 
-            </div>
-            <div class="visualise-options">
-                <i class="fa fa-bars fa-2x icono-boton-options" aria-hidden="true"></i>
-            </div>
-        </div>
-        <div class="recuadro-inferior-analytics" >
-            <div class="recuadro-inferior-analytics-top">
-                <div class="graph-container recuadro-w50" ></div>
-                <div class="graph-container recuadro-w50" ></div>
-            </div>
-            <div class="recuadro-inferior-analytics-bottom">
-                <div class="graph-container recuadro-w50" ></div>
-                <div class="graph-container recuadro-w50" ></div>
-            </div>
-        </div>
+    // Creamos index para saber en qué página estamos
+    let pageIndex = 0;
+    
+    // Función para cargar las gráficas
+    function load_page() {
+        // Carga las gráficas al cargar la página
+        create_all();
+        window.onload = load_4;
+        window.addEventListener('resize',load_4);
+    }
 
-        <script>
-            const plot = {{ plots | tojson | safe }};   
-            const containers = document.getElementsByClassName("graph-container"); 
-            var graph_divs = [];           
-            
-            create_all();
-            window.onload = load_all;
-            window.addEventListener('resize',load_all);
+    
 
-        </script>
+    function moveRight() {
+        if (plot.length>(pageIndex+1)*4)
+        {
+            pageIndex++;
+            load_4();
+        }
+        console.log(pageIndex);
+
+        //updatePage();
+    }
+
+    function moveLeft() {
+        if (pageIndex > 0) {
+            pageIndex--;
+            load_4();
+            //updatePage();
+        
+        }console.log(pageIndex);
+    }
+
+    function updatePage() {
+        const pageWidth = containers.length * containers[0].offsetWidth;
+        const offset = -pageIndex * pageWidth;
+        document.querySelector(".recuadro-inferior-analytics").style.transform = `translateX(${offset}px)`;
+        
+    }
+
+    load_page();
+</script>
 
 {% endblock %}

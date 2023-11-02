@@ -1,4 +1,5 @@
 from app import create_app
+from flask import session
 
 # Create the Flask app
 app = create_app()

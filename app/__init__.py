@@ -31,6 +31,7 @@ def create_app(config_class=Config):
     #conn = mysql.connector.connect(**db_config)
     #cursor = conn.cursor(buffered=True,dictionary=True)
     
+
     openai.api_key = Config.OPENAI_KEY
     #test()
 
@@ -39,22 +40,17 @@ def create_app(config_class=Config):
     from app.routes.dash import dash_bp
     from app.routes.settings import settings_bp
     from app.database.seeder import seeder_bp
+    from app.routes.newgraphic import newgraphic_bp
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(settings_bp,url_prefix="/private")
     app.register_blueprint(dash_bp, url_prefix='/private')
+    app.register_blueprint(newgraphic_bp, url_prefix='/private')
     app.register_blueprint(seeder_bp)
 
     
     @app.route("/")
     def redirect_home():
-        session['user_id'] = 1
-        session['user_email'] = "pau.munoz.baranco@est.edu"
-        session['personal_token'] = "user_personal_token"
-        session['org_name'] = "user_org_name"
-        session['external_token'] = "user_external_token"
-        session['role'] ="user"
-        session['confirmed'] = 1
         return redirect(url_for("dash.dashboard"))
     
     @app.context_processor

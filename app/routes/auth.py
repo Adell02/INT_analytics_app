@@ -13,6 +13,15 @@ auth_bp = Blueprint('auth', __name__)
 def login_required(route_function):
     @wraps(route_function)
     def wrapper(*args,**kwargs):
+        
+        session['user_id'] = 1
+        session['user_email'] = 'ari@gmail.com'
+        session['personal_token'] = 'user_personal_token'
+        session['org_name'] = 'ari'
+        session['external_token'] = 'user_external_token'
+        session['role'] = 'user'
+        session['confirmed'] = 1
+
         if 'user_id' in session:
             # User is Logged In
             return route_function(*args,**kwargs)        

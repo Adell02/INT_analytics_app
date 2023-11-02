@@ -47,11 +47,6 @@ def index_prueba():
 def mapview():
     return render_template('mapview.html')
 
-@dash_bp.route('/newgraphic')
-#@login_required
-def newgraphic():
-    return render_template('newgraphic.html')
-
 
 @dash_bp.route('/analytics')
 #@login_required

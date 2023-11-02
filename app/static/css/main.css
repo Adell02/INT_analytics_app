@@ -148,7 +148,6 @@ body{
 body{
     height:100%;
     margin:0;
-    overflow:hidden;
 }
 .content{
     margin-top: 0 !important;
@@ -205,7 +204,6 @@ body{
     margin-bottom: 1rem;
     height: 43vh;
 }
-
 .recuadro-inferior-dashboard{
     display: flex;
     flex-direction: row;
@@ -217,10 +215,31 @@ body{
 }
 
 
+.recuadro-w10{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 2rem;
+    width:10%;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+}
+
+
 .recuadro-w33{
     margin-left: 1rem;
     margin-right: 1rem;
     width:33%;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+}
+.recuadro-w46{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width:46%;
     background-color: #ffffff;
     opacity: 90%;
     border-radius: 15px 15px 15px 15px;
@@ -350,6 +369,23 @@ body{
 
 
 /*      NEW GRAPHIC     */
+
+.recuadro-medio-newgraphic{
+    display: flex;
+    flex-direction: column;
+    height: calc( 100vh - (10rem));;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
+.recuadro-inferior-newgraphic{
+    justify-content: space-evenly;
+    display: flex;
+    flex-direction: row;
+    height: 4rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
 .new-graphic-superior{
     margin-right: 1rem;
     width: 25%; 
@@ -361,6 +397,50 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.new-graphic-save{
+    margin-right: 1rem;
+    width: 25%; 
+    height: 3rem;
+    background-color: #45b3f7;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    border:none;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+    font-family: "Montserrat",'sans-serif';
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.new-graphic-input{
+    height: 3rem;
+    background-color: #ffffff;
+    width:100%;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    border:none;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.new-graphic-save:hover{
+    background-color: #094f7a;
+}
+
+form[name="newgraphic_form"]{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 
 
@@ -415,9 +495,6 @@ body{
     margin-bottom: 2rem;
 }
 
-
-
-
 .contenedor-correo {
     width: 50%;
     font-size: 18px;
@@ -470,6 +547,8 @@ body{
     border-radius: 7px;
     cursor: pointer; 
     font-size: 16px; 
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 600;
     padding: 10px 20px; 
     box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
 }
@@ -490,6 +569,8 @@ body{
     border-radius: 7px; 
     cursor: pointer; 
     font-size: 20px; 
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 600;
     display: block; 
     box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
     border: none;
@@ -541,27 +622,65 @@ body{
 
 }
 
-.custom-select select {
-    display: none; /*hide original SELECT element: */
-  }
 
+/*    BUTTON    */
 
-.select-selected {
-    background-color: DodgerBlue;
+.custom-select {
+    position: relative;
+    margin-right: 1rem;
+    width: 25%; 
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
-  /* Style the arrow inside the select element: */
-  .select-selected:after {
-    position: absolute;
+  select {
+    appearance: none;
+    /*  safari  */
+    -webkit-appearance: none;
+    /*  other styles for aesthetics */
+    width: 100%;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+    padding: 0.675em 1em 0.675em 1em;
+    background-color: #fff;
+    border:none;
+    border-radius: 15px 15px 15px 15px;
+    color: black;
+    cursor:default;
+  }
+  
+  
+  .custom-select::before,
+  .custom-select::after {
+    --size: 0.3rem;
     content: "";
-    top: 14px;
-    right: 10px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-color: #fff transparent transparent transparent;
+    position: absolute;
+    right: 1rem;
+    pointer-events: none;
   }
   
+  .custom-select::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid black;
+    top: 40%;
+  }
+  
+  .custom-select::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid black;
+    top: 55%;
+  }
+
+
   /* Point the arrow upwards when the select box is open (active): */
   .select-selected.select-arrow-active:after {
     border-color: transparent transparent #fff transparent;

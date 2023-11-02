@@ -4,65 +4,68 @@
 {% block content %} 
         <div class="margen">
         </div>
+        
         <div class="recuadro-superior-analytics" >
-            <div class="new-graphic-superior">
-                Graph Type
-                <div class="custom-select" style="width:3rem;">
-                    <select>
-                      <option value="0">Select Graph Type:</option>
-                      <option value="1">Histogram</option>
-                      <option value="2">Py Chart</option>
-                      <option value="3">Graph 3</option>
-                      <option value="4">Graph 4</option>
-                      
+            <form method="POST" name="newgraphic_form">
+
+                <div class="custom-select" >
+                    <select id="graph_type" name="graph_type" placeholder="Select Graph Type:">
+                      <option value="none">Select Graph Type:</option>
+                      <option value="Pie_Chart">Pie Chart</option>
+                      <option value="Bar_Chart">Bar Chart</option>
+                      <option value="Histogram_Distribution">Histogram / Distribution</option>
+                      <option value="Scatter_Plot">Scatter Plot</option>
+                      <option value="Line_Chart">Line Chart</option>
                     </select>
                 </div>
-            </div>
-            <div class="new-graphic-superior">
-                Graph Title
-            </div>
-            <div class="new-graphic-superior">
-                Graph Data "x"
-            </div>
-            <div class="new-graphic-superior">
-                <button class="dropdown-button" onclick="toggleDropdown()">Graph Data 'y'</button> <!--llamamos a la función que hace desplegar menu-->
-                <div class="dropdown-content" id="myDropdown">
-                    
-                    <a href="#">Opción 1</a>
-                    <a href="#">Opción 2</a>
-                    <a href="#">Opción 3</a>
+
+                <div class="new-graphic-superior" >
+                    <input type="text" class="new-graphic-input" id="graph_title" name="graph_title" placeholder="Enter Graph Title" value="">
                 </div>
-            </div>
-            <script>
-                function toggleDropdown() { //Si es block significa que el menu está desplegado y a la inversa
-                    var dropdown = document.getElementById("myDropdown");
-                    if (dropdown.style.display === "block") {
-                        dropdown.style.display = "none";
-                    } else {
-                        dropdown.style.display = "block";
-                        var button = document.querySelector(".dropdown-button");
-                        var rect = button.getBoundingClientRect(); //con esta función se obtiene la posición del botón y las opciones se pone debajo
-                        dropdown.style.left = rect.left + "px";
-                        dropdown.style.top = rect.bottom + "px";
-                    }
-                }
-        
-                // Cerramos el menú desplegable si se hace clic fuera de él
-                window.addEventListener("click", function(event) {
-                    var dropdown = document.getElementById("myDropdown");
-                    if (!event.target.matches(".dropdown-button")) {
-                        if (dropdown.style.display === "block") {
-                            dropdown.style.display = "none";
-                        }
-                    }
-                });
-            </script>
+
+                <div class="custom-select" >
+                    <select  name="graph_data_x" id="graph_data_x" placeholder="Select Graph Data 'x':" >
+                        <option value="">Select Graph Data "x":</option>
+                        {% for col in columns_list %}
+                            <option value="{{ col }}"> {{ col }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="custom-select" multiple >
+                    <select  name="graph_data_y" placeholder="Select Graph Data 'y':">
+                        <option value="">Select Graph Data "y":</option>
+                        {% for col in columns_list %}
+                            <option value="{{ col }}"> {{ col }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
         </div>
-        
+        <div class="recuadro-medio-newgraphic" >
+            <div class="graph-container recuadro-w100" >
+
+            </div>
+        </div>
+        <li class="recuadro-inferior-newgraphic" >
+            <button type="submit"  class="new-graphic-save">Generate Graphic</button>
+        </li>
+        </form>
 
 
+        <script>
 
+            const plot = {{ plots | tojson | safe }}; 
+            const containers = document.getElementsByClassName("graph-container"); 
+            var graph_divs = [];              
+            
+            if (containers[0].childElementCount == 0){
+                create_all(); 
+            }
+            
+            window.onload = load_all;
+                        
+        </script>
 
-
-        
 {% endblock %}

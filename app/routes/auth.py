@@ -5,6 +5,7 @@ import bcrypt
 
 from app.database.seeder import *
 from app.utils.account.token import *
+from app.utils.DataframeManager.load_df import *
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -13,17 +14,17 @@ auth_bp = Blueprint('auth', __name__)
 def login_required(route_function):
     @wraps(route_function)
     def wrapper(*args,**kwargs):
+        
+        session['Optimization'] = 'Optimized'
+        
         if 'user_id' in session:
-            # User is Logged In
+            # User is Logged In           
             return route_function(*args,**kwargs)        
         else:
             # User is NOT Logged In
             return redirect(url_for('auth.login'))
     return wrapper
 
-
-# This wrapper has to be implemented so that if user is logged, 
-# just show a message saying he is logged, and redirect him to the main page
 
 def logout_required(route_function):
     @wraps(route_function)
@@ -69,6 +70,7 @@ def login():
                 session['external_token'] = user_external_token
                 session['role'] = user_role
                 session['confirmed'] = user_confirmed
+                
                 # Redirect to a success page or dashboard
                 return redirect(url_for('dash.dashboard'))
             else:
@@ -112,7 +114,7 @@ def register():
 def change_password(token_user):
     error =""
     email = confirm_token(token_user)
-    if email:
+    if check_existance("email",email):
         if request.method == 'POST':
             new_password = request.form['password']    
             if new_password == request.form['password_confirmation']:

@@ -20,13 +20,23 @@ def create_app(config_class=Config):
     Session(app)       
     
     db_config= {
-    'host':app.config["MYSQL_HOST"],
-    'user':app.config["MYSQL_USER"],
-    'password':app.config["MYSQL_PASSWORD"],
-    'database':app.config["MYSQL_DB"]
+        'host':app.config["MYSQL_HOST"],
+        'user':app.config["MYSQL_USER"],
+        'password':app.config["MYSQL_PASSWORD"],
+        'database':app.config["MYSQL_DB"]
+    }
+
+    db_config_ray={
+        'host':app.config["MYSQL_HOST_RAY"],
+        'user':app.config["MYSQL_USER_RAY"],
+        'password':app.config["MYSQL_PASSWORD_RAY"],
+        'database':app.config["MYSQL_DB_RAY"]
     }
     conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor(buffered=True,dictionary=True)
+    cursor = conn.cursor(buffered=True,dictionary=True)    
+
+    #conn_ray = mysql.connector.connect(**db_config_ray)
+    #cursor_ray = conn_ray.cursor(buffered=True,dictionary=True)
 
     openai.api_key = Config.OPENAI_KEY
     #test()
@@ -35,13 +45,20 @@ def create_app(config_class=Config):
     from app.routes.auth import auth_bp
     from app.routes.dash import dash_bp
     from app.routes.settings import settings_bp
+    from app.routes.ai_chat import ai_chat_bp
+    from app.routes.RESTful_API import rest_api_bp
     from app.database.seeder import seeder_bp
+    from app.routes.newgraphic import newgraphic_bp
 
+    app.register_blueprint(rest_api_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(settings_bp,url_prefix="/private")
     app.register_blueprint(dash_bp, url_prefix='/private')
+    app.register_blueprint(ai_chat_bp, url_prefix='/private')
+    app.register_blueprint(newgraphic_bp, url_prefix='/private')
     app.register_blueprint(seeder_bp)
 
+    
     @app.route("/")
     def redirect_home():
         return redirect(url_for("dash.dashboard"))

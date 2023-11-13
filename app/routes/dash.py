@@ -1,60 +1,62 @@
 # dash.py
 import os
-from flask import Blueprint, render_template,request
-import pandas as pd
+from flask import Blueprint, render_template,url_for,request,session
 import zlib
+import requests,json
 
 from app.routes.auth import login_required
 from app.utils.graph_functions.generate_scatter import generate_scatter_plot
-from app.utils.graph_functions.generate_dasboard_graphics import generate_dashboard_graphics
+from app.utils.account.token import generate_token
+from app.utils.DataframeManager.load_df import generate_cache_dash_name,load_current_df_memory
+from app.utils.graph_functions.generate_dasboard_graphics import build_html
+
 
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard',methods=['POST','GET'])
 @login_required
 def dashboard():
-    #df = pd.read_excel("E:/GitCode/INT_data_analysis/Ray 7.7_statistics_23-07.xlsx","G2")
+    dataframe = load_current_df_memory()
+    available_vin = list(dataframe['Id'].keys().unique())    
 
-    #y_data = df['Max speed']
-    #x_data = df['Timestamp']
-    #title = 'Max Speed vs Timestamp'
-    #plotly_plot = generate_scatter_plot(x_data, y_data, title)
-    #compressed_plot = zlib.compress(plotly_plot.encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
-    cached_path = "app/database/cached_dashboard.zlib"
-    cached = ""
-    plots = ""
+    default_vin = ''
+
+    if request.method == 'POST':
+        VIN_selected = request.form['VIN_selector']
+        
+        session['Optimization'] = request.form['Optimization']
+            
+        if VIN_selected != '':
+            token_cache = generate_token("dash_from_vin_admin")
+            url_cache_dashboard = url_for("rest_api.compute_dash_from_VIN",token=token_cache,vin=VIN_selected,_external=True)
+            plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
+            default_vin = VIN_selected
+            return render_template('dashboard.html', plots=plots,available_vin=available_vin,default_vin=default_vin)  
+
+    cached_path = generate_cache_dash_name()
     if os.path.isfile(cached_path):
         with open(cached_path, "rb") as file:
             cached = file.read()
-        cached = zlib.decompress(cached).decode('utf-8')
-    else:
-        plots = generate_dashboard_graphics()
-        if request.method == 'POST':
-            code = request.form.get('code')
-            #compressed_dashboard = zlib.compress(code.encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
-            #with open(cached_path, "wb") as file:
-            #    file.write(compressed_dashboard)
-    return render_template('dashboard.html', plots=plots,cached=cached)
+        dashboard = json.loads(zlib.decompress(cached).decode('utf-8'))
+    else:        
+        token_cache = generate_token("cache_dashboard_admin")
+        url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
+        plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
+
+    html_string = build_html('app/utils/graph_functions/dashboard_config.json')
+
+    return render_template('dashboard.html', html_string = html_string, plots=plots,available_vin=available_vin,default_vin=default_vin)
     
 
-@dash_bp.route('/prueba')
-@login_required
-def index_prueba():
-    return render_template('template.html')
 
 @dash_bp.route('/mapview')
-#@login_required
+@login_required
 def mapview():
     return render_template('mapview.html')
 
-@dash_bp.route('/newgraphic')
-@login_required
-def newgraphic():
-    return render_template('newgraphic.html')
-
 
 @dash_bp.route('/analytics')
-#@login_required
+@login_required
 def analytics():
 
     plots = []
@@ -76,6 +78,11 @@ def analytics():
     x_prueba4=[1,2,3,4,5]
     y_prueba4=[5,4,3,4,5]
     title_prueba4='Prueba 4'
+    plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
+    plots.append(plotly_plot4)
+    x_prueba4=[1,2,3,4,5]
+    y_prueba4=[1,1,1,1,1]
+    title_prueba4='Prueba 5'
     plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
     plots.append(plotly_plot4)
 

@@ -14,17 +14,21 @@
     
 </head>
 <body>
-
+    <div id="loading">
+        <div class="loading-gif">
+            <img src="/static/R.gif">
+        </div>
+    </div>
     <!-- Barra Vertical -->
     <div class="barra">
         <div class="user">
             <div class="dashboard-box">
                 <div class="dashboard-box-icon">
-                    <a href="/private/user"> <i class="fa fa-user-circle fa-3x icono-user"> </i> </a>
+                    <i class="fa fa-user-circle fa-3x icono-user"> </i>
                 </div>
                 <div class="dashboard-box-text">
                     <!-- Texto dentro de la barra -->
-                     <a class="texto-dentro" href="/private/user"> Hello, <b>{{session['user_email'].split("@")[0] | safe}}</b></a> 
+                     <p class="texto-dentro"> Hello, <b>{{session['user_email'].split("@")[0] | safe}}</b></p> 
                 </div>
             </div>
         </div>
@@ -66,11 +70,15 @@
                      <a class="texto-dentro" href="/private/mapview"> Mapview</a> 
                 </div>
             </div>
-            
-        </div>
-
-
-        <div class="settings">
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/aichat"> <i class="fa fa-comments-o fa-3x icono-ai_chat"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/private/aichat"> AI Chat</a> 
+                </div>
+            </div>
             <div class="dashboard-box">
                 <div class="dashboard-box-icon">
                     <a href="/private/settings"> <i class="fa fa-cogs fa-3x icono-settings"> </i> </a>
@@ -80,6 +88,21 @@
                      <a class="texto-dentro" href="/private/settings"> Settings</a> 
                 </div>
             </div>
+            
+        </div>
+
+
+        <div class="logout">
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/settings"> <i class="fa fa-sign-out fa-3x icono-logout"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/auth/logout"> Logout</a> 
+                </div>
+            </div>
+
         </div>
 
     </div>    
@@ -89,6 +112,17 @@
         {% block content %} 
         {% endblock %}
     </div>
+    
+    <script>
+        // Función para ocultar el GIF de carga y mostrar el contenido
+        function hideLoading() {
+            document.getElementById("loading").style.display = "none";
+        }
+
+        // Espera a que el contenido de la página esté completamente cargado
+        window.addEventListener("load", hideLoading);
+    </script>
+    
 
     
 

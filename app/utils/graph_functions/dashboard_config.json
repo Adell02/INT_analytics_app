@@ -1,0 +1,161 @@
+
+[
+    {
+        "height":"medio",
+        "width":100,
+        "child":true,
+        "flex-direction":"row",
+        "child_config":
+            [
+                {
+                    "height":"medio",
+                    "width":33,
+                    "child":true,
+                    "flex-direction":"column",
+                    "child_config":
+                        [
+                            {
+                                "height":"superior",
+                                "width":100,
+                                "child":false,
+                                "function":"generate_pie_chart",
+                                "parameters":["Dataframe","elements","title"],
+                                "elements":["City (km)","Sport (km)","Flow (km)"],
+                                "title":"Modos de Conducción por km"
+                            },
+                            {
+                                "height":"superior",
+                                "width":100,
+                                "child":false,
+                                "function":"generate_pie_chart",
+                                "parameters":["Dataframe","elements","title"],
+                                "elements":["Sail (km)","Regen (km)"],
+                                "title":"Sail - Regen por km"
+                            }
+                        ]
+
+                },
+                {
+                    "height":"medio",
+                    "width":33,
+                    "child":true,
+                    "flex-direction":"column",
+                    "child_config":
+                        [
+                            {
+                                "height":"superior",
+                                "width":100,
+                                "child":false,
+                                "function":"generate_pie_chart",
+                                "parameters":["Dataframe","elements","title"],
+                                "elements":["City energy (Wh)","Sport energy (Wh)","Flow energy (Wh)"],
+                                "title":"Modos de Conducción por Wh"
+                            },
+                            {
+                                "height":"superior",
+                                "width":100,
+                                "child":false,
+                                "function":"generate_pie_chart",
+                                "parameters":["Dataframe","elements","title"],
+                                "elements":["City regen (Wh)","Sport regen (Wh)"],
+                                "title":"Regeneración City vs Sport por Wh"
+                            }
+                        ]
+
+                },
+                {
+                    "height":"medio",
+                    "width":33,
+                    "child":false,
+                    "function":"generate_note",
+                    "parameters":["Dataframe","notes"],
+                    "notes":["Consumo medio: 35 kWh","Temperatura media: 40 ºC"]
+                }
+            ]
+
+    },
+    {
+        "height":"medio",
+        "width":100,
+        "child":true,
+        "flex-direction":"row",
+        "child_config":
+        [
+            {
+                "height":"medio",
+                "width":50,
+                "child":false,
+                "function":"generate_multi_histogram",
+                "parameters":["Dataframe","elements","units","title"],
+                "elements":["Total energy (Wh)","Total regen (Wh)"],
+                "units":"Wh",
+                "title":"Distribución consumo y regeneración de energía"
+            },
+            {
+                "height":"medio",
+                "width":50,
+                "child":false,
+                "function":"generate_scatter_plot_user",
+                "parameters":["Dataframe","key_user","element_x","elements_y","title","user_reg_line","reg_line"],
+                "key_user":"",
+                "element_x":"End odometer",
+                "elements_y":["Min cell V","Max cell V"],
+                "title":"Tensiones de celda vs Uso",
+                "user_reg_line":false,
+                "reg_line":true
+            }
+                
+        ]
+    },
+    {
+        "height":"medio",
+        "width":100,
+        "child":true,
+        "flex-direction":"row",
+        "child_config":
+        [
+            {
+                "height":"medio",
+                "width":50,
+                "child":false,
+                "function":"get_consumption_vs_temp",
+                "parameters":["Dataframe"]
+            },
+            {
+                "height":"medio",
+                "width":50,
+                "child":false,
+                "function":"generate_multi_histogram",
+                "parameters":["Dataframe","elements","units","title"],
+                "elements":["Motor min T (°C)","Motor max T (°C)"],
+                "units":"ºC",
+                "title":"Distribución Temperatura Motor"
+                
+            } 
+                
+        ]
+    },
+    {
+        "height":"medio",
+        "width":100,
+        "child":true,
+        "flex-direction":"row",
+        "child_config":
+        [
+            {
+                "height":"medio",
+                "width":100,
+                "child":false,
+                "function":"generate_multi_histogram",
+                "parameters":["Dataframe","elements","units","title"],
+                "elements":["Inv  min T (°C)","Inv max T (°C)"],
+                "units":"ºC",
+                "title":"Distribución Temperatura Inversor"
+                
+            } 
+                
+        ]
+    }
+
+]
+

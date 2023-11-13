@@ -1,106 +1,98 @@
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import numpy as np
-import statsmodels.api as sm
-import os
-
 from app.utils.graph_functions.functions import * 
 from app.utils.graph_functions.consumption_vs_temp import *
-
-import pyarrow as pa
-import pyarrow.parquet as pq
+from plotly.graph_objects import Figure
 
 
-def generate_dashboard_graphics(samples=None):
-    # Generates 7 graphics to be displayed on a fixed dashboard
-    # 
-    # INPUT:
-    #   - data_file_route: relative path the data file
-    #   - samples: number of samples to be plotted. Default value is None (all samples)
-    # 
-    # OUTPUT:
-    #   - list of figures created
-
-    # Fistly, create a dataframe containing all columns needed:
-    LIST_COLUMNS = ['City (km)','Sport (km)','Flow (km)','Sail (km)','Regen (km)',
-                    'City energy (Wh)','Sport energy (Wh)','Flow energy (Wh)','City regen (Wh)','Sport regen (Wh)',
-                    'Total energy (Wh)','Total regen (Wh)',
-                    'End odometer','Min cell V','Max cell V',
-                    'Total (km)','Avg temp','SoC delta (%)',
-                    'Motor min T (°C)','Motor max T (°C)',
-                    'Inv  min T (°C)','Inv max T (°C)']
+def serialize_figures(fig_vector):
+    serialized_figures = []
+    for idx,fig in enumerate(fig_vector):
+        if type(fig) == Figure:
+            fig.update_layout({'paper_bgcolor': 'rgba(0, 0, 0, 0)'},margin=dict(l=25, r=20, t=55, b=20))
+            serialized_figures.append(fig.to_json())
+        
+    return serialized_figures
     
-    INDEX = 'VIN'
-    KEY_COLS = ['VIN','Id','Timestamp']
+def generate_dashboard_graphics(df,vin=None):
 
-    
-    # Generate a dataframe containing all columns listed before
-    #df =df_from_elements(data_file_route,INDEX,samples,KEY_COLS,LIST_COLUMNS)
-    #table = pa.Table.from_pandas(df)
-    #parquet_file = "Database_Ray.parquet"
-    #pq.write_table(table,parquet_file)
-    parquet_file = "app/database/Database_Ray.parquet"
-    table = pq.read_table(parquet_file)
-    df = table.to_pandas()
-    
     # Generate functions in order and add them to a figures vector
+    
+    with open('app/utils/graph_functions/dashboard_config.json',encoding="utf-8") as f:
+        config = json.load(f)
+    
     fig_vector = []
 
-    fig_vector.append(
-        generate_pie_chart(
-            df,
-            ['City (km)','Sport (km)','Flow (km)','Sail (km)','Regen (km)'],
-            'Modos de Conducción por km'))    
-    fig_vector.append(
-        generate_pie_chart(
-            df,
-            ['City energy (Wh)','Sport energy (Wh)','Flow energy (Wh)','City regen (Wh)','Sport regen (Wh)'],
-            'Modos de Conducción por Wh'))
-    fig_vector.append(
-        generate_multi_histogram(
-            df,
-            [ 'Total energy (Wh)','Total regen (Wh)'],
-            'Wh',
-            title = 'Distribución consumo y regeneración de energía'
-        )
-    )
-    fig_vector.append(
-        generate_scatter_plot_user(
-            df,
-            'UDNR7711AM0000137',
-            'End odometer',
-            ['Min cell V','Max cell V'],
-            'Comparación usuario: Tensiones de celda vs Uso',
-            True, True
-        )
-    )
-
-    fig_vector.append(get_consumption_vs_temp(df))
-
-    fig_vector.append(
-        generate_multi_histogram(
-            df,
-            ['Motor min T (°C)','Motor max T (°C)'],
-            'ºC',
-            title = 'Distribución Temperatura Motor'
-        )
-    )
-
-    fig_vector.append(
-        generate_multi_histogram(
-            df,
-            ['Inv  min T (°C)','Inv max T (°C)'],
-            'ºC',
-            title = 'Distribución Temperatura Inversor'
-        )
-    )
-
-    serialized_figures = []
-    for fig in fig_vector:
-        fig.update_layout({'paper_bgcolor': 'rgba(0, 0, 0, 0)'},margin=dict(l=20, r=20, t=55, b=20))
-        serialized_figures.append(fig.to_json())
+    for row in config:
+        if row['child'] == True:
+            for sub_row in row['child_config']:
+                if sub_row['child'] == True:
+                    for sub_sub_row in sub_row['child_config']:
+                        if sub_sub_row['child'] == True:
+                            print("Too complex layout")
+                        else:
+                            func_str = sub_sub_row["function"]+"("
+                            for param in sub_sub_row["parameters"]:
+                                if param == "Dataframe":
+                                    func_str += "df"
+                                elif param == "key_user":
+                                    if vin:
+                                        func_str += +",key_user='"+vin+"'"
+                                    else:
+                                        func_str += ",key_user=''"
+                                elif type(sub_sub_row[param]) == list or type(sub_sub_row[param]) == bool:
+                                    func_str += ","+param+"="+str(sub_sub_row[param])
+                                elif type(sub_sub_row[param]) == str:
+                                    func_str += ","+param+"='"+str(sub_sub_row[param])+"'"
+                                
+                            func_str += ")"           
+                            fig = eval(func_str)                                                        
+                            fig_vector.append(fig)
+                else:
+                    func_str = sub_row["function"]+"("
+                    for param in sub_row["parameters"]:
+                        if param == "Dataframe":
+                            func_str += "df"
+                        elif param == "key_user":
+                            if vin:
+                                func_str += ",key_user='"+vin+"'"
+                            else:
+                                func_str += ",key_user=''"
+                        elif type(sub_row[param]) == list or type(sub_row[param]) == bool:
+                            func_str += ","+param+"="+str(sub_row[param])
+                        elif type(sub_row[param]) == str:
+                            func_str += ","+param+"='"+str(sub_row[param])+"'"
+                    func_str += ")"  
+                    fig = eval(func_str)                                                        
+                    fig_vector.append(fig)
+                    
+    serialized_figures = serialize_figures(fig_vector)
 
     return serialized_figures
 
+def build_html(config_file:str):
+    html_string = ""
+    with open(config_file) as f:
+        config = json.load(f)
+    idx = 0
+    for row in config:        
+        if row['child']:
+            html_string += '<div class="recuadro-'+row['height']+'-dashboard" style="display:flex;flex-direction:'+row['flex-direction']+'">'
+            for sub_row in row['child_config']:
+                if sub_row['child']:
+                    html_string += '<div class="sub-container-'+sub_row['height']+' sub-recuadro-w'+str(sub_row['width'])+'" style="display:flex;flex-direction:'+sub_row['flex-direction']+'">'
+                    for sub_sub_row in sub_row['child_config']:
+                        if sub_sub_row['child']:
+                            print("Too complex layout")
+                        elif sub_sub_row['function'] != 'generate_note':
+                            html_string += '<div class="sub-graph-container graph-container">'
+                            #html_string += plots[idx]
+                            #idx += 1
+                            html_string += '</div>'
+
+                    html_string += '</div>'
+                elif sub_row['function'] != 'generate_note':
+                    html_string += '<div class="graph-container recuadro-w'+str(sub_row['width'])+'">'
+                    #html_string += plots[idx]
+                    #idx += 1
+                    html_string += '</div>'
+            html_string += '</div>'   
+    return html_string

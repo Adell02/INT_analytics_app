@@ -4,12 +4,10 @@
 {% block content %} 
     <div class="contenido">
         <div class="a">
-            <div class="recuadro-superior-analytics" >
+            <div class="recuadro-superior-analytics">
                 <div class="new-graphic">
-    
                 </div>
                 <div class="search-graphic">
-    
                 </div>
                 <div class="visualise-options">
                     <i class="fa fa-bars fa-2x icono-boton-options" aria-hidden="true"></i>
@@ -19,25 +17,39 @@
         
         <head>
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-            
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+            <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
         </head>
         <body>
-            <div id="map"></div>
-            
-            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+            <div id="map-container">
+                <div id="map" class="grayscale-map"></div>
+            </div>
             <script>
-                // Crea un mapa interactivo con Leaflet
                 var map = L.map('map').setView([41.373349, 2.06085], 10);
 
-                // Agrega una capa de OpenStreetMap al mapa
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
                     maxZoom: 19,
-                    attribution: '©️ <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution: '© <a href="https://carto.com/attributions">CARTO</a>'
                 }).addTo(map);
 
-                // Agrega un marcador al mapa
-                L.marker([41.373349851846285, 2.060854795286366]).addTo(map)
-                    .bindPopup('RAY').openPopup();
+                //añadimos los puntos
+                var puntos = [
+                    [41.373349, 2.06085],
+                    [41.37457763574095, 2.062641146649088],
+                    [41.37467827273396, 2.064851286867785]
+                    
+                ];
+
+                
+                var heatLayer = L.heatLayer(puntos, {
+                    radius: 20,
+                    gradient: { 0.4: 'white', 0.65: 'gray', 1: 'black' } // Define la paleta de colores
+                }).addTo(map);
+
+                
+                puntos.forEach(function (coordenada) {
+                    L.marker(coordenada, { icon: L.divIcon({ className: 'red-marker' }) }).addTo(map);
+                });
             </script>
         </body>
     </div>

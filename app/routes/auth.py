@@ -112,7 +112,7 @@ def register():
         seeder(email=in_email,password=in_password)
 
         #flash("A confirmation email has been sent via email.", "success")
-        return render_template("login.html",error="")
+        return redirect(url_for("auth.login"))
 
     return render_template("register.html")
 

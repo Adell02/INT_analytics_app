@@ -19,7 +19,7 @@ def connection_mysql(route_function):
     @wraps(route_function)
     def wrapper(*args, **kwargs):
         opening_connection()
-        try:
+        try:       
             return route_function(*args, **kwargs)
         finally:
             closing_connection()
@@ -51,6 +51,8 @@ def closing_connection():
     conn.close()
     # cursor_ray.close()
     # conn_ray.close()
+    cursor = None
+    conn = None
     
 #--------------- SEEDER ---------------#
 
@@ -76,7 +78,7 @@ def seeder(email=None,password=None):
     #Saving the Actions performed on the DB
     conn.commit()
 
-    return fetch_all()
+    return fetch_all_with_connection()
  
 @seeder_bp.route('/new_table/<table>')
 @connection_mysql
@@ -96,11 +98,22 @@ def new_table(table):
 
 @seeder_bp.route('/fetch_all',methods=['GET'])
 @connection_mysql
-def fetch_all():
-    conn.commit()
-    cursor.execute(''' SELECT * from user;''')
+def fetch_all():    
+    cursor.execute(''' SELECT * from user;''')    
     all_users = All_users()
     [all_users.add_user(User(x)) for x in cursor.fetchall()]
+    conn.commit()
+
+    if request.method == 'GET':
+        return (repr(all_users))
+    else:
+        return all_users
+
+def fetch_all_with_connection():    
+    cursor.execute(''' SELECT * from user;''')    
+    all_users = All_users()
+    [all_users.add_user(User(x)) for x in cursor.fetchall()]
+    conn.commit()
 
     if request.method == 'GET':
         return (repr(all_users))
@@ -110,9 +123,10 @@ def fetch_all():
 @seeder_bp.route('/fetch_user/<email>',methods=['GET'])
 @connection_mysql
 def fetch_user(email):
-    conn.commit()
+    
     cursor.execute(''' SELECT * from user WHERE email = %s;''',(email,))
     user = cursor.fetchone()
+    conn.commit()
 
     if not user:
         if request.method == 'GET':
@@ -130,13 +144,12 @@ def fetch_user(email):
 @seeder_bp.route('/delete_user')
 @connection_mysql
 def delete_user():
-    print(fetch_all())
+    print(fetch_all_with_connection())
     print("Enter Email: ",end="")
     email = input()
-
     cursor.execute(''' DELETE FROM user WHERE email = %s;''',(email,))
     conn.commit()
-    return fetch_all()
+    return fetch_all_with_connection()
 
 @connection_mysql
 def edit_user(email,field,value):
@@ -158,7 +171,7 @@ def check_existance(field,value):
 def confirm_user(email=None):
 
     if not email:
-        print(fetch_all())
+        print(fetch_all_with_connection())
 
         print("Enter Email: ",end="")
         email = input()

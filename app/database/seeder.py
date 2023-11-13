@@ -50,6 +50,7 @@ def new_table(table):
 
 @seeder_bp.route('/fetch_all',methods=['GET'])
 def fetch_all():
+    conn.commit()
     cursor.execute(''' SELECT * from user;''')
     all_users = All_users()
     [all_users.add_user(User(x)) for x in cursor.fetchall()]
@@ -61,6 +62,7 @@ def fetch_all():
     
 @seeder_bp.route('/fetch_user/<email>',methods=['GET'])
 def fetch_user(email):
+    conn.commit()
     cursor.execute(''' SELECT * from user WHERE email = %s;''',(email,))
     user = cursor.fetchone()
 

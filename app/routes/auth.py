@@ -14,14 +14,7 @@ auth_bp = Blueprint('auth', __name__)
 def login_required(route_function):
     @wraps(route_function)
     def wrapper(*args,**kwargs):
-
-        session['user_id'] = 1
-        session['user_email'] = "guillermo@adell.tech"
-        session['personal_token'] = "personal_token"
-        session['org_name'] = "ORG name"
-        session['external_token'] = "External Token"
-        session['role'] = "user"
-        session['confirmed'] = 1
+        
         session['Optimization'] = 'Optimized'
         
         if 'user_id' in session:

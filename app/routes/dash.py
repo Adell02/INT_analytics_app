@@ -8,6 +8,7 @@ from app.routes.auth import login_required
 from app.utils.graph_functions.generate_scatter import generate_scatter_plot
 from app.utils.account.token import generate_token
 from app.utils.DataframeManager.load_df import generate_cache_dash_name,load_current_df_memory
+from app.routes.RESTful_API import *
 from app.utils.graph_functions.generate_dasboard_graphics import build_html
 
 
@@ -40,8 +41,9 @@ def dashboard():
         dashboard = json.loads(zlib.decompress(cached).decode('utf-8'))
     else:        
         token_cache = generate_token("cache_dashboard_admin")
-        url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
-        plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
+        #url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
+        #plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
+        plots = cache_dashboard(token_cache)
 
     html_string = build_html('app/utils/graph_functions/dashboard_config.json')
 

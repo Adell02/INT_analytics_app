@@ -8,6 +8,7 @@ from app.routes.auth import login_required
 from app.utils.graph_functions.generate_scatter import generate_scatter_plot
 from app.utils.account.token import generate_token
 from app.utils.DataframeManager.load_df import generate_cache_dash_name,load_current_df_memory
+from app.utils.RESTful_API import cache_dashboard,compute_dash_from_VIN
 from app.utils.graph_functions.generate_dasboard_graphics import build_html
 
 
@@ -21,6 +22,8 @@ def dashboard():
 
     default_vin = ''
 
+    html_string = build_html('app/utils/graph_functions/dashboard_config.json')
+
     if request.method == 'POST':
         VIN_selected = request.form['VIN_selector']
         
@@ -28,22 +31,18 @@ def dashboard():
             
         if VIN_selected != '':
             token_cache = generate_token("dash_from_vin_admin")
-            url_cache_dashboard = url_for("rest_api.compute_dash_from_VIN",token=token_cache,vin=VIN_selected,_external=True)
-            plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
+            plots = compute_dash_from_VIN(token_cache,VIN_selected)
             default_vin = VIN_selected
-            return render_template('dashboard.html', plots=plots,available_vin=available_vin,default_vin=default_vin)  
+            return render_template('dashboard.html', html_string = html_string,plots=plots,available_vin=available_vin,default_vin=default_vin)  
 
     cached_path = generate_cache_dash_name()
     if os.path.isfile(cached_path):
         with open(cached_path, "rb") as file:
             cached = file.read()
-        dashboard = json.loads(zlib.decompress(cached).decode('utf-8'))
+        plots = json.loads(zlib.decompress(cached).decode('utf-8'))
     else:        
         token_cache = generate_token("cache_dashboard_admin")
-        url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
-        plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
-
-    html_string = build_html('app/utils/graph_functions/dashboard_config.json')
+        plots = cache_dashboard(token_cache)
 
     return render_template('dashboard.html', html_string = html_string, plots=plots,available_vin=available_vin,default_vin=default_vin)
     

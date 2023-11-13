@@ -20,26 +20,6 @@ def create_app(config_class=Config):
 
     Session(app)   
     mail = Mail(app)
-    
-    
-    db_config= {
-        'host':app.config["MYSQL_HOST"],
-        'user':app.config["MYSQL_USER"],
-        'password':app.config["MYSQL_PASSWORD"],
-        'database':app.config["MYSQL_DB"]
-    }
-
-    db_config_ray={
-        'host':app.config["MYSQL_HOST_RAY"],
-        'user':app.config["MYSQL_USER_RAY"],
-        'password':app.config["MYSQL_PASSWORD_RAY"],
-        'database':app.config["MYSQL_DB_RAY"]
-    }
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor(buffered=True,dictionary=True)    
-
-    #conn_ray = mysql.connector.connect(**db_config_ray)
-    #cursor_ray = conn_ray.cursor(buffered=True,dictionary=True)
 
     openai.api_key = Config.OPENAI_KEY
     #test()

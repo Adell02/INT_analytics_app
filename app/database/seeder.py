@@ -1,17 +1,61 @@
-
+# Seeder
+from functools import wraps
 from flask import Blueprint,request,render_template,redirect
+import mysql.connector
 import bcrypt
 
 
-from app.config import Config
 from app import conn,cursor
+from app.config import Config
 from app.database.models import User,All_users
 from app.utils.account.token import generate_personal_token
 
 
 seeder_bp = Blueprint('seeder', __name__)
 
+#--------------- WRAPPER ---------------#
+
+def connection_mysql(route_function):
+    @wraps(route_function)
+    def wrapper(*args, **kwargs):
+        opening_connection()
+        try:
+            return route_function(*args, **kwargs)
+        finally:
+            closing_connection()
+    return wrapper
+
+def opening_connection():
+    global conn,cursor
+    db_config= {
+        'host':Config.MYSQL_HOST,
+        'user':Config.MYSQL_USER,
+        'password':Config.MYSQL_PASSWORD,
+        'database':Config.MYSQL_DB
+    }
+
+    db_config_ray={
+        'host':Config.MYSQL_HOST_RAY,
+        'user':Config.MYSQL_USER_RAY,
+        'password':Config.MYSQL_PASSWORD_RAY,
+        'database':Config.MYSQL_DB_RAY
+    }
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(buffered=True,dictionary=True) 
+    #conn_ray = mysql.connector.connect(**db_config_ray)
+    #cursor_ray = conn_ray.cursor(buffered=True,dictionary=True)
+
+def closing_connection():   
+    global conn,cursor 
+    cursor.close()
+    conn.close()
+    # cursor_ray.close()
+    # conn_ray.close()
+    
+#--------------- SEEDER ---------------#
+
 @seeder_bp.route('/seeder')
+@connection_mysql
 def seeder(email=None,password=None):
     if email == None:
         print("Enter Email: ",end="")
@@ -35,6 +79,7 @@ def seeder(email=None,password=None):
     return fetch_all()
  
 @seeder_bp.route('/new_table/<table>')
+@connection_mysql
 def new_table(table):    
     #Executing SQL Statements
     if table == 'user' or table == 'all':
@@ -50,6 +95,7 @@ def new_table(table):
     return "Table Created"
 
 @seeder_bp.route('/fetch_all',methods=['GET'])
+@connection_mysql
 def fetch_all():
     conn.commit()
     cursor.execute(''' SELECT * from user;''')
@@ -62,6 +108,7 @@ def fetch_all():
         return all_users
     
 @seeder_bp.route('/fetch_user/<email>',methods=['GET'])
+@connection_mysql
 def fetch_user(email):
     conn.commit()
     cursor.execute(''' SELECT * from user WHERE email = %s;''',(email,))
@@ -81,6 +128,7 @@ def fetch_user(email):
         return(user)
 
 @seeder_bp.route('/delete_user')
+@connection_mysql
 def delete_user():
     print(fetch_all())
     print("Enter Email: ",end="")
@@ -90,12 +138,14 @@ def delete_user():
     conn.commit()
     return fetch_all()
 
+@connection_mysql
 def edit_user(email,field,value):
     query = "UPDATE user SET " + field + "=\'"+value+"\' WHERE email = \'"+email+"\';"
     cursor.execute(query)
     conn.commit()
     return True
 
+@connection_mysql
 def check_existance(field,value):
     query = "SELECT * FROM user WHERE " + field +"=\'"+value+"\';"
     cursor.execute(query)
@@ -104,6 +154,7 @@ def check_existance(field,value):
     return fetch
 
 @seeder_bp.route("/confirm_user")
+@connection_mysql
 def confirm_user(email=None):
 
     if not email:

@@ -1,50 +1,62 @@
 # dash.py
 import os
-from flask import Blueprint, render_template,session,url_for
-import json
+from flask import Blueprint, render_template,url_for,request,session
 import zlib
-import requests
+import requests,json
 
 from app.routes.auth import login_required
 from app.utils.graph_functions.generate_scatter import generate_scatter_plot
 from app.utils.account.token import generate_token
-from app.utils.DataframeManager.load_df import generate_cache_dash_name
+from app.utils.DataframeManager.load_df import generate_cache_dash_name,load_current_df_memory
+from app.utils.graph_functions.generate_dasboard_graphics import build_html
 
 
 dash_bp = Blueprint('dash', __name__)
 
 @dash_bp.route('/dashboard',methods=['POST','GET'])
-#@login_required
+@login_required
 def dashboard():
-    cached_path = generate_cache_dash_name()
+    dataframe = load_current_df_memory()
+    available_vin = list(dataframe['Id'].keys().unique())    
 
+    default_vin = ''
+
+    if request.method == 'POST':
+        VIN_selected = request.form['VIN_selector']
+        
+        session['Optimization'] = request.form['Optimization']
+            
+        if VIN_selected != '':
+            token_cache = generate_token("dash_from_vin_admin")
+            url_cache_dashboard = url_for("rest_api.compute_dash_from_VIN",token=token_cache,vin=VIN_selected,_external=True)
+            plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
+            default_vin = VIN_selected
+            return render_template('dashboard.html', plots=plots,available_vin=available_vin,default_vin=default_vin)  
+
+    cached_path = generate_cache_dash_name()
     if os.path.isfile(cached_path):
         with open(cached_path, "rb") as file:
             cached = file.read()
-        cached = zlib.decompress(cached).decode('utf-8')
-        plots = json.loads(cached)
+        dashboard = json.loads(zlib.decompress(cached).decode('utf-8'))
     else:        
         token_cache = generate_token("cache_dashboard_admin")
         url_cache_dashboard = url_for("rest_api.cache_dashboard",token=token_cache,_external=True)
-        returned = requests.get(url_cache_dashboard).content
-        plots = json.loads(returned)
+        plots = json.loads(requests.get(url_cache_dashboard).content.decode('utf-8'))
 
-    return render_template('dashboard.html', plots=plots)
+    html_string = build_html('app/utils/graph_functions/dashboard_config.json')
+
+    return render_template('dashboard.html', html_string = html_string, plots=plots,available_vin=available_vin,default_vin=default_vin)
     
 
-@dash_bp.route('/prueba')
-#@login_required
-def index_prueba():
-    return render_template('template.html')
 
 @dash_bp.route('/mapview')
-#@login_required
+@login_required
 def mapview():
     return render_template('mapview.html')
 
 
 @dash_bp.route('/analytics')
-#@login_required
+@login_required
 def analytics():
 
     plots = []

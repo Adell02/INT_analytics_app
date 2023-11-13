@@ -38,7 +38,7 @@ def new_graph():
         fig_vector = []
 
         if  graph_type == "none" :
-            h
+            pass
         elif graph_type == "Pie_Chart" :
             fig_vector.append(
             generate_pie_chart(

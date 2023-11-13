@@ -22,21 +22,16 @@ def login_required(route_function):
         session['external_token'] = "External Token"
         session['role'] = "user"
         session['confirmed'] = 1
+        session['Optimization'] = 'Optimized'
         
         if 'user_id' in session:
-            # User is Logged In
-            if 'df' not in session.keys():
-                session['df'] = load_current_df_memory().to_dict('list')
-
+            # User is Logged In           
             return route_function(*args,**kwargs)        
         else:
             # User is NOT Logged In
             return redirect(url_for('auth.login'))
     return wrapper
 
-
-# This wrapper has to be implemented so that if user is logged, 
-# just show a message saying he is logged, and redirect him to the main page
 
 def logout_required(route_function):
     @wraps(route_function)
@@ -82,6 +77,7 @@ def login():
                 session['external_token'] = user_external_token
                 session['role'] = user_role
                 session['confirmed'] = user_confirmed
+                
                 # Redirect to a success page or dashboard
                 return redirect(url_for('dash.dashboard'))
             else:

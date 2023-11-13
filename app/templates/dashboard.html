@@ -4,53 +4,70 @@
 {% block content %} 
         <div class="margen">
         </div>
-        <div class="recuadro-superior-analytics" >
-            <div class="new-graphic-superior">
-                Display:
+        <form method='POST'>
+            <div class="recuadro-superior-analytics" >
+                <div class="new-graphic-superior">
+                    <select id="VIN_selector" name="VIN_selector" placeholder="Select VIN:">
+                        <option value=""> Select VIN </option>
+                        {% for VIN in available_vin %}
+                            <option value={{ VIN }}> {{VIN}} </option>
+                        {% endfor %}
+                      </select>
+                </div>
+                <div class="new-graphic-superior">
+                    Time:
+                </div>
+                <div class="new-graphic-superior">
+                    <select id="Optimization" name="Optimization" placeholder="Select Optimization:">
+                        <option value="Optimized"> Optimized </option>
+                        <option value="Fast"> Fast </option>
+                        <option value="All Data"> All Data </option>
+                      </select>
+                </div>
+                <div class="contenedorsave">      
+                    <button type="submit"  class="save-button">Update</button>
+                </div>
             </div>
-            <div class="new-graphic-superior">
-                Time:
-            </div>
-        </div>
 
+        </form>
+        
+        {{ html_string | safe }}
+        
+        
+    <script>
+        const plot = {{ plots | tojson | safe }}; 
 
-
-        <div class="recuadro-superior-dashboard" >
-            <div class="graph-container recuadro-w33">
-            </div>
-            <div class="graph-container recuadro-w33">
-            </div>
-            <div class="graph-container recuadro-w33">
-            </div>
-        </div>
-
-
-        <div class="recuadro-medio-dashboard" >
-            <div class="graph-container recuadro-w66" >
-
-            </div>
-            <div class="graph-container recuadro-w33" >
-
-            </div>
-        </div>
-        <div class="recuadro-inferior-dashboard" >
-            <div class="graph-container recuadro-w50">
-            </div>
-            <div class="graph-container recuadro-w50">
-            </div>
-        </div>
-    
-        <script>
-            const plot = {{ plots | tojson | safe }}; 
-            const containers = document.getElementsByClassName("graph-container"); 
-            var graph_divs = []; 
+        const containers = document.getElementsByClassName("graph-container"); 
+        var graph_divs = []; 
             
-            if (containers[0].childElementCount == 0){
-                create_all(); 
-            }               
+        if (containers[0].childElementCount == 0){
+            create_all(); 
+        }         
+        
+        var optimization = '{{ session["Optimization"] }}';
+        var desiredDataPoints;
 
+        if (optimization == 'Optimized'){
+            desiredDataPoints = 1000;
+            window.onload = load_all_optimized;
+        }
+        else if (optimization == 'Fast'){
+            desiredDataPoints = 10000;
+            window.onload = load_all_optimized;
+        }
+        else{
             window.onload = load_all;
-            window.addEventListener('resize',resize_all);            
+        }
+        
+        window.addEventListener('resize',resize_all);  
+      
 
-        </script>
+        // Set the selected VIN on the dropdown as default
+        var selected_vin = '{{ default_vin | safe}}';
+        document.getElementById("VIN_selector").value = selected_vin;  
+
+        // Set the selected Optimization on the dropdown as default
+        document.getElementById("Optimization").value = optimization;
+        
+    </script>
 {% endblock %}

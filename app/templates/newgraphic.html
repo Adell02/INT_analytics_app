@@ -32,8 +32,8 @@
                     </select>
                 </div>
 
-                <div class="custom-select" multiple >
-                    <select  name="graph_data_y" placeholder="Select Graph Data 'y':">
+                <div class="custom-select" >
+                    <select  multiple name="graph_data_y" placeholder="Select Graph Data 'y':">
                         <option value="">Select Graph Data "y":</option>
                         {% for col in columns_list %}
                             <option value="{{ col }}"> {{ col }} </option>
@@ -58,7 +58,9 @@
 
             const plot = {{ plots | tojson | safe }}; 
             const containers = document.getElementsByClassName("graph-container"); 
-            var graph_divs = [];              
+            var graph_divs = [];        
+            
+            
             
             if (containers[0].childElementCount == 0){
                 create_all(); 

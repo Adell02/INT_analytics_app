@@ -9,10 +9,16 @@ class Config:
     DEBUG = os.getenv("DEBUG")
     SECRET_KEY = os.getenv("SECRET_KEY")
     SECRET_KEY_PERSONAL_TOKEN = os.getenv("SECRET_KEY_PERSONAL_TOKEN")
+
     MYSQL_HOST = os.getenv("MYSQL_HOST")
     MYSQL_USER = os.getenv("MYSQL_USER")
     MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
     MYSQL_DB = os.getenv("MYSQL_DB")
+
+    MYSQL_HOST_RAY = os.getenv("MYSQL_HOST_RAY")
+    MYSQL_USER_RAY = os.getenv("MYSQL_USER_RAY")
+    MYSQL_PASSWORD_RAY = os.getenv("MYSQL_PASSWORD_RAY")
+    MYSQL_DB_RAY = os.getenv("MYSQL_DB_RAY")
 
     SESSION_TYPE= os.getenv("SESSION_TYPE")
     SESSION_PERMANENT= False

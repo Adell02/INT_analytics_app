@@ -58,6 +58,9 @@ body{
 
 
 /* BARRA */
+.fa-3x{
+    font-size: 2.5rem!important;
+}
 .barra {
     position: fixed;
     left: 0;
@@ -88,7 +91,7 @@ body{
     justify-content: center;
 }
 
-.settings{
+.logout{
     height: 20%;
     display: flex;
     flex-direction: column;
@@ -101,7 +104,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: initial;
-    height: 20%;
+    height: 5rem;
     min-width: min-content;
     pointer-events: none;
     white-space: nowrap;
@@ -115,6 +118,34 @@ body{
 .dashboard-box-text{
     text-align: left;
     height: max-content;
+}
+
+/*      ICONOS      */
+
+.icono-dashboard{
+    color: white;
+}
+.icono-user{
+    color:white;
+}
+.icono-analytics{
+    color:white;
+}
+.icono-mapview{
+    color:white;
+}
+.icono-ai_chat{
+    color: white
+}
+.icono-settings{
+    color: white
+}
+.icono-logout{
+    color: white
+}
+.icono-boton-options{
+    color:#0b1f3f;
+
 }
 
 /*      BARRA DESPLEGADA        */
@@ -184,7 +215,10 @@ body{
 
 /* DASHBOARD */
 
-
+.graph-container>div{
+    height:100%;
+    width: 100%;
+}
 
 .recuadro-superior-dashboard{
     display: flex;
@@ -268,9 +302,9 @@ body{
 }
 
 .recuadro-w100{
-    margin-left: 2rem;
-    margin-right: 2rem;
-    width:calc(100% - (4rem));
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width:calc(100% - (2rem));
     height: calc( 100% - (2rem));
     background-color: #ffffff;
     opacity: 90%;
@@ -278,6 +312,23 @@ body{
     box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
 }
 
+.sub-container-medio{
+    height: 100%;
+    justify-content: space-between;
+}
+.sub-recuadro-w33{
+    width:33%;
+}
+
+.sub-graph-container{
+    height: calc(50% - 1rem);
+    width: calc(100% - 2rem);
+    margin: 1rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+}
 
 
 
@@ -595,32 +646,6 @@ form[name="newgraphic_form"]{
     flex: 1; 
     min-width: 100px; 
     overflow: hidden;
-}
-
-
-
-
-
-/*      ICONOS      */
-
-.icono-dashboard{
-    color: white;
-}
-.icono-user{
-    color:white;
-}
-.icono-analytics{
-    color:white;
-}
-.icono-mapview{
-    color:white;
-}
-.icono-settings{
-    color: white
-}
-.icono-boton-options{
-    color:#0b1f3f;
-
 }
 
 

@@ -146,7 +146,7 @@ def trace_scatter_plot(dataframe,element_x,elements_y,reg_line=False):
     #   - None if error occured
     
     # Plot generation for each data source passed as parameter elements_y
-    
+        
     trace_vector=[]          # This vector will contain all traces, one for each element_y
     
     # We have to differentiate if elements_y is a vector or a string, because the for loop won't
@@ -344,7 +344,8 @@ def generate_scatter_plot_user(dataframe,key_user,element_x,elements_y,title="Un
     if key_user in dataframe.index:
         user_df = dataframe.loc[dataframe.index == key_user]
     else:
-        return None
+        fig = generate_scatter_plot(dataframe,element_x,elements_y,title,reg_line)
+        return fig
 
     # Use trace_scatter_plot to generate a figure containing all data, to do so, we'll use
     # an auxiliary vector containing all traces
@@ -447,6 +448,14 @@ def generate_response_surface(dataframe,element_x,element_y,element_z,title='Unn
         aspectmode = 'cube'
     ))
     return fig
+
+def generate_note(dataframe,notes):
+    html_note = "<div class='note-container'>"+ "<ul class='list-notes'>"
+    for note in notes:
+        html_note += "<li class='list-notes-element'>"+note+"</li>"
+    html_note += "</ul></div>"
+
+    return html_note
 
 """********************     Dataframe funcitons    ********************"""
 

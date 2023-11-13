@@ -5,6 +5,7 @@ from app.routes.auth import login_required
 from app.database.seeder import *
 from app.utils.account.token import *
 from app.utils.AI.openai_request import *
+from app.utils.DataframeManager.load_df import load_current_df_memory
 
 ai_chat_bp = Blueprint('aichat', __name__)
 
@@ -16,7 +17,7 @@ def ai_chat():
         pass
     if request.method == "POST":
         if request.form['data'] != '':            
-            dataframe = pd.DataFrame(session['df'])
+            dataframe = load_current_df_memory()
             #response_ai = ai_request(dataframe,request.form['data'],dataframe.columns)
             response_ai = 'City mode percentage: 623.8823872683247%\nSport mode percentage: 195.69808216863078%\nFlow mode percentage: 180.41953056304445%'
             if 'chat' not in session.keys():

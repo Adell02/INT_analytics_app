@@ -17,8 +17,8 @@ jobs:
       - name: Set up SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: 13.48.135.195
+          username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |            
             cd INT_analytics_app 

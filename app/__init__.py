@@ -46,11 +46,9 @@ def create_app(config_class=Config):
     from app.routes.dash import dash_bp
     from app.routes.settings import settings_bp
     from app.routes.ai_chat import ai_chat_bp
-    from app.routes.RESTful_API import rest_api_bp
     from app.database.seeder import seeder_bp
     from app.routes.newgraphic import newgraphic_bp
 
-    app.register_blueprint(rest_api_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(settings_bp,url_prefix="/private")
     app.register_blueprint(dash_bp, url_prefix='/private')

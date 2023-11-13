@@ -35,8 +35,8 @@ def create_app(config_class=Config):
         'password':app.config["MYSQL_PASSWORD_RAY"],
         'database':app.config["MYSQL_DB_RAY"]
     }
-    #conn = mysql.connector.connect(**db_config)
-    #cursor = conn.cursor(buffered=True,dictionary=True)    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(buffered=True,dictionary=True)    
 
     #conn_ray = mysql.connector.connect(**db_config_ray)
     #cursor_ray = conn_ray.cursor(buffered=True,dictionary=True)

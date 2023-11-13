@@ -20,6 +20,9 @@ ID: {str(self.id)}
     email: {self.email}
     personal token: {self.personal_token}
     org. name: {str(self.org_name)}
+    external token : {self.external_token}
+    role : {self.role}
+    is_confirmed : {self.is_confirmed}
 """
         string+="</pre>"
         return(string)
@@ -31,6 +34,9 @@ ID: {str(self.id)}
     email: {self.email}
     personal token: {self.personal_token}
     org. name: {str(self.org_name)}
+    external token : {self.external_token}
+    role : {self.role}
+    is_confirmed : {self.is_confirmed}
 """
         
         return(string)

@@ -3,6 +3,8 @@ run.py
 app/__init__.py
 app/config.py
 flask_session/
+log.txt
+test.*
 
 
 .DS_Store

@@ -208,7 +208,7 @@ function load_all_optimized(){
 // ANALYTICS
 
 function load_graph_analytics(div_id,idx,idx_page) {        
-    var figure = JSON.parse(plot[idx_page]);
+    var figure = JSON.parse(plotFiltrado[idx_page]);
     figure.layout.width = containers[idx].offsetWidth;
     figure.layout.height = containers[idx].offsetHeight;
 
@@ -216,11 +216,12 @@ function load_graph_analytics(div_id,idx,idx_page) {
 }
 
 function load_4(){
+    const desiredDataPoints = 1000;
 
     // Iterate through each container
     for (let i = 0; i < 4; i++) {    
-        if (pageIndex*4+i<plot.length){
-            load_graph_analytics(graph_divs[i].id,i,pageIndex*4+i);
+        if (pageIndex*4+i<plotFiltrado.length){
+            load_graph_optimized_analytics(graph_divs[i].id,i,pageIndex*4+i,desiredDataPoints);
         }
         else{
             Plotly.purge(graph_divs[i]);
@@ -234,4 +235,78 @@ function resize_all(){
     for (let i = 0; i < graph_divs.length; i++) {    
         resize_graph(graph_divs[i].id,i)
     }  
+}
+
+function load_graph_optimized_analytics(div_id,idx,idx_page,desiredDataPoints) {        
+    var figure = JSON.parse(plotFiltrado[idx_page]);
+
+    figure.layout.width = containers[idx].offsetWidth;
+
+    var downsampledData = [];
+
+    figure.data.forEach(function (trace) {
+        if (trace.type === 'scatter') {
+            var downsampled_trace = downsample(trace, desiredDataPoints);
+            downsampledData.push(downsampled_trace);
+        } else {
+            downsampledData.push(trace);
+        }
+    });
+
+    Plotly.newPlot(div_id,downsampledData,figure.layout);
+
+    var GraphDiv = document.getElementById(div_id);
+    GraphDiv.on('plotly_relayout',
+        function(eventdata){
+
+            var start_x = eventdata['xaxis.range[0]'];
+            var end_x = eventdata['xaxis.range[1]'];
+            var start_y = eventdata['yaxis.range[0]'];
+            var end_y = eventdata['yaxis.range[1]'];
+
+            var new_traces = JSON.parse(plotFiltrado[idx_page]).data;
+            
+            for (let i=0;i<new_traces.length;i++){
+
+                if (new_traces[i].type == "scatter" && start_x != undefined && start_y != undefined){
+                    x=[]
+                    y=[]
+                    for (let s=0;s<new_traces[i].x.length;s++){
+                        if (new_traces[i].x[s]>start_x && new_traces[i].x[s]<end_x && new_traces[i].y[s]>start_y && new_traces[i].y[s]<end_y){
+                            x.push(new_traces[i].x[s]);
+                            y.push(new_traces[i].y[s]);
+                        }
+                    }
+                    new_traces[i].x = [...x];
+                    new_traces[i].y = [...y];
+                }else if(new_traces[i].type == "scatter" && start_x != undefined){
+                    x=[]
+                    y=[]
+                    for (let s=0;s<new_traces[i].x.length;s++){
+                        if (new_traces[i].x[s]>start_x && new_traces[i].x[s]<end_x){
+                            x.push(new_traces[i].x[s]);
+                            y.push(new_traces[i].y[s]);
+                        }
+                    }
+                    new_traces[i].x = [...x];
+                    new_traces[i].y = [...y];
+                } else if(new_traces[i].type == "scatter" && start_y != undefined){
+                    x=[]
+                    y=[]
+                    for (let s=0;s<new_traces[i].x.length;s++){
+                        if (new_traces[i].y[s]>start_y && new_traces[i].y[s]<end_y){
+                            x.push(new_traces[i].x[s]);
+                            y.push(new_traces[i].y[s]);
+                        }
+                    }
+                    new_traces[i].x = [...x];
+                    new_traces[i].y = [...y];
+                }
+                
+            }
+            zoom_resample(GraphDiv,new_traces,desiredDataPoints);
+            
+            
+        }
+    );
 }

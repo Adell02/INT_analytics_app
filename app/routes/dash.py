@@ -5,7 +5,7 @@ import zlib
 import requests,json
 
 from app.routes.auth import login_required
-from app.utils.graph_functions.generate_scatter import generate_scatter_plot
+from app.utils.graph_functions.generate_dasboard_graphics import generate_dashboard_graphics
 from app.utils.account.token import generate_token
 from app.utils.DataframeManager.load_df import generate_cache_dash_name,load_current_df_memory
 from app.routes.RESTful_API import cache_dashboard,compute_dash_from_VIN
@@ -57,35 +57,18 @@ def mapview():
 @dash_bp.route('/analytics')
 @login_required
 def analytics():
+    columns_list = ['City (km)','Sport (km)','Flow (km)','Sail (km)','Regen (km)',
+                    'City energy (Wh)','Sport energy (Wh)','Flow energy (Wh)','City regen (Wh)','Sport regen (Wh)',
+                    'Total energy (Wh)','Total regen (Wh)',
+                    'End odometer','Min cell V','Max cell V',
+                    'Total (km)','Avg temp','SoC delta (%)',
+                    'Motor min T (°C)','Motor max T (°C)',
+                    'Inv  min T (°C)','Inv max T (°C)']
+    dataframe = load_current_df_memory()
 
-    plots = []
-    x_prueba=[1,2,3,4,5]
-    y_prueba=[1,2,3,4,5]
-    title_prueba='Prueba 1'
-    plotly_plot = generate_scatter_plot(x_prueba, y_prueba, title_prueba)
-    plots.append(plotly_plot)
-    x_prueba2=[1,2,3,4,5]
-    y_prueba2=[5,4,3,2,1]
-    title_prueba2='Prueba 2'
-    plotly_plot2 = generate_scatter_plot(x_prueba2, y_prueba2, title_prueba2)
-    plots.append(plotly_plot2)
-    x_prueba3=[1,2,3,4,5]
-    y_prueba3=[1,2,3,2,1]
-    title_prueba3='Prueba 3'
-    plotly_plot3 = generate_scatter_plot(x_prueba3, y_prueba3, title_prueba3)
-    plots.append(plotly_plot3)
-    x_prueba4=[1,2,3,4,5]
-    y_prueba4=[5,4,3,4,5]
-    title_prueba4='Prueba 4'
-    plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
-    plots.append(plotly_plot4)
-    x_prueba4=[1,2,3,4,5]
-    y_prueba4=[1,1,1,1,1]
-    title_prueba4='Prueba 5'
-    plotly_plot4 = generate_scatter_plot(x_prueba4, y_prueba4, title_prueba4)
-    plots.append(plotly_plot4)
+    plots=generate_dashboard_graphics(dataframe)
 
-    return render_template('analytics.html',plots=plots)
+    return render_template('analytics.html',plots=plots, columns_list=columns_list)
 
 
 

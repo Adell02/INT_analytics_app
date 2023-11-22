@@ -72,7 +72,7 @@ Now, you can start coding!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Git Frequently Used Commands
+## Git Frequently Used Commands
 [Most of the content in this section has been extracted from the manual page "man"]
 
 **git add <file_name>**
@@ -102,63 +102,64 @@ A breakdown of the file structure is shown next.
 <details>
   <summary>Show Structure Tree</summary>
 
-  >\\__ app
-  .... \\__ database
-  ......... \\__ dfs
-  ......... \\__ models.py
-  ......... \\__ seeder.py
-  .... \\__ routes
-  ......... \\__ ai_chat.py
-  ......... \\__ auth.py
-  ......... \\__ dash.py
-  ......... \\__ newgraphic.py
-  ......... \\__ RESTful_API.py
-  ......... \\__ settings.py
-  ......... \\__ analytics.py
-  .... \\__ static
-  ......... \\__ css
-  .............. \\__ analytics.css
-  .............. \\__ main.css
-  .............. \\__ mapview.css
-  .............. \\__ settings.css
-  ......... \\__ js
-  .............. \\__ chat_ai.js
-  .............. \\__ load_graphs.js
-  ......... \\__ gif
-  .............. \\__ R.gif
-  .... \\__ templates
-  ......... \\__ ai_chat.html
-  ......... \\__ analytics.html
-  ......... \\__ change_password.html
-  ......... \\__ confirm_email.html
-  ......... \\__ dashboard.html
-  ......... \\__ datasource.html
-  ......... \\__ login.html
-  ......... \\__ mapview.html
-  ......... \\__ newgraphic.html
-  ......... \\__ register.html
-  ......... \\__ settings.py
-  ......... \\__ template.html
-  .... \\__ utils
-  ......... \\__ account
-  .............. \\__ token.py
-  ......... \\__ AI
-  .............. \\__ openai_request.py
-  ......... \\__ communication
-  .............. \\__ mailing.py
-  ......... \\__ DataframeManager
-  .............. \\__ load_df.py
-  ......... \\__ graph_functions
-  .............. \\__ consumption_vs_temp.py
-  .............. \\__ dashboard_config.json
-  .............. \\__ functions.py
-  .............. \\__ generate_dashboard_graphics.py
-  \\__ __init__.py
-  \\__ config.py
-  \\__ README.md
-  \\__ .gitignore
-  \\__ requirements.txt
-  \\__ run.py
+>
+\\__ app<br>
+... \\__ database<br>
+........ \\__ dfs<br>
+........ \\__ models.py<br>
+........ \\__ seeder.py<br>
+... \\__ routes<br>
+........ \\__ ai_chat.py<br>
+........ \\__ auth.py<br>
+........ \\__ dash.py<br>
+........ \\__ newgraphic.py<br>
+........ \\__ RESTful_API.py<br>
+........ \\__ settings.py<br>
+......... \\__ analytics.py<br>
+.... \\__ static<br>
+......... \\__ css<br>
+.............. \\__ analytics.css<br>
+.............. \\__ main.css<br>
+.............. \\__ mapview.css<br>
+.............. \\__ settings.css<br>
+......... \\__ js<br>
+.............. \\__ chat_ai.js<br>
+.............. \\__ load_graphs.js<br>
+......... \\__ gif<br>
+.............. \\__ R.gif<br>
+.... \\__ templates<br>
+......... \\__ ai_chat.html<br>
+......... \\__ analytics.html<br>
+......... \\__ change_password.html<br>
+......... \\__ confirm_email.html<br>
+......... \\__ dashboard.html<br>
+......... \\__ datasource.html<br>
+......... \\__ login.html<br>
+......... \\__ mapview.html<br>
+......... \\__ newgraphic.html<br>
+......... \\__ register.html<br>
+......... \\__ settings.py<br>
+......... \\__ template.html<br>
+.... \\__ utils<br>
+......... \\__ account<br>
+.............. \\__ token.py<br>
+......... \\__ AI<br>
+.............. \\__ openai_request.py<br>
+......... \\__ communication<br>
+.............. \\__ mailing.py<br>
+......... \\__ DataframeManager<br>
+.............. \\__ load_df.py<br>
+......... \\__ graph_functions<br>
+.............. \\__ consumption_vs_temp.py<br>
+.............. \\__ dashboard_config.json<br>
+.............. \\__ functions.py<br>
+.............. \\__ generate_dashboard_graphics.py<br>
+\\__ __init__.py<br>
+\\__ config.py<br>
+\\__ README.md<br>
+\\__ .gitignore<br>
+\\__ requirements.txt<br>
+\\__ run.py<br>
 
 </details>
  

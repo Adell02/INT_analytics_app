@@ -31,9 +31,12 @@ La idea es ir vehiculo por vehiculo y obtener los siguientes datos:
 INDEX = 'VIN'
 KEY_COLUMNS = ['VIN','Id','Timestamp']
 NUM_ROWS = 10000
-DISTANCE_COLUMN = 'Total (km)'
+DISTANCE_COLUMN = 'Total distance'
+# TEMP_COLUMN = 'Motor min T (°C)'
 TEMP_COLUMN = 'Avg temp'
-SOC_COLUMN = 'SoC delta (%)'
+# TEMP_COLUMN = 'Inv  min T (°C)'
+# TEMP_COLUMN = 'Average V'
+SOC_COLUMN = 'SoC delta'
 TEXT_OFFSET = 500
 
 
@@ -92,7 +95,9 @@ def get_consumption_vs_temp(df):
     
     # 4. Get a scatter plot
     fig_filtered = generate_scatter_plot(df_filtered,TEMP_COLUMN,CONSUMPTION_COLUMN,'Consumption vs Temp Filtered',True)
-
+    fig_filtered.update_layout(scene=dict(
+        xaxis = dict(range=[min(df[TEMP_COLUMN]),max(df[TEMP_COLUMN])])
+    ))
     # 5. Get the correlation between variables
 
     """
@@ -110,71 +115,16 @@ def get_consumption_vs_temp(df):
     x_position_filtered = min(df_filtered[TEMP_COLUMN])+TEXT_OFFSET
     y_position_filtered = max(df_filtered[CONSUMPTION_COLUMN])
 
-    # Generate text and place it in the figures
+    # Generate text to display the correlation and place it in the legend
     fig_text = f'r: {round(correlation*100,2)}%'
-    fig_filtered.add_trace(go.Scatter(x=[x_position_filtered], y=[y_position_filtered], mode="text",text=fig_text, showlegend=False))
-    fig_filtered.update_traces(textfont=dict(size=15, color="black"),marker=dict(size=1))
+    fig_filtered.add_trace(go.Scatter(x=[x_position_filtered], y=[y_position_filtered], mode="text",name = fig_text ,showlegend=True))
+    fig_filtered.update_traces(marker=dict(size=3))
     fig_filtered.update_layout(legend=dict(
         yanchor="top",
         y=0.99,
         xanchor="right",
         x=0.99
-    ))
-
-    """
-    This second part consists of showing a different analyses of the situation. Now we are going to weigh the points to be shown
-    into the scatter plot, to do so:
-        1) Get the mean and standard deviation of the km 
-        2) Applly the weigh function to the consumption values
-        3) Modify the original dataframe CONSUMPTION_COLUMN
-        4) Display the graphic as done previously
-
-    This will ensure that the more relevant samples are those that correspond to a trip distance closer to the mean
-    """
-
-    # 1. Get the mean and standard dev
-    mean = df[DISTANCE_COLUMN].mean()
-    std_dev = df[DISTANCE_COLUMN].std()
-
-    # 2 & 3. Apply the weigh function to the consumption column and modify original df
-    weighed_consumption = [weigh(value,mean,std_dev) for value in df[CONSUMPTION_COLUMN]]
-    df[CONSUMPTION_COLUMN] = weighed_consumption
-
-
-    # 3. Display the graphic
-    column_filtered_above = df[CONSUMPTION_COLUMN].quantile(0.975)
-    column_filtered_below = df[CONSUMPTION_COLUMN].quantile(0.025)
-
-    df_weighed = df[(df[CONSUMPTION_COLUMN] <= column_filtered_above) & (df[CONSUMPTION_COLUMN] >= column_filtered_below)]
-    fig_weighed = generate_scatter_plot(df_weighed,TEMP_COLUMN,CONSUMPTION_COLUMN,'Consumption vs Temp Weighed',True)
-
-    correlation = df_weighed[CONSUMPTION_COLUMN].corr(df_weighed[TEMP_COLUMN])
-   
-    x_position_weighed = min(df_weighed[TEMP_COLUMN])+TEXT_OFFSET
-    y_position_weighed = max(df_weighed[CONSUMPTION_COLUMN])
-
-    # Generate text and place it in the figures
-    fig_text = f'r: {round(correlation*100,2)}%'
-    fig_weighed.add_trace(go.Scatter(x=[x_position_weighed], y=[y_position_weighed], mode="text",text=fig_text, showlegend=False))
-    fig_weighed.update_traces(textfont=dict(size=10, color="black"),marker=dict(size=1))
-
+))
     
     return fig_filtered
 
-
-"""
-Comentarios Marco:
-
-- Estaría bien algun escalado que cogiera un 95% de puntos (por ejemplo)
-
-- Vemos una variacion del 0.5 al 0.7 --> casi un 50% de empeoramiento por temperatura
-
-Cómo mejorar el análisis
-    1)  Calcular el coeficiente de correlación para ver qué tanto afecta la temperatura al
-        consumo
-    2)  Para un análisis más significativo, ponderar los resultados por la distancia del
-        trayecto, por ejemplo dist<5km --> ponderamos por 0 (no lo incluímos)
-        
-        Una idea es hacer una distribución de los km de los viajes y ponderar según la
-        distribución
-"""

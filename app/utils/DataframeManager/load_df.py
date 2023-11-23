@@ -7,23 +7,36 @@ from datetime import datetime
 
 from app import Config
 from app.utils.graph_functions.functions import *
-from app.utils.graph_functions.generate_dasboard_graphics import *
+from app.utils.graph_functions.generate_dashboard_graphics import *
+from app.utils.DataframeManager.DataBase import df_from_scratch
+from app.utils.DataframeManager.dataframe_treatment import df_filter_data
+from app.utils.DataframeManager.dataframe_storage import df_append_data
 
 def generate_cache_dash_name():
     current_month = datetime.datetime.now().month
     current_year = datetime.datetime.now().year
 
-    name = Config.PATH_CACHE + "_" + str(current_month) + "_" + str(current_year) +".zlib"
+    name = Config.PATH_CACHE_DASHBOARD + "_" + str(current_month) + "_" + str(current_year) +".zlib"
+
+    return name
+
+def generate_cache_analytics_name():
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
+
+    name = Config.PATH_CACHE_ANALYTICS + "_" + str(current_month) + "_" + str(current_year) +".zlib"
 
     return name
 
 def generate_df_name(type:str) -> str:
-    current_month = datetime.datetime.now().month
-    current_year = datetime.datetime.now().year
-
-    name = Config.PATH_DATAFRAMES + type + "_" + str(current_month) + "_" + str(current_year) +".parquet"
+    #current_month = datetime.datetime.now().month
+    #current_year = datetime.datetime.now().year
+    current_month = "07"
+    current_year = "2023"
+    name = Config.PATH_DATAFRAMES + str(current_year) + "_" + str(current_month) + "_" + type +".parquet"
 
     return name
+
 
 def check_exists_df(name:str) -> int:   
     return os.path.isfile(name)
@@ -48,11 +61,17 @@ def test_generate_parquet_from_df(origin_file,parquet_file):
 
 
 def load_current_df_memory(samples=None) -> pd.DataFrame:
-    name = generate_df_name("run")
+    name = generate_df_name("trip")
 
     # WHAT HAPPENS IF DOES NOT EXIST? 
     if not check_exists_df(name):
-        test_generate_parquet_from_df("app\database\dfs\Ray 7.7_modificat.xlsx",name)
+        #test_generate_parquet_from_df("app\database\dfs\Ray 7.7_modificat.xlsx",name)
+        df_trip,df_charge = df_from_scratch()
+        df_filter_data(df_trip,'trip',True)
+        df_filter_data(df_charge,'charge',True)
+        df_append_data(df_trip,'trip')
+        df_append_data(df_charge,'charge')
+
     if samples:
         pf = pq.ParquetFile(name)
         first_N_rows = next(pf.iter_batches(batch_size=samples))

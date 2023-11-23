@@ -19,7 +19,7 @@
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
-                                "parameters":["Dataframe","elements","title"],
+                                "parameters":["dataframe","elements","title"],
                                 "elements":["City (km)","Sport (km)","Flow (km)"],
                                 "title":"Modos de Conducción por km"
                             },
@@ -28,7 +28,7 @@
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
-                                "parameters":["Dataframe","elements","title"],
+                                "parameters":["dataframe","elements","title"],
                                 "elements":["Sail (km)","Regen (km)"],
                                 "title":"Sail - Regen por km"
                             }
@@ -47,7 +47,7 @@
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
-                                "parameters":["Dataframe","elements","title"],
+                                "parameters":["dataframe","elements","title"],
                                 "elements":["City energy (Wh)","Sport energy (Wh)","Flow energy (Wh)"],
                                 "title":"Modos de Conducción por Wh"
                             },
@@ -56,7 +56,7 @@
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
-                                "parameters":["Dataframe","elements","title"],
+                                "parameters":["dataframe","elements","title"],
                                 "elements":["City regen (Wh)","Sport regen (Wh)"],
                                 "title":"Regeneración City vs Sport por Wh"
                             }
@@ -68,7 +68,7 @@
                     "width":33,
                     "child":false,
                     "function":"generate_note",
-                    "parameters":["Dataframe","notes"],
+                    "parameters":["dataframe","notes"],
                     "notes":["Consumo medio: 35 kWh","Temperatura media: 40 ºC"]
                 }
             ]
@@ -86,7 +86,7 @@
                 "width":50,
                 "child":false,
                 "function":"generate_multi_histogram",
-                "parameters":["Dataframe","elements","units","title"],
+                "parameters":["dataframe","elements","units","title"],
                 "elements":["Total energy (Wh)","Total regen (Wh)"],
                 "units":"Wh",
                 "title":"Distribución consumo y regeneración de energía"
@@ -96,7 +96,7 @@
                 "width":50,
                 "child":false,
                 "function":"generate_scatter_plot_user",
-                "parameters":["Dataframe","key_user","element_x","elements_y","title","user_reg_line","reg_line"],
+                "parameters":["dataframe","key_user","element_x","elements_y","title","user_reg_line","reg_line"],
                 "key_user":"",
                 "element_x":"End odometer",
                 "elements_y":["Min cell V","Max cell V"],
@@ -119,14 +119,14 @@
                 "width":50,
                 "child":false,
                 "function":"get_consumption_vs_temp",
-                "parameters":["Dataframe"]
+                "parameters":["dataframe"]
             },
             {
                 "height":50,
                 "width":50,
                 "child":false,
                 "function":"generate_multi_histogram",
-                "parameters":["Dataframe","elements","units","title"],
+                "parameters":["dataframe","elements","units","title"],
                 "elements":["Motor min T (°C)","Motor max T (°C)"],
                 "units":"ºC",
                 "title":"Distribución Temperatura Motor"
@@ -147,7 +147,7 @@
                 "width":100,
                 "child":false,
                 "function":"generate_multi_histogram",
-                "parameters":["Dataframe","elements","units","title"],
+                "parameters":["dataframe","elements","units","title"],
                 "elements":["Inv  min T (°C)","Inv max T (°C)"],
                 "units":"ºC",
                 "title":"Distribución Temperatura Inversor"

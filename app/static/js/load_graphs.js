@@ -166,7 +166,6 @@ function load_graph(div_id,idx) {
 
 function resize_graph(div_id,idx){
     var figure = document.getElementById(div_id);
-
     figure.layout.width = containers[idx].offsetWidth;
     figure.layout.height = containers[idx].offsetHeight;
 
@@ -201,6 +200,13 @@ function load_all_optimized(){
     // Iterate through each container
     for (let i = 0; i < graph_divs.length; i++) {    
         load_graph_optimized(graph_divs[i].id,i,desiredDataPoints)
+    }  
+}
+
+function resize_all(){
+    // Iterate through each container
+    for (let i = 0; i < graph_divs.length; i++) {    
+        resize_graph(graph_divs[i].id,i)
     }  
 }
 
@@ -243,12 +249,12 @@ function load_4(){
         }
         
     }  
-    resize_all();
+    resize_4();
 }
 
-function resize_all(){
+function resize_4(){
     // Iterate through each container
-    for (let i = 0; i < graph_divs.length; i++) {    
+    for (let i = 0; i < Math.min(plotFiltrado.length,graph_divs.length); i++) {    
         resize_graph(graph_divs[i].id,i)
     }  
 }
@@ -332,11 +338,7 @@ function filtrarPlot() {
     let typeFilter = document.getElementById('graph_type').value;
     let dataFilter = document.getElementById('graph_data_x').value; 
     let userInput = document.getElementById('userInput').value.trim().toLowerCase();
-    console.log(userInput);
     let userWords = userInput ? userInput.split(" ") : [];
-    
-    
-    
     
     for (let i = 0; i < plot.length; i++) {
         let elemento = JSON.parse(plot[i]);
@@ -344,7 +346,6 @@ function filtrarPlot() {
         let cumpleCondiciontype = false;
         let cumplePalabrasUsuario = userWords.length === 0 ? true : userWords.every(word => 
         elemento.layout && elemento.layout.title && elemento.layout.title.text && elemento.layout.title.text.toLowerCase().includes(word));
-        console.log(cumplePalabrasUsuario)
         
         for (let y = 0; y < elemento.data.length; y++) {
             //pongo el or porqueen algunas graficas no se llamama label, sino name
@@ -395,8 +396,7 @@ function filtrarPlot() {
         }
         
     }
-    console.log(plotFiltrado);
-    pageIndex=0;
+    pageIndex=0;    
     load_4();
     
 }

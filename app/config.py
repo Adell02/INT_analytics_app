@@ -39,8 +39,11 @@ class Config:
     OPENAI_KEY = os.getenv("OPENAI_KEY")
 
     PATH_DATAFRAMES = "app/database/dfs/"
-    PATH_CACHE = "app/database/cache/dashboard"
+    PATH_CRITICAL_DATA = "app/database/dfs/critical_data.parquet"
+    PATH_CACHE_DASHBOARD = "app/database/cache/dashboard"
+    PATH_CACHE_ANALYTICS = "app/database/cache/analytics"
     PATH_DASHBOARD_CONFIG = "app/utils/graph_functions/dashboard_config.json"
+    PATH_ANALYTICS_CONFIG = "app/utils/graph_functions/analytics_config.json"
     PATH_BATTERY_PARAMS = "app/utils/DataframeManager/param_battery.json"
 
     template_folder="app/templates"

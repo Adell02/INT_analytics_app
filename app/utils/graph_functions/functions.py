@@ -11,7 +11,26 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import datetime
 
+#Protocol Dictionary
+protocol_dict={"G1":["Timestamp CT", "Start", "End", "Start odometer", "Id"],
+                   "G2":["Timestamp CT", "End odometer", "Max speed", "Id"],
+                   "C2":["Timestamp CT", "City distance", "Sport distance","Flow distance","Sail distance","Regen distance","Id"],
+                   "C3":["Timestamp CT", "City energy", "Sport energy","Flow energy","City regen","Sport regen","Map changes","Id"],
+                   "IE":["Timestamp CT", "Inv max T", "Inv avg T", "Inv min T","Motor max T","Motor avg T","Motor min T","Id"],
+                   "B1":["Timestamp CT", "Start SoC", "End SoC","Max discharge","Max regen","Id"],
+                   "B2":["Timestamp CT", "Avg current", "Thermal current","Max V","Id"],
+                   "B3":["Timestamp CT", "Average V", "Min V","Max cell V","Min cell V","Id"],
+                   "B4":["Timestamp CT", "Cell V diff", "Max temp CT","Avg temp","Min temp CT","Max delta","Avg delta","Id"],
+                   "H2":["Timestamp CC", "SoC i", "SoC f","Vmin I","Vavg I","Vmax I","Vmin F"],
+                   "H3":["Timestamp CC", "Avg final V", "Max final V","Max BMS current","Max charger current"], 
+                   "H4":["Timestamp CC", "Charger max P", "Min temp I","Avg temp I","Max temp I","Min temp F"],
+                   "H5":["Timestamp CC", "Avg temp F","Max temp F","Min temp CC","Max temp CC","Cycles","Age"],
+                   "H8":["Timestamp CC", "uSoC I", "uSoC F","Connector"]}
+#En el H5-->"H5":["Timestamp", "ID", "Avg temp F","Max temp F","Min temp CC","Max temp CC","Cycles","Age"] el ID apareix al protocol pero no a 
+#la seva descripcio ni tampoc apareix en el excel. DE MOMENT NO EL POSO
 
+df_dict_trip = {}
+df_dict_charge = {}
 
 """********************     Trace generation    ********************"""
 
@@ -115,7 +134,7 @@ def trace_scatter_plot(dataframe,element_x,elements_y,reg_line=False):
     #   - None if error occured
     
     # Plot generation for each data source passed as parameter elements_y
-        
+    
     trace_vector=[]          # This vector will contain all traces, one for each element_y
     
     # We have to differentiate if elements_y is a vector or a string, because the for loop won't
@@ -162,6 +181,19 @@ def trace_bar_chart(dataframe,element_x,elements_y):
     
     return trace_vector
 
+def trace_box_plot(dataframe:pd.DataFrame,elements):
+# Generates a trace to be added to a box plot
+
+    trace_vector = []
+    # Check if elements is a string or a tuple
+    if isinstance(elements,str):
+        trace_vector.append(go.Box(y=dataframe[elements],name=elements))
+
+    else:
+        for element in elements:
+            trace_vector.append(go.Box(y=dataframe[element],name=element))
+    
+    return trace_vector
 
 """********************     Figures generation    ********************"""
 
@@ -296,6 +328,7 @@ def generate_scatter_plot(dataframe,element_x,elements_y,title='Unnamed Scatter 
 
     # Add legend and display it in the top-right corner of the graph
     fig.update_layout(showlegend=True, legend=dict(x=0.85, y=0.95, traceorder='normal', orientation='v'))
+    fig.update_traces(marker=dict(size=3))
 
     return fig
 
@@ -321,8 +354,6 @@ def generate_scatter_plot_user(dataframe,key_user,element_x,elements_y,title="Un
     if key_user in dataframe.index:
         user_df = dataframe.loc[dataframe.index == key_user]
     else:
-        fig = generate_scatter_plot(dataframe,element_x,elements_y,title,reg_line)
-        return fig
         fig = generate_scatter_plot(dataframe,element_x,elements_y,title,reg_line)
         return fig
 
@@ -359,6 +390,7 @@ def generate_scatter_plot_user(dataframe,key_user,element_x,elements_y,title="Un
 
     # Add legend and display it in the top-right corner of the graph
     fig.update_layout(showlegend=True, legend=dict(x=0.85, y=0.95, traceorder='normal', orientation='v'))
+    fig.update_traces(marker=dict(size=3))
 
 
     return fig
@@ -379,6 +411,9 @@ def generate_line_chart(dataframe,element_x,elements_y,title='Unnamed Line Chart
 
     # From all traces, we generate the figure
     fig = go.Figure(data=trace_vector,layout=layout)
+
+    # Add legend and display it in the top-right corner of the graph
+    fig.update_layout(showlegend=True, legend=dict(x=0.85, y=0.95, traceorder='normal', orientation='v'))
     
     return fig
 
@@ -434,6 +469,24 @@ def generate_response_surface(dataframe,element_x,element_y,element_z,title='Unn
     ))
     return fig
 
+def generate_box_plot(dataframe:pd.DataFrame,elements,title='Unamed Box Plot'):
+    # Generate a box plot given a dataframe and the elements to be plotted
+    # INPUTS:
+    #   - dataframe
+    #   - elements
+    #   - title
+    # OUTPUT:
+    #   - figure
+    trace_vector = trace_box_plot(dataframe,elements)
+
+    layout = go.Layout(title = title)
+    fig = go.Figure(data=trace_vector,layout=layout)
+
+    # Add legend and display it in the top-right corner of the graph
+    fig.update_layout(showlegend=True, legend=dict(x=0.85, y=0.95, traceorder='normal', orientation='v'))
+
+    return fig
+
 def generate_note(dataframe,notes):
     html_note = "<div class='note-container'>"+ "<ul class='list-notes'>"
     for note in notes:
@@ -442,7 +495,7 @@ def generate_note(dataframe,notes):
 
     return html_note
 
-"""********************     Dataframe funcitons    ********************"""
+"""********************     Dataframe functions    ********************"""
 
 def df_from_xlsx_elements(file_route,index,rows,key_cols,elements):
     # Returns a dataframe containing all data passed as 'elements' structured following
@@ -621,8 +674,9 @@ def df_get_elements_tag(dataframe:pd.DataFrame):
         index = dataframe.index.name
 
     return index, tags_vector
-
+'''
 def df_check_user_values(usr_dataframe):
+
     # Load the JSON file
     #INPUT
     #usr_dataframe: Un DataFrame de pandas que contiene los datos que se van a verificar. Los nombres de las columnas del DataFrame representan los elementos cuyos valores se verificarán.
@@ -631,15 +685,15 @@ def df_check_user_values(usr_dataframe):
     #   - result:Devuelve True si todos los valores están dentro de los rangos, y False si al menos un valor está fuera de los rangos o si hay elementos no encontrados en el archivo JSON.
     #elements_check: Un diccionario que contiene información detallada sobre la verificación de cada elemento. Para cada elemento, se almacenan los resultados de la verificación mínima (Check_min), la verificación máxima (Check_max).Este diccionario proporciona detalles sobre qué valores no cumplen con los criterios de verificación.
     
-    with open('param_batery.json', 'r') as archivo:
-        dict_param = json.load(archivo)
+    with open('param_batery.json', 'r') as file:
+        dict_param = json.load(file)
 
     result = True
     elements_check = {}
 
     for element in usr_dataframe.columns:
-        min_value = dict_param[element]['minimum']
-        max_value = dict_param[element]['maximum']
+        min_value = dict_param[element]['Value_MIN']
+        max_value = dict_param[element]['Value_MAX']
         
         check_min = True  # Initialize the verification variables
         check_max = True
@@ -659,11 +713,244 @@ def df_check_user_values(usr_dataframe):
             result = False
 
     return result, elements_check
+'''
+
+def load_parameters_from_json():
+    # Leer el archivo JSON con los valores máximos y mínimos
+    with open('param_battery.json', 'r') as json_file:
+        data = json.load(json_file)
+    return data["parameters"]
+
+def df_verify_values_in_range(file_path):
+   
+    if not os.path.exists(file_path):
+        return -1
+    
+    dataframe = pd.read_parquet(file_path)
+    
+    parametrs = load_parameters_from_json()
+    for column in dataframe.columns:
+        value_max = parametrs.get(column, {}).get("Value_MAX") #Si el campo no se encuentra, get() devuelve un diccionario vacío ({})
+        value_min = parametrs.get(column, {}).get("Value_MIN")
+
+        condicion = (dataframe[column] >= value_min) & (dataframe[column] <= value_max)
+        dataframe = dataframe.loc[condicion]
+        if dataframe.empty:
+            print("empty")
+    # Generate the new file
+    table = pa.Table.from_pandas(dataframe)
+    pq.write_table(table,file_path)
+    
+    return dataframe
+
+def df_create(string:str, param_order)->pd.DataFrame:
+    # Split the string into its components
+    components = string.split(':')
+    payload = components[1]
+
+    # Check if the "End of Message Character" is present and remove it
+    if payload.endswith(",#&"):
+        payload = payload[:-3]
+    # Eliminar espacios en blanco adicionales al final del payload
+    payload = payload.strip()
+
+    # Split the payload into its parts
+    payload_parts = payload.split(',')
+    param_values = []
+
+    # Convert the values to integers or leave as None if they can't be converted
+    for part in payload_parts:
+        if part.isdigit() or (part[0] == '-' and part[1:].isdigit()):
+            param_values.append(int(part))
+        else:
+            param_values.append(None)
+
+    # Create a dictionary to store the parameter values
+    param_dict = {param: [value] for param, value in zip(param_order, param_values)}
+
+    # Create a DataFrame from the dictionary
+    df = pd.DataFrame(param_dict)
+
+    return df
+
+def df_from_string_to_df(string:str)-> (pd.DataFrame,str):
+
+    
+    components = string.split(':')
+    message_type = components[0][1:]
+    type_name=check_type(message_type)
+
+    if message_type == 'G1':
+        param_order = protocol_dict["G1"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'G2':
+        param_order = protocol_dict["G2"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'C2':
+        param_order = protocol_dict["C2"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'C3':
+        param_order = protocol_dict["C3"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'IE':
+        param_order = protocol_dict["IE"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'B1':
+        param_order = protocol_dict["B1"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'B2':
+        param_order = protocol_dict["B2"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'B3':
+        param_order = protocol_dict["B3"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'B4':
+        param_order = protocol_dict["B4"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'H2':
+        param_order = protocol_dict["H2"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'H3':
+        param_order = protocol_dict["H3"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'H4':
+        param_order = protocol_dict["H4"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'H5':
+        param_order = protocol_dict["H5"]
+        df_str=df_create(string, param_order)
+    elif message_type == 'H8':
+        param_order = protocol_dict["H8"]
+        df_str=df_create(string, param_order)
+    
+    return (df_str, type_name)
+
+def check_type(string:str)-> str:
+    
+    trip =['G1','G2','C2','C3','IE','B1','B2','B3','B4']
+    charge=['H2','H3','H4','H5','H8']
+    if string in trip:
+        return 'trip'
+    elif string in charge:
+        return 'charge'
+
+    return -1
+
+def create_df_dict(dataframes:pd.DataFrame, type_name:str)->pd.DataFrame:
 
 
-"""********************     Parquet Files functions    ********************"""
+    all_columns_trip = ['Timestamp CT','Id','Start','End','Start odometer','End odometer','Max speed','City distance','Sport distance','Flow distance','Sail distance','Regen distance','City energy', 
+                   'Sport energy','Flow energy','City regen','Sport regen','Map changes','Inv max T', 'Inv avg T', 'Inv min T','Motor max T','Motor avg T','Motor min T',
+                   'Start SoC', 'End SoC','Max discharge','Max regen','Avg current', 'Thermal current','Max V','Average V', 'Min V','Max cell V','Min cell V',
+                   'Cell V diff', 'Max temp CT','Avg temp','Min temp CT','Max delta','Avg delta']
 
-def df_generate_month_df(file_path:str,type_name:str,year:int,month:int) -> pd.DataFrame:
+    all_columns_charge = ['Timestamp CC', 'SoC i', 'SoC f','Vmin I','Vavg I','Vmax I','Vmin F','Avg final V', 'Max final V','Max BMS current','Max charger current',
+                        'Charger max P', 'Min temp I','Avg temp I','Max temp I','Min temp F', 'Avg temp F','Max temp F','Min temp CC','Max temp CC','Cycles','Age','uSoC I',
+                        'uSoC F','Connector']
+
+    if type_name == 'trip':
+
+        for df in dataframes:
+            timestamp_column_name = 'Timestamp CT'
+            id_column_name = 'Id'
+            
+            timestamp = df[timestamp_column_name].iloc[0]
+            identifier = df[id_column_name].iloc[0]
+
+            if (timestamp, identifier) in df_dict_trip:
+                # Actualizar los valores existentes en el DataFrame correspondiente
+                existing_df = df_dict_trip[(timestamp, identifier)]
+                for col in df.columns:
+                    if col not in [timestamp_column_name, id_column_name]:
+                        existing_df.loc[0, col] = df[col].iloc[0]
+                
+                # Verificar si todas las columnas están completas
+                if all(existing_df.notnull().all()):
+                    # Retornar el DataFrame y eliminarlo del diccionario
+                    del df_dict_trip[(timestamp, identifier)]
+                    
+                    return existing_df
+            else:
+                # Si no existe, crear una nueva entrada con el DataFrame vacío y luego asignar los datos
+                df_dict_trip[(timestamp, identifier)] = pd.DataFrame(columns=all_columns_trip)
+                
+                # Asignar valores a las columnas de timestamp y JI
+                df_dict_trip[(timestamp, identifier)].at[0, timestamp_column_name] = timestamp
+                df_dict_trip[(timestamp, identifier)].at[0, id_column_name] = identifier
+                
+                # Asignar valores a las otras columnas
+                for col in df.columns:
+                    if col not in [timestamp_column_name, id_column_name]:
+                        df_dict_trip[(timestamp, identifier)].loc[0, col] = df[col].iloc[0]
+        return df_dict_trip
+
+    elif type_name == 'charge':
+        for df in dataframes:
+            timestamp_column_name = 'Timestamp CC'
+            
+            timestamp = df[timestamp_column_name].iloc[0]
+
+            if timestamp in df_dict_charge:
+                # Actualizar los valores existentes en el DataFrame correspondiente
+                existing_df = df_dict_charge[timestamp]
+                for col in df.columns:
+                    if col != timestamp_column_name:
+                        existing_df.loc[0, col] = df[col].iloc[0]
+                
+                # Verificar si todas las columnas están completas
+                if all(existing_df.notnull().all()):
+                    # Retornar el DataFrame y eliminarlo del diccionario
+                    del df_dict_charge[timestamp]
+                    return existing_df
+            else:
+                # Si no existe, crear una nueva entrada con el DataFrame vacío y luego asignar los datos
+                df_dict_charge[timestamp] = pd.DataFrame(columns=all_columns_charge)
+                
+                # Asignar valores a las columnas de timestamp y JI
+                df_dict_charge[timestamp].at[0, timestamp_column_name] = timestamp
+                
+                # Asignar valores a las otras columnas
+                for col in df.columns:
+                    if col != timestamp_column_name:
+                        df_dict_charge[timestamp].loc[0, col] = df[col].iloc[0]
+
+        return df_dict_charge
+
+
+    return -1
+
+
+
+
+"""********************     Data treatment and storage functions    ********************"""
+
+def find_max_distance(df):
+    
+    # Find the index and maximum travelled distance within a month
+    # 
+    # INPUTS:
+    # - df
+    # 
+    # OUTPUT:
+    # - distance_index = [max_distance, max_distance_index]
+    
+    DISTANCE_COLUMN = 'Total distance'
+
+    # Group by index and accumulate all distances
+    total_distances_by_index = df.groupby(df.index)[DISTANCE_COLUMN].sum()
+
+    # Find the index which has the maximum distance travelled
+    max_distance_index = total_distances_by_index.idxmax()
+
+    # Find the totale maximum distance
+    max_distance = total_distances_by_index.max()
+    
+    # Generate the output tuple including both data
+    distance_index = [max_distance,max_distance_index]
+
+    return distance_index
+
+def df_generate_month_df(file_path_trip:str,file_path_charge:str,year:int,month:int) -> pd.DataFrame:
     # Given a month and year, generates a dataframe containing all "data_to_save" information
     # which will be further (in another function) appended to the parquet file that contains
     # all months.
@@ -672,49 +959,44 @@ def df_generate_month_df(file_path:str,type_name:str,year:int,month:int) -> pd.D
     # 
     # IMPORTANT: The function saves the mean value of the columns to be saved
     # 
-    # INPUT
-    # INPUT
-    #   - dataframe:        dataframe containing all data   
     # INPUT  
-    #   - dataframe:        dataframe containing all data   
-    #   - data_to_save:     columns to be "meaned" and saved in the new df
+    #   - file_path:        .parquet from which to read the last month's data
+    #   - type_name:        indicates if the file is 
     #   - month, year:      integers to indicate the month and year of the dataframe
     # 
     # OUTPUT
     #   - -1 if no file matches the date
     #   - df_month
 
-    """ Se suposa que els noms de les columnes son correctes i no s'ha de fer cap check """
-    MONTHLY_DATA_TRIP = ['Mins','Max speed','Total (km)','Total energy (Wh)','Inv  min T (°C)']
-    MONTHLY_DATA_CHARGE = ['Min temp I','Max temp I']
-
-    df = pd.read_parquet(file_path)
-
-    if type_name == 'trip':
-        # Generate a new dataframe containing the necessary columns from both vectors    
-        df_month = pd.DataFrame(columns = MONTHLY_DATA_TRIP)
-        for column_tag in MONTHLY_DATA_TRIP:
-            df_month[column_tag] = None   
-        
-        # Add to the dataframe all columns to be stored. Note that the value saved is
-        # the average 
-        mean_trip = pd.DataFrame(df[MONTHLY_DATA_TRIP].mean()).transpose()
-        df_month[MONTHLY_DATA_TRIP] = mean_trip
-
-    elif type_name == 'charge':
-        # Generate a new dataframe containing the necessary columns from both vectors    
-        df_month = pd.DataFrame(columns = MONTHLY_DATA_CHARGE)
-        for column_tag in MONTHLY_DATA_CHARGE:
-            df_month[column_tag] = None   
-        
-        # Add to the dataframe all columns to be stored. Note that the value saved is
-        # the average 
-        mean_trip = df[MONTHLY_DATA_CHARGE].mean()
-        df_month[MONTHLY_DATA_CHARGE] = mean_trip
-    
-    else:
+    if not (os.path.exists(file_path_trip) and os.path.exists(file_path_charge)):
         return -1
+    
+    df_trip = pd.read_parquet(file_path_trip)
+    df_charge = pd.read_parquet(file_path_charge)
 
+    # Generate a dictionary with all data of interest, using both df_trip and df_charge
+    # to do so
+    new_row = {
+        'Connected vehicles':           df_trip.index.nunique(),
+        'Total distance':               round(sum(df_trip["Total distance"])),
+        'City distance':                round(sum(df_trip["City distance"])),
+        'Sport distance':               round(sum(df_trip["Sport distance"])),
+        'Flow distance':                round(sum(df_trip["Flow distance"])),  
+        'Average trip distance':        round(df_trip["Total distance"].mean()),
+        'Average consumption':          round(((sum(df_trip["Total energy"]) - sum(df_trip["Total regen"])) / sum(df_trip["Total distance"]))),
+        'Average range':                round(7500/((sum(df_trip["Total energy"]) - sum(df_trip["Total regen"])) / sum(df_trip["Total distance"]))),
+        'Average charged SoC':          round((df_charge['uSoC F']-df_charge['uSoC I']).mean()),
+        'Average final charging SoC':   round(df_charge['uSoC F'].mean()),
+        'Shucko':                       round(len(df_charge["Connector"][df_charge["Connector"] == 0])*100/df_charge.shape[0]),
+        'Max km in month':              find_max_distance(df_trip)[1],
+        'Max km in month VIN':          find_max_distance(df_trip)[0],
+        'Max km odometer':              df_trip['End odometer'].max(),
+        'Max km odometer VIN':          df_trip['End odometer'].idxmax(),
+        'Trips between charges':        round(df_trip.shape[0]/df_charge.shape[0],1)                         
+    }
+
+    df_month = pd.DataFrame([new_row])
+    
     # Generate the date string and update df_month
     date_string = f'{year}-{month:02}'
     date = np.datetime64(date_string)
@@ -745,9 +1027,11 @@ def df_add_df_to_parquet_file(file_path:str,df_new:pd.DataFrame) -> pd.DataFrame
         df_exist = pd.read_parquet(file_path)
         df_final = pd.concat([df_exist,df_new])
 
+        # If the file_path corresponds to a critical data type
         # Erase possible duplicates and sort rows by ascending date
-        df_final.drop_duplicates(subset='Date',keep='last',inplace=True)
-        df_final.sort_values(by='Date',ascending=True,inplace=True)
+        if 'Date' in df_final.columns:
+            df_final.drop_duplicates(subset='Date',keep='last',inplace=True)
+            df_final.sort_values(by='Date',ascending=True,inplace=True)
 
         # Overwrite file
         table = pa.Table.from_pandas(df_final)
@@ -878,9 +1162,9 @@ def df_get_columns_tag(dataframe):
 def resolution(df,type_name:str):
     
     # Nombres de las columnas ordenadas por resolución
-    Route_resolution01 = ["End odometer", "City (km)","Sport (km)","Flow (km)","Sail (km)","Regen (km)","Motor avg T (°C)","Thermal current","Max temp","Min temp","Max delta","Avg delta"]
-    Route_resolution001 = ["Regen (%)", "Start SoC ","End SoC ","SoC delta (%)","Avg temp"]
-    Route_resolution0001 = ["Max discharge ", "Max regen","Avg current","Max V","Average V","Min V","Max cell V","Min cell V","Cell V diff","Min temp","Avg delta"]
+    Route_resolution01 = ["End odometer", "City distance","Sport distance","Flow distance","Sail distance","Regen distance","Motor avg T","Thermal current","Max temp","Min temp","Max delta","Avg delta"]
+    Route_resolution001 = ["Regen", "Start SoC","End SoC","SoC delta","Avg temp"]
+    Route_resolution0001 = ["Max discharge", "Max regen","Avg current","Max V","Average V","Min V","Max cell V","Min cell V","Cell V diff","Min temp","Avg delta"]
     Load_resolution01 = ["Max charger current","Min temp I","Max temp I","Min temp F","Max temp F","Min temp","Max temp","Cycles","Max temp","Min temp"]
     Load_resolution001 = ["SoC i", "SoC f","Charger max P","Avg temp I","Avg temp F","Age","uSoC I","uSoC F"]
     Load_resolution0001 = ["Vmin I", "Vavg I","Vmax I","Vmin F","Delta V I","Avg final V","Max final V","Max BMS current","Min temp"]
@@ -912,3 +1196,36 @@ def resolution(df,type_name:str):
             df[parameter] = df[parameter] * 0.001
 
     return df
+
+def df_update_column_tags(df:pd.DataFrame,type_name:str) -> pd.DataFrame:
+    '''
+    # Check if file_path is correct
+    if not os.path.exists(file_path):
+        return -1
+    df = pd.read_parquet(file_path)'''
+
+    # Check type_name and update the column tags
+    if type_name == 'trip':
+        column_tags_trip = ["Timestamp","Id","Start","End","Mins","End odometer","Max speed","City distance","Sport distance","Flow distance",
+                    "Sail distance","Regen distance","Total distance","City energy","Sport energy","Flow energy","City regen",
+                    "Sport regen","Map changes","Total energy","Total regen","Regen","Inv max T","Inv avg T","Inv  min T",
+                    "Motor max T","Motor avg T","Motor min T","Start SoC","End SoC","Max discharge","Max regen","SoC delta",
+                    "Avg current","Thermal current","Max V","Average V","Min V","Max cell V","Min cell V","Cell V diff","Max temp CT",
+                    "Avg temp","Min temp CT","Max delta","Avg delta","Temp general delta"]
+
+        df.columns = column_tags_trip
+    
+    elif type_name == 'charge':
+
+        column_tags_charge = ["Timestamp","SoC i","SoC f","Vmin I","Vavg I","Vmax I","Vmin F","Delta V I","Avg final V","Max final V","Max BMS current",
+                           "Max charger current","Charger max P","Min temp I","Avg temp I","Max temp I","Min temp F","Avg temp F",
+                           "Max temp F","Min temp CC","Max temp CC","Cycles","Age","uSoC I","uSoC F","Connector"]
+
+        df.columns = column_tags_charge
+    else:
+        return -1
+
+    # Generate the new file
+    table = pa.Table.from_pandas(df)
+    #pq.write_table(table,file_path)
+    return 0

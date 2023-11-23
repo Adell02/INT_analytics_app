@@ -6,11 +6,10 @@ import requests,json
 
 from app.config import Config
 from app.routes.auth import login_required
-from app.utils.graph_functions.generate_dasboard_graphics import generate_dashboard_graphics
+from app.utils.graph_functions.generate_dashboard_graphics import generate_dashboard_graphics,build_html
 from app.utils.account.token import generate_token
 from app.utils.DataframeManager.load_df import generate_cache_dash_name,load_current_df_memory
 from app.routes.RESTful_API import cache_dashboard,compute_dash_from_VIN
-from app.utils.graph_functions.generate_dasboard_graphics import build_html
 
 
 dash_bp = Blueprint('dash', __name__)

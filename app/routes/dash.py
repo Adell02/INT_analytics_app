@@ -47,29 +47,3 @@ def dashboard():
 
     return render_template('dashboard.html', html_string = html_string, plots=plots,available_vin=available_vin,default_vin=default_vin)
     
-
-
-@dash_bp.route('/mapview')
-@login_required
-def mapview():
-    return render_template('mapview.html')
-
-
-@dash_bp.route('/analytics')
-@login_required
-def analytics():
-    columns_list = ['City (km)','Sport (km)','Flow (km)','Sail (km)','Regen (km)',
-                    'City energy (Wh)','Sport energy (Wh)','Flow energy (Wh)','City regen (Wh)','Sport regen (Wh)',
-                    'Total energy (Wh)','Total regen (Wh)',
-                    'End odometer','Min cell V','Max cell V',
-                    'Total (km)','Avg temp','SoC delta (%)',
-                    'Motor min T (°C)','Motor max T (°C)',
-                    'Inv  min T (°C)','Inv max T (°C)']
-    dataframe = load_current_df_memory()
-
-    plots=generate_dashboard_graphics(dataframe)
-
-    return render_template('analytics.html',plots=plots, columns_list=columns_list)
-
-
-

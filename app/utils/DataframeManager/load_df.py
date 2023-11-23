@@ -42,7 +42,7 @@ def test_generate_parquet_from_df(origin_file,parquet_file):
 
     
     # Generate a dataframe containing all columns listed before
-    df = df_from_elements(origin_file,INDEX,None,KEY_COLS,LIST_COLUMNS)
+    df = df_from_xlsx_elements(origin_file,INDEX,None,KEY_COLS,LIST_COLUMNS)
     table = pa.Table.from_pandas(df)
     pq.write_table(table,parquet_file)
 

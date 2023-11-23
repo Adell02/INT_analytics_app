@@ -1,6 +1,14 @@
 
 /*      NEW GRAPHIC CSS     */
-
+.recuadro-superior-newgraphic{
+  display: flex;
+  flex-direction: row;
+  height: 4rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  position: relative;
+  z-index: 99;
+}
 
 .recuadro-w100{
     margin-left: 2rem;

@@ -20,14 +20,6 @@
     overflow: hidden;
 }
   
-.chat-header {
-  background-color: #007BFF;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 18px;
-  text-align: center;
-}
-  
 .chat-messages {
     padding: 10px;
     overflow-y: auto;

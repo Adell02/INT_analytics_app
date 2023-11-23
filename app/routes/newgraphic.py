@@ -50,11 +50,11 @@ def new_graph():
         
         fig_vector = []
 
-        if  graph_type == "none" or len(graph_data_y)==0 or graph_data_y[0]=="" or graph_data_x=="":
+        if  graph_type == "none" or len(graph_data_y)==0 or graph_data_y[0]=="":
             pass
         else :
             
-            if graph_type == "Pie_Chart" :
+            if graph_type == "Pie_Chart":
 
                 fig_vector.append(
                     generate_pie_chart(
@@ -62,7 +62,7 @@ def new_graph():
                     graph_data_y,
                     graph_title)
                 )
-            elif graph_type == "Bar_Chart" :
+            elif graph_type == "Bar_Chart"  and graph_data_x!="":
                 fig_vector.append(
                     generate_bar_chart(
                     df,
@@ -86,7 +86,7 @@ def new_graph():
                     graph_title)
                 )
 
-            elif graph_type == "Scatter_Plot":
+            elif graph_type == "Scatter_Plot" and graph_data_x!="":
                 fig_vector.append(
                     generate_scatter_plot_user(
                     df,"",
@@ -94,7 +94,7 @@ def new_graph():
                     graph_title, False,trendline_check)
                 )
 
-            elif graph_type == "Line_Chart":
+            elif graph_type == "Line_Chart" and graph_data_x!="":
                 fig_vector.append(
                     generate_line_chart(
                     df,
@@ -104,11 +104,6 @@ def new_graph():
 
             fig_vector[0].update_layout({'paper_bgcolor':'rgba(0,0,0,0)'} , margin=dict(l=20, r=20, t=55, b=20))
             fig_vector[0]=fig_vector[0].to_json()
-        
-    
-
-    
-    
 
     return render_template('newgraphic.html',columns_list=columns_list,plots=fig_vector, config=config, available_vin=available_vin)
 

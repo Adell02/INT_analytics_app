@@ -2,12 +2,39 @@
 
 {% block title %} Analytics {% endblock %}
 {% block content %} 
+<link rel="stylesheet" href="../static/css/analytics.css">
 <div class="margen"></div>
 <div class="recuadro-superior-analytics">
     <button class="go-left" onclick="moveLeft()">
         <i class="fa fa-arrow-left fa-2x icono-boton-options" aria-hidden="true"></i>
     </button>
-    <div class="search-graphic"></div>
+    <div class="graphic-type-analytics">
+        <select id="graph_type" name="graph_type" placeholder="Select Graph Type:">
+            <option value="none">Select Graph Type:</option>
+            <option value="pie">Pie Chart</option>
+            <option value="barchart">Bar Chart</option>
+            <option value="histogram">Histogram / Distribution</option>
+            <option value="scatter">Scatter Plot</option>
+            <option value="linechart">Line Chart</option>
+          </select>
+    </div>
+    <div class="graphic-title-analytics">
+        <input type="text" class="new-graphic-input-analytics" id="userInput" name="userInput" placeholder="Enter Graph Title" value="">
+    </div>
+    <div class="graphic-data-analytics">
+        <select name="graph_data_x" id="graph_data_x">
+            <option value="none">Select Graph Data:</option>
+            {% for column in columns_list %}
+                <option value="{{ column }}">{{ column }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="contenedorfilter-analytics">      
+        <button type="submit" id="filter-button" class="filter-button-analytics">Filter</button>
+    </div>
+
+
+
     <button class="go-right" onclick="moveRight()">
         <i class="fa fa-arrow-right fa-2x icono-boton-options" aria-hidden="true"></i>
     </button>
@@ -24,13 +51,94 @@
 </div>
 
 <script>
+    
+    
     const plot = {{ plots | tojson | safe }};
+    var plotFiltrado=[...plot];
     const containers = document.getElementsByClassName("graph-container");
     var graph_divs = [];
-
-    // Creamos index para saber en qué página estamos
     let pageIndex = 0;
     
+
+
+    document.getElementById('filter-button').addEventListener('click', filtrarPlot);
+
+    function filtrarPlot() {
+        plotFiltrado=[];
+        let typeFilter = document.getElementById('graph_type').value;
+        let dataFilter = document.getElementById('graph_data_x').value; 
+        let userInput = document.getElementById('userInput').value.trim().toLowerCase();
+        console.log(userInput);
+        let userWords = userInput ? userInput.split(" ") : [];
+        
+        
+        
+        
+        for (let i = 0; i < plot.length; i++) {
+            let elemento = JSON.parse(plot[i]);
+            let cumpleCondicionvariable = false;
+            let cumpleCondiciontype = false;
+            let cumplePalabrasUsuario = userWords.length === 0 ? true : userWords.every(word => 
+            elemento.layout && elemento.layout.title && elemento.layout.title.text && elemento.layout.title.text.toLowerCase().includes(word));
+            console.log(cumplePalabrasUsuario)
+            
+            for (let y = 0; y < elemento.data.length; y++) {
+                //pongo el or porqueen algunas graficas no se llamama label, sino name
+                if ((elemento.data[y] && elemento.data[y].labels && elemento.data[y].labels.includes(dataFilter)) || (elemento.data[y] && elemento.data[y].name && elemento.data[y].name.includes(dataFilter))) { // Añado elemento.data[y] && elemento.data[y].labels && para verificar que la posicion que busco exista
+                    cumpleCondicionvariable = true;
+                }
+                if (elemento.data[y] && elemento.data[y].type === typeFilter) {
+                    cumpleCondiciontype = true;
+                }
+                
+            }
+            
+            if (typeFilter==="none" && dataFilter==="none" && userWords.length === 0){
+                plotFiltrado=[...plot];
+            }
+            else if ((typeFilter !== "none" && dataFilter!=="none" && userWords.length !== 0)){
+
+                if (cumpleCondiciontype && cumpleCondicionvariable && cumplePalabrasUsuario) {
+                    plotFiltrado.push(plot[i]);
+                } 
+            }
+            else {
+                if ( typeFilter === "none" && dataFilter ==="none"){
+                    if (cumplePalabrasUsuario){
+                        plotFiltrado.push(plot[i]);
+                    }
+                }
+                else if (typeFilter === "none"){
+                    if (cumpleCondicionvariable && cumplePalabrasUsuario){
+                        plotFiltrado.push(plot[i]);
+                    }
+
+                }
+                else if(dataFilter==="none"){
+                    if (cumpleCondiciontype && cumplePalabrasUsuario){
+                        plotFiltrado.push(plot[i]);
+                    }
+
+                }
+                else if(userWords.length === 0){
+                    if (cumpleCondiciontype && cumpleCondicionvariable){
+                        plotFiltrado.push(plot[i]);
+                    }
+                    
+                }
+                
+
+            }
+            
+        }
+        console.log(plotFiltrado);
+        pageIndex=0;
+        load_4();
+        
+
+
+
+    }
     // Función para cargar las gráficas
     function load_page() {
         // Carga las gráficas al cargar la página
@@ -42,7 +150,7 @@
     
 
     function moveRight() {
-        if (plot.length>(pageIndex+1)*4)
+        if (plotFiltrado.length>(pageIndex+1)*4)
         {
             pageIndex++;
             load_4();

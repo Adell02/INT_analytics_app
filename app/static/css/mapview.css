@@ -1,0 +1,115 @@
+/*   MAPVIEW    */
+
+.recuadro-superior-mapview{
+    display: flex;
+    flex-direction: row;
+    height: 4rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.search-graphic-mapview{
+    position: relative;
+    margin-right: 1rem;
+    width: 85%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.visualise-options-mapview{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    width: 15%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    
+
+}
+#graph_type_mapview{
+    text-align: center;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+    padding: 0.675em 1em 0.675em 1em;
+    background-color: #fff;
+    border: none;
+    color: black;
+    cursor: default;
+    text-align: center;
+}
+
+ 
+  #graph_type1 {
+    display: none;
+  }
+  
+  
+  .show-select #graph_type1 {
+    display: block; 
+  }
+
+.red-marker {
+    /* Estilo para el marcador en rojo */
+    background-color: red;
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+}
+
+
+.contenido {
+    width: 100%;
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 10;
+    outline: none;
+}
+
+
+.a {
+    background-color: transparent;
+    width: calc(100vw - 10rem);
+    height: 10rem;
+    z-index: 11;
+    position: absolute;
+    top: 2rem;
+    left: 6rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+.form-control{
+    border: none; 
+    background: none; 
+    font-size: 18px; 
+    width: 100%; 
+    outline: none; 
+    text-align: center; 
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+
+

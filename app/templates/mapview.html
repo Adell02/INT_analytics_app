@@ -2,16 +2,22 @@
 
 {% block title %} Mapview {% endblock %}
 {% block content %} 
+<link rel="stylesheet" href="../static/css/mapview.css">
     <div class="contenido">
         <div class="a">
-            <div class="recuadro-superior-analytics">
-                <div class="new-graphic">
+            <div class="recuadro-superior-mapview">
+                
+                <div class="search-graphic-mapview">
+                    <input type="text" class="form-control" name="entity_name" placeholder="Search" >
                 </div>
-                <div class="search-graphic">
+                <div class="visualise-options-mapview">
+                    <select id="graph_type_mapview" name="graph_type_mapview">
+                        <option value="option1">Opción 1</option>
+                        <option value="option2">Opción 2</option>
+                    </select>
                 </div>
-                <div class="visualise-options">
-                    <i class="fa fa-bars fa-2x icono-boton-options" aria-hidden="true"></i>
-                </div>
+                
+                
             </div>
         </div>
         
@@ -53,4 +59,7 @@
             </script>
         </body>
     </div>
+    
+    
+    
 {% endblock %}

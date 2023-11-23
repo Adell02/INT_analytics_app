@@ -1,0 +1,184 @@
+/*   ANALYTICS    */
+
+.recuadro-superior-analytics{
+    display: flex;
+    flex-direction: row;
+    height: 4rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    position:relative;
+    z-index:9;
+}
+.go-left{
+    margin-right: 1rem;
+    width: 5%; 
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+.go-left:active {
+    background-color: #45b3f7; /* Nuevo color de fondo al hacer clic */
+}
+
+.graphic-type-analytics{
+    position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.graphic-title-analytics{
+    position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.new-graphic-input-analytics {
+    height: 3rem;
+    background-color: #ffffff;
+    width: 100%;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    border: none;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+    text-align: left;
+    padding-left: 1rem;
+}
+.graphic-data-analytics{
+    position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.save-filter-analytics{
+    position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.contenedorfilter-analytics{
+    position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #45b3f7;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+.filter-button-analytics {
+    background-color: #45b3f7;
+    color: white; 
+    width: 100%;
+    border-radius: none; 
+    cursor: pointer; 
+    font-size: 20px; 
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 600;
+    display: block; 
+    box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
+    border: none;
+    height: 100%;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.filter-button-analytics:hover {
+    background-color: #094f7a; 
+}
+
+
+.go-right{
+    width: 5%; 
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+}
+.go-right:active {
+    background-color: #45b3f7; /* Nuevo color de fondo al hacer clic */
+}
+
+.recuadro-inferior-analytics{
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
+.recuadro-inferior-analytics-top{
+    display: flex;
+    flex-direction: row;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 43vh;
+}
+.recuadro-inferior-analytics-bottom{
+    display: flex;
+    flex-direction: row;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 43vh;
+}
+
+.recuadro-w50{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    width:50%;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+}

@@ -165,7 +165,7 @@ function load_graph(div_id,idx) {
 }
 
 function resize_graph(div_id,idx){
-    var figure = document.getElementById(div_id)
+    var figure = document.getElementById(div_id);
 
     figure.layout.width = containers[idx].offsetWidth;
     figure.layout.height = containers[idx].offsetHeight;
@@ -215,6 +215,21 @@ function load_graph_analytics(div_id,idx,idx_page) {
     Plotly.newPlot(div_id,figure.data,figure.layout);
 }
 
+function create_newgraphic(){
+            
+    const container = containers[0];
+
+    // Create an inner div for the graph
+    const graphDiv = document.createElement("div");
+    graphDiv.id = "plotly_graph" ;
+    container.appendChild(graphDiv);
+    graph_divs.push(graphDiv)
+    if (plot.length > 0){
+        load_graph(graphDiv,0)
+    }
+        
+}
+
 function load_4(){
     const desiredDataPoints = 1000;
 
@@ -228,6 +243,7 @@ function load_4(){
         }
         
     }  
+    resize_all();
 }
 
 function resize_all(){
@@ -309,4 +325,78 @@ function load_graph_optimized_analytics(div_id,idx,idx_page,desiredDataPoints) {
             
         }
     );
+}
+
+function filtrarPlot() {
+    plotFiltrado=[];
+    let typeFilter = document.getElementById('graph_type').value;
+    let dataFilter = document.getElementById('graph_data_x').value; 
+    let userInput = document.getElementById('userInput').value.trim().toLowerCase();
+    console.log(userInput);
+    let userWords = userInput ? userInput.split(" ") : [];
+    
+    
+    
+    
+    for (let i = 0; i < plot.length; i++) {
+        let elemento = JSON.parse(plot[i]);
+        let cumpleCondicionvariable = false;
+        let cumpleCondiciontype = false;
+        let cumplePalabrasUsuario = userWords.length === 0 ? true : userWords.every(word => 
+        elemento.layout && elemento.layout.title && elemento.layout.title.text && elemento.layout.title.text.toLowerCase().includes(word));
+        console.log(cumplePalabrasUsuario)
+        
+        for (let y = 0; y < elemento.data.length; y++) {
+            //pongo el or porqueen algunas graficas no se llamama label, sino name
+            if ((elemento.data[y] && elemento.data[y].labels && elemento.data[y].labels.includes(dataFilter)) || (elemento.data[y] && elemento.data[y].name && elemento.data[y].name.includes(dataFilter))) { // Añado elemento.data[y] && elemento.data[y].labels && para verificar que la posicion que busco exista
+                cumpleCondicionvariable = true;
+            }
+            if (elemento.data[y] && elemento.data[y].type === typeFilter) {
+                cumpleCondiciontype = true;
+            }
+            
+        }
+        
+        if (typeFilter==="none" && dataFilter==="none" && userWords.length === 0){
+            plotFiltrado=[...plot];
+        }
+        else if ((typeFilter !== "none" && dataFilter!=="none" && userWords.length !== 0)){
+
+            if (cumpleCondiciontype && cumpleCondicionvariable && cumplePalabrasUsuario) {
+                plotFiltrado.push(plot[i]);
+            } 
+        }
+        else {
+            if ( typeFilter === "none" && dataFilter ==="none"){
+                if (cumplePalabrasUsuario){
+                    plotFiltrado.push(plot[i]);
+                }
+            }
+            else if (typeFilter === "none"){
+                if (cumpleCondicionvariable && cumplePalabrasUsuario){
+                    plotFiltrado.push(plot[i]);
+                }
+
+            }
+            else if(dataFilter==="none"){
+                if (cumpleCondiciontype && cumplePalabrasUsuario){
+                    plotFiltrado.push(plot[i]);
+                }
+
+            }
+            else if(userWords.length === 0){
+                if (cumpleCondiciontype && cumpleCondicionvariable){
+                    plotFiltrado.push(plot[i]);
+                }
+                
+            }
+            
+
+        }
+        
+    }
+    console.log(plotFiltrado);
+    pageIndex=0;
+    load_4();
+    
 }

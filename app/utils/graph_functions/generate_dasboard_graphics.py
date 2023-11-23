@@ -42,11 +42,16 @@ def generate_dashboard_graphics(config_file:str,df,vin=None):
 
     for row in config:
         if row['child'] == True:
+
             for sub_row in row['child_config']:
+
                 if sub_row['child'] == True:
+
                     for sub_sub_row in sub_row['child_config']:
+
                         if sub_sub_row['child'] == True:
                             print("Too complex layout")
+
                         else:
                             fig = build_run_function(sub_sub_row,df,vin)                                                        
                             fig_vector.append(fig)
@@ -66,15 +71,16 @@ def build_html(config_file:str,df,plots:list,vin=None):
     idx = 0
     for row in config:        
         if row['child']:
-            html_string += '<div class="recuadro-'+row['height']+'-dashboard" style="display:flex;flex-direction:'+row['flex-direction']+'">'
+            html_string += '<div class="recuadro-h'+ str(row['height'])+'" style="display:flex;flex-direction:'+str(row['flex-direction'])+'">'
             for sub_row in row['child_config']:
                 if sub_row['child']:
-                    html_string += '<div class="sub-container-'+sub_row['height']+' sub-recuadro-w'+str(sub_row['width'])+'" style="display:flex;flex-direction:'+sub_row['flex-direction']+'">'
+                    html_string += '<div class="sub-recuadro-h'+str(sub_row['height'])+' sub-recuadro-w'+str(sub_row['width'])+'" style="display:flex;flex-direction:'+str(sub_row['flex-direction'])+'">'
                     for sub_sub_row in sub_row['child_config']:
                         if sub_sub_row['child']:
                             print("Too complex layout")
                         elif sub_sub_row['function'] != 'generate_note':
-                            html_string += '<div class="sub-graph-container graph-container">'                            
+                            html_string += '<div class="graph-container recuadro-h'+ str(sub_sub_row['height'])+' recuadro-w'+str(sub_sub_row['width'])+'">'
+                            
                             html_string += '</div>'
                         else:
                             html_string += build_run_function(sub_sub_row,df,vin)

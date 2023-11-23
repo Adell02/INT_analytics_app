@@ -1,13 +1,18 @@
 {% extends 'template.html' %}
 
 {% block title %} Dashboard {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/dashboard.css">
+{% endblock %}
+
 {% block content %} 
     
     <div class="margen">
     </div>
     <form method='POST'>
         <div class="recuadro-superior-analytics" >
-            <div class="new-graphic-superior">                
+            <div class="dashboard-superior custom-select">                
                 <div class="dropdown">
                     <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
                     <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
@@ -15,18 +20,18 @@
                     </div>
                 </div>
             </div>
-            <div class="new-graphic-superior">
+            <div class="dashboard-superior">
                 Time selected: Current Month
             </div>
-            <div class="new-graphic-superior">
+            <div class="dashboard-superior custom-select">
                 <select id="Optimization" name="Optimization" placeholder="Select Optimization:">
                     <option value="Optimized"> Optimized </option>
                     <option value="Fast"> Fast </option>
                     <option value="All Data"> All Data </option>
                   </select>
             </div>
-            <div class="contenedorsave">      
-                <button type="submit"  class="save-button">Update</button>
+            <div class="dashboard-update-box">      
+                <button type="submit"  class="dashboard-update-button">Update</button>
             </div>
         </div>
     </form>
@@ -55,20 +60,26 @@
         
         var optimization = '{{ session["Optimization"] }}';
         var desiredDataPoints;
+        var func_load;
 
         if (optimization == 'Optimized'){
             desiredDataPoints = 1000;
-            window.onload = load_all_optimized;
+            func_load = load_all_optimized;
         }
         else if (optimization == 'Fast'){
             desiredDataPoints = 10000;
-            window.onload = load_all_optimized;
+            func_load = load_all_optimized;
         }
         else{
-            window.onload = load_all;
+            func_load = load_all;
         }
         
         window.addEventListener('resize',resize_all);  
+
+        window.onload = function(){
+            func_load();
+            window.dispatchEvent(new Event('resize'));
+        }
       
 
         // Set the selected VIN on the dropdown as default

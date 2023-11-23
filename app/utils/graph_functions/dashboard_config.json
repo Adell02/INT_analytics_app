@@ -1,21 +1,21 @@
 
 [
     {
-        "height":"medio",
+        "height":50,
         "width":100,
         "child":true,
         "flex-direction":"row",
         "child_config":
             [
                 {
-                    "height":"medio",
+                    "height":50,
                     "width":33,
                     "child":true,
                     "flex-direction":"column",
                     "child_config":
                         [
                             {
-                                "height":"superior",
+                                "height":25,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -24,7 +24,7 @@
                                 "title":"Modos de Conducción por km"
                             },
                             {
-                                "height":"superior",
+                                "height":25,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -36,14 +36,14 @@
 
                 },
                 {
-                    "height":"medio",
+                    "height":50,
                     "width":33,
                     "child":true,
                     "flex-direction":"column",
                     "child_config":
                         [
                             {
-                                "height":"superior",
+                                "height":25,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -52,7 +52,7 @@
                                 "title":"Modos de Conducción por Wh"
                             },
                             {
-                                "height":"superior",
+                                "height":25,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -64,7 +64,7 @@
 
                 },
                 {
-                    "height":"medio",
+                    "height":50,
                     "width":33,
                     "child":false,
                     "function":"generate_note",
@@ -75,14 +75,14 @@
 
     },
     {
-        "height":"medio",
+        "height":50,
         "width":100,
         "child":true,
         "flex-direction":"row",
         "child_config":
         [
             {
-                "height":"medio",
+                "height":50,
                 "width":50,
                 "child":false,
                 "function":"generate_multi_histogram",
@@ -92,7 +92,7 @@
                 "title":"Distribución consumo y regeneración de energía"
             },
             {
-                "height":"medio",
+                "height":50,
                 "width":50,
                 "child":false,
                 "function":"generate_scatter_plot_user",
@@ -108,21 +108,21 @@
         ]
     },
     {
-        "height":"medio",
+        "height":50,
         "width":100,
         "child":true,
         "flex-direction":"row",
         "child_config":
         [
             {
-                "height":"medio",
+                "height":50,
                 "width":50,
                 "child":false,
                 "function":"get_consumption_vs_temp",
                 "parameters":["Dataframe"]
             },
             {
-                "height":"medio",
+                "height":50,
                 "width":50,
                 "child":false,
                 "function":"generate_multi_histogram",
@@ -136,14 +136,14 @@
         ]
     },
     {
-        "height":"medio",
+        "height":50,
         "width":100,
         "child":true,
         "flex-direction":"row",
         "child_config":
         [
             {
-                "height":"medio",
+                "height":50,
                 "width":100,
                 "child":false,
                 "function":"generate_multi_histogram",

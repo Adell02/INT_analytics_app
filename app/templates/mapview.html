@@ -1,8 +1,16 @@
 {% extends 'template.html' %}
 
 {% block title %} Mapview {% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/css/mapview.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+{% endblock %}
+
 {% block content %} 
-<link rel="stylesheet" href="../static/css/mapview.css">
+
     <div class="contenido">
         <div class="a">
             <div class="recuadro-superior-mapview">
@@ -21,11 +29,6 @@
             </div>
         </div>
         
-        <head>
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-            <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-        </head>
         <body>
             <div id="map-container">
                 <div id="map" class="grayscale-map"></div>

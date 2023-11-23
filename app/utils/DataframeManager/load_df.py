@@ -1,24 +1,25 @@
-from datetime import datetime
+
 import pandas as pd
 import os 
 import pyarrow as pa
 import pyarrow.parquet as pq
+from datetime import datetime
 
 from app import Config
 from app.utils.graph_functions.functions import *
 from app.utils.graph_functions.generate_dasboard_graphics import *
 
 def generate_cache_dash_name():
-    current_month = datetime.now().month
-    current_year = datetime.now().year
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
 
     name = Config.PATH_CACHE + "_" + str(current_month) + "_" + str(current_year) +".zlib"
 
     return name
 
 def generate_df_name(type:str) -> str:
-    current_month = datetime.now().month
-    current_year = datetime.now().year
+    current_month = datetime.datetime.now().month
+    current_year = datetime.datetime.now().year
 
     name = Config.PATH_DATAFRAMES + type + "_" + str(current_month) + "_" + str(current_year) +".parquet"
 

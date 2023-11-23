@@ -71,13 +71,3 @@ def request_python_function(request:str,columns:list):
       presence_penalty=0
     )
     return parse_response(response)  
-
-def test():
-    data = {
-        'Plug': ['Type A', 'Type B', 'Type A', 'Type C', 'Type B', 'Type A', 'Type A', 'Type C'],
-        'Other_Column': [1, 2, 3, 4, 5, 6, 7, 8]
-    }
-    
-    df = pandas.DataFrame(data)
-    
-    print (ai_request(df,"Which is the % of use for every plug type?",['Plug','Other_Column']))

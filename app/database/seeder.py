@@ -2,7 +2,9 @@
 from functools import wraps
 from flask import Blueprint,request,render_template,redirect
 import mysql.connector
+import pyodbc as sql
 import bcrypt
+import pandas as pd
 
 from app import conn,cursor
 from app.config import Config
@@ -24,34 +26,63 @@ def connection_mysql(route_function):
             closing_connection()
     return wrapper
 
+def connection_sql_ray(route_function):
+    @wraps(route_function)
+    def wrapper(*args, **kwargs):
+        opening_connection_RAY()
+        try:       
+            return route_function(*args, **kwargs)
+        finally:
+            closing_connection_RAY()
+    return wrapper
+
 def opening_connection():
     global conn,cursor
     db_config= {
         'host':Config.MYSQL_HOST,
         'user':Config.MYSQL_USER,
         'password':Config.MYSQL_PASSWORD,
-        'database':Config.MYSQL_DB
-    }
+        'database':Config.MYSQL_DB,
+        'port':Config.MYSQL_PORT
+    }    
 
-    db_config_ray={
-        'host':Config.MYSQL_HOST_RAY,
-        'user':Config.MYSQL_USER_RAY,
-        'password':Config.MYSQL_PASSWORD_RAY,
-        'database':Config.MYSQL_DB_RAY
-    }
+
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(buffered=True,dictionary=True) 
-    #conn_ray = mysql.connector.connect(**db_config_ray)
-    #cursor_ray = conn_ray.cursor(buffered=True,dictionary=True)
+    
+    print("connected")
+
+def opening_connection_RAY():
+    global cursor_ray,conn_ray
+    
+    
+    db_config_ray=(
+        'Driver={ODBC Driver 18 for SQL Server};'
+        f'Server={Config.MYSQL_HOST_RAY};'
+        f'Database={Config.MYSQL_DB_RAY};'
+        f'UID={Config.MYSQL_USER_RAY};'
+        f'PWD={Config.MYSQL_PASSWORD_RAY};'
+        'Encrypt:yes;'
+    )
+    
+    conn_ray = sql.connect(db_config_ray)
+    cursor_ray = conn_ray.cursor()
+    print("connected")    
 
 def closing_connection():   
     global conn,cursor 
     cursor.close()
-    conn.close()
-    # cursor_ray.close()
-    # conn_ray.close()
+    conn.close()    
     cursor = None
     conn = None
+
+def closing_connection_RAY():   
+    global conn_ray,cursor_ray 
+    cursor_ray.close()
+    conn_ray.close()
+    cursor_ray = None
+    conn_ray = None
+    
     
 #--------------- SEEDER ---------------#
 
@@ -86,10 +117,11 @@ def new_table(table):
     if table == 'user' or table == 'all':
         cursor.execute(''' CREATE TABLE user (userid INT NOT NULL AUTO_INCREMENT, email VARCHAR(50) NOT NULL, password VARCHAR(100) NOT NULL, personal_token VARCHAR(100) NOT NULL, org_name VARCHAR(50), external_token VARCHAR(100),role VARCHAR(50) NOT NULL DEFAULT 'user', is_confirmed BOOLEAN NOT NULL, PRIMARY KEY(userid)); ''')
     elif table == 'dashboard' or 'all':
-        cursor.execute(''' CREATE TABLE dashboard (token_id VARCHAR(100) NOT NULL, org_name VARCHAR(50), configuration JSON,PRIMARY KEY(token_id),FOREIGN KEY (token_id) REFERENCES user(personal_token)); ''')
-    elif table == 'data' or 'all':
-        #cursor.execute(''' CREATE TABLE user (userid INT NOT NULL AUTO_INCREMENT, email VARCHAR(50) NOT NULL, password VARCHAR(100) NOT NULL, personal_token VARCHAR(100) NOT NULL, org_name VARCHAR(50), external_token VARCHAR(100),role VARCHAR(50) NOT NULL DEFAULT 'user', is_confirmed BOOLEAN NOT NULL, PRIMARY KEY(userid)); ''')
         pass
+        #cursor.execute(''' CREATE TABLE dashboard (token_id VARCHAR(100) NOT NULL, org_name VARCHAR(50), configuration JSON,PRIMARY KEY(token_id),FOREIGN KEY (token_id) REFERENCES user(personal_token)); ''')
+    elif table == 'data' or 'all':
+        cursor.execute(''' CREATE TABLE data (org_token VARCHAR(100) NOT NULL, last_timestamp INT, columnes JSON, VINs JSON, PRIMARY KEY(org_token)); ''')
+        cursor.execute('''INSERT INTO data (org_token,last_timestamp,columnes,VINs) VALUES ('RAY',NULL,NULL,NULL);''')
     #Saving the Actions performed on the DB
     conn.commit()
 
@@ -152,14 +184,14 @@ def delete_user():
 
 @connection_mysql
 def edit_user(email,field,value):
-    query = "UPDATE user SET " + field + "=\'"+value+"\' WHERE email = \'"+email+"\';"
+    query = "UPDATE user SET " + field + "=\'"+str(value)+"\' WHERE email = \'"+email+"\';"
     cursor.execute(query)
     conn.commit()
     return True
 
 @connection_mysql
 def check_existance(field,value):
-    query = "SELECT * FROM user WHERE " + field +"=\'"+value+"\';"
+    query = "SELECT * FROM user WHERE " + field +"=\'"+str(value)+"\';"
     cursor.execute(query)
     conn.commit()
     fetch = cursor.fetchone()
@@ -179,7 +211,45 @@ def confirm_user(email=None):
     conn.commit()
     return "User confirmed successfully"
 
+@connection_sql_ray
+def fetch_ray_trip(timestamp):
+    CATEGORIES = ["G1","G2","C2","C3","IE","B1","B2","B3","B4"]
+    query = '''SELECT DeviceId,OriginalMessage FROM PRORawData WHERE (('''
+    for c in CATEGORIES:
+        query += f"OriginalMessage LIKE '${c}%'"
+        if c == CATEGORIES[len(CATEGORIES)-1]:
+            query += ")"
+        else:
+            query += " OR "
+    
+    query += f" AND TimeStamp >= {timestamp});"
+    
+    read_df = pd.read_sql_query(query,conn_ray)
+    read_df.to_csv("fetched_RAY_data.csv",index=False)
 
+@connection_mysql
+def edit_data(field,value):
+    if field != "columnes" and field != "VINs":
+        query = "UPDATE data SET " + field + "="+str(value)+" WHERE org_token = 'RAY';"
+    else:
+        query = "UPDATE data SET " + field + "= '["+",".join(value)+"]' WHERE org_token = 'RAY';"
+    cursor.execute(query)
+    conn.commit()
+    return True
+
+@connection_mysql
+def fetch_data_params(field):
+    
+    query = "SELECT "+field+" FROM data WHERE org_token = 'RAY';"
+    cursor.execute(query)
+    conn.commit()
+    fetch = cursor.fetchone()
+
+    if field != "columnes" and field != "VINs" or type(fetch[field]) == type(None):
+        return fetch[field]    
+    else:        
+        return fetch[field].strip('][').split(',')
+    
 
 
 

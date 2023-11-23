@@ -3,7 +3,13 @@ body{
     font-family: "Montserrat",'sans-serif';
     font-weight: 400;
 }
-
+input{
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+}
+select{
+    outline:none;
+}
 
 
 /* UNDERLINE EFFECT WHEN HOVER*/
@@ -228,6 +234,8 @@ body{
     margin-top: 1rem;
     margin-bottom: 1rem;
     height: 23vh;
+    position: relative;
+    z-index: 99;
 }
 
 .recuadro-medio-dashboard{
@@ -341,6 +349,8 @@ body{
     height: 4rem;
     margin-left: 2rem;
     margin-right: 2rem;
+    position: relative;
+    z-index: 99;
 }
 .go-left{
     margin-right: 1rem;
@@ -890,3 +900,55 @@ form[name="newgraphic_form"]{
   border: 1px solid #ccc;
 }
   
+
+
+
+
+/* SEARCHABLE DROPDOWN TEST */
+/* Style for the dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    height: inherit;
+    width: 90%;
+}
+
+/* Style for the dropdown button */
+.dropdown input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    height: -webkit-fill-available;
+}
+
+
+/* Style for the dropdown content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Style for dropdown options */
+.dropdown-content a {
+    padding: 12px 16px;
+    display: block;
+    text-decoration: none;
+    
+}
+
+/* Highlight the selected option */
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* Show the dropdown content when the search box is clicked */
+.show {
+    display: block;
+}

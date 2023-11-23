@@ -1,19 +1,19 @@
 from flask import Flask,url_for,redirect,session
 from flask_mail import Mail
 from flask_session import Session
-import mysql.connector
 import openai
 
 from app.config import Config
-from app.utils.AI.openai_request import test
 
 
 conn = None
 cursor = None
+conn_ray = None
+cursor_ray = None
 mail = None
 
 def create_app(config_class=Config):
-    global conn,cursor,mail
+    global mail
     
     app = Flask(__name__)
     app.config.from_object(config_class) 
@@ -22,7 +22,6 @@ def create_app(config_class=Config):
     mail = Mail(app)
 
     openai.api_key = Config.OPENAI_KEY
-    #test()
 
     # Import and register Blueprint(s)
     from app.routes.auth import auth_bp

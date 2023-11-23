@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request,url_for,session
+from flask import Blueprint, render_template,request
 
 from app.routes.auth import login_required
 from app.database.seeder import *
@@ -6,17 +6,9 @@ from app.utils.account.token import *
 
 from app.utils.graph_functions.functions import * 
 from app.utils.graph_functions.consumption_vs_temp import *
+from app.utils.DataframeManager.load_df import generate_df_name
 
-import pyarrow as pa
 import pyarrow.parquet as pq
-
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import numpy as np
-import statsmodels.api as sm
-import os
 
 
 newgraphic_bp = Blueprint('newgraphic', __name__)
@@ -32,7 +24,7 @@ def new_graph():
         graph_data_x =request.form['graph_data_x']
         graph_data_y =request.form['graph_data_y']
 
-        parquet_file = "app/database/Database_Ray.parquet"
+        parquet_file = generate_df_name("run")
         table = pq.read_table(parquet_file)
         df = table.to_pandas()
         fig_vector = []
@@ -47,8 +39,6 @@ def new_graph():
             graph_title)
             )
         
-        
-
 
         fig_vector[0].update_layout({'paper_bgcolor':'rgba(0,0,0,0)'} , margin=dict(l=20, r=20, t=55, b=20))
         fig_vector[0]=fig_vector[0].to_json()

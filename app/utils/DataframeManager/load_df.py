@@ -4,6 +4,7 @@ import os
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from app import Config
 from app.utils.graph_functions.functions import *
 from app.utils.graph_functions.generate_dasboard_graphics import *
 
@@ -11,7 +12,7 @@ def generate_cache_dash_name():
     current_month = datetime.now().month
     current_year = datetime.now().year
 
-    name = "app/database/cache/dashboard" + "_" + str(current_month) + "_" + str(current_year) +".zlib"
+    name = Config.PATH_CACHE + "_" + str(current_month) + "_" + str(current_year) +".zlib"
 
     return name
 
@@ -19,7 +20,7 @@ def generate_df_name(type:str) -> str:
     current_month = datetime.now().month
     current_year = datetime.now().year
 
-    name = "app/database/dfs/"+ type + "_" + str(current_month) + "_" + str(current_year) +".parquet"
+    name = Config.PATH_DATAFRAMES + type + "_" + str(current_month) + "_" + str(current_year) +".parquet"
 
     return name
 

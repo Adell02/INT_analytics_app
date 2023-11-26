@@ -1,6 +1,6 @@
 # Seeder
 from functools import wraps
-from flask import Blueprint,request,render_template,redirect
+from flask import Blueprint,request
 import mysql.connector
 import pyodbc as sql
 import bcrypt
@@ -46,28 +46,23 @@ def opening_connection():
         'port':Config.MYSQL_PORT
     }    
 
-
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(buffered=True,dictionary=True) 
     
-    print("connected")
-
 def opening_connection_RAY():
     global cursor_ray,conn_ray
-    
-    
+        
     db_config_ray=(
         'Driver={ODBC Driver 18 for SQL Server};'
         f'Server={Config.MYSQL_HOST_RAY};'
         f'Database={Config.MYSQL_DB_RAY};'
-        f'UID={Config.MYSQL_USER_RAY};'
+        f'UID={Config.MYSQL_USER_RAY}@{Config.MYSQL_HOST_RAY};'
         f'PWD={Config.MYSQL_PASSWORD_RAY};'
         'Encrypt:yes;'
     )
     
     conn_ray = sql.connect(db_config_ray)
     cursor_ray = conn_ray.cursor()
-    print("connected")    
 
 def closing_connection():   
     global conn,cursor 
@@ -250,6 +245,22 @@ def fetch_data_params(field):
     else:        
         return fetch[field].strip('][').split(',')
     
+@connection_sql_ray
+def fetch_ray_gps(vin,timestamp_init,timestamp_end,journey_id):    
+    
+    query = f'''SELECT TOP(1) DeviceId,Timestamp,OriginalMessage FROM PRORawData WHERE (DeviceId = '{vin}' AND Timestamp >= '{int(timestamp_init)}' AND Timestamp <= '{int(timestamp_end)}' AND OriginalMessage LIKE '$P1%' AND OriginalMessage LIKE '%{int(journey_id)},#&' AND SUBSTRING(OriginalMessage, CHARINDEX(',',OriginalMessage)+1,CHARINDEX(',', OriginalMessage, CHARINDEX(',', OriginalMessage) + 1) - CHARINDEX(',', OriginalMessage) - 1) <> '');'''    
+    read_df = pd.read_sql_query(query,conn_ray)
+    if len(read_df):
+        split = read_df['OriginalMessage'][0].split(",")[1:5]
+        if split[1] == 'N':
+            lat = split[0]
+        else:
+            lat = "-"+split[0]
+        if split[2] == 'E':
+            long = split[2]
+        else:
+            long = "-"+split[2]
 
-
-
+        return (lat,long)
+    else:
+        return ("","")

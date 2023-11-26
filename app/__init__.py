@@ -22,7 +22,7 @@ def create_app(config_class=Config):
     mail = Mail(app)
 
     openai.api_key = Config.OPENAI_KEY
-
+    
     # Import and register Blueprint(s)
     from app.routes.auth import auth_bp
     from app.database.seeder import seeder_bp
@@ -46,13 +46,11 @@ def create_app(config_class=Config):
     app.register_blueprint(ai_chat_bp, url_prefix='/private')
     app.register_blueprint(settings_bp,url_prefix="/private")
     
-
-    
     @app.route("/")
     def redirect_home():
         return redirect(url_for("dash.dashboard"))
     
     @app.context_processor
     def global_variables():
-        return{'session':session}
+        return{'session':session}        
     return app

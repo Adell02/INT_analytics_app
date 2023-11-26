@@ -9,7 +9,7 @@ import json
 from scipy import interpolate
 import pyarrow as pa
 import pyarrow.parquet as pq
-import datetime
+from datetime import datetime
 
 #Protocol Dictionary
 protocol_dict={"G1":["Timestamp CT", "Start", "End", "Start odometer", "Id"],
@@ -1053,11 +1053,11 @@ def df_add_df_to_parquet_file(file_path:str,df_new:pd.DataFrame) -> pd.DataFrame
 def df_append_data(df_new:pd.DataFrame, type_name:str) -> int:
 
     timestamp_max=df_new['Timestamp'].max()
-    date_max=datetime.datetime.utcfromtimestamp(timestamp_max)
+    date_max=datetime.utcfromtimestamp(timestamp_max)
     year_max=date_max.year
     month_max=date_max.month
     timestamp_min=df_new['Timestamp'].min()
-    date_min=datetime.datetime.utcfromtimestamp(timestamp_min)
+    date_min=datetime.utcfromtimestamp(timestamp_min)
     year_min=date_min.year
     month_min=date_min.month
 

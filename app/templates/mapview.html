@@ -7,61 +7,51 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="../static/js/map.js"></script>
 {% endblock %}
 
 {% block content %} 
 
-    <div class="contenido">
-        <div class="a">
-            <div class="recuadro-superior-mapview">
-                
-                <div class="search-graphic-mapview">
-                    <input type="text" class="form-control" name="entity_name" placeholder="Search" >
+    
+    <div class="recuadro-superior-mapview">
+        
+        <div class="search-graphic-mapview">
+            <input type="text" class="form-control" name="entity_name" placeholder="Search" >
+        </div>
+        <div class="visualise-options-mapview">
+            <div class="dropdown">
+                <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
+                <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
+                    <!-- Dropdown options will be dynamically added here -->
                 </div>
-                <div class="visualise-options-mapview">
-                    <select id="graph_type_mapview" name="graph_type_mapview">
-                        <option value="option1">Opción 1</option>
-                        <option value="option2">Opción 2</option>
-                    </select>
-                </div>
-                
-                
             </div>
         </div>
         
-        <body>
-            <div id="map-container">
-                <div id="map" class="grayscale-map"></div>
-            </div>
-            <script>
-                var map = L.map('map').setView([41.373349, 2.06085], 10);
-
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '© <a href="https://carto.com/attributions">CARTO</a>'
-                }).addTo(map);
-
-                //añadimos los puntos
-                var puntos = [
-                    [41.373349, 2.06085],
-                    [41.37457763574095, 2.062641146649088],
-                    [41.37467827273396, 2.064851286867785]
-                    
-                ];
-
-                
-                var heatLayer = L.heatLayer(puntos, {
-                    radius: 20,
-                    gradient: { 0.4: 'white', 0.65: 'gray', 1: 'black' } // Define la paleta de colores
-                }).addTo(map);
-
-                
-                puntos.forEach(function (coordenada) {
-                    L.marker(coordenada, { icon: L.divIcon({ className: 'red-marker' }) }).addTo(map);
-                });
-            </script>
-        </body>
+        
     </div>
+    
+    
+    <div id="map-container">
+        <div id="map" class="grayscale-map"></div>
+    </div>
+
+    
+    <script>
+        const fig = JSON.parse({{fig | tojson | safe}});
+                       
+        generate_map(fig);
+        
+        // Populate the dropdown with options
+        const options = {{available_vin | safe}};
+        var dropdownContent = document.getElementById("myDropdown");
+        options.forEach(function (option) {
+            var a = document.createElement("a");
+            a.textContent = option;
+            a.href = "#";
+            dropdownContent.appendChild(a);
+        });
+                        
+    </script>
     
     
     

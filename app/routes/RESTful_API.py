@@ -2,6 +2,8 @@ import json,zlib
 from datetime import datetime
 from flask import Blueprint
 import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 from app.utils.account.token import *
 from app.database.seeder import edit_data,fetch_data_params
@@ -28,6 +30,9 @@ def server_process(token,timestamp):
         # Pass to Miquel's function -> generate df
         # Pass to df_append -> generate .parquet for months and filter
         # update Timestamp, VINs and Columns : Mysql params = org_token,last_timestamp,columnes,VINs
+        df_ = load_current_df_memory()
+        df = process_coords_for_df(df_)        
+
         if True or fetch_data_params("last_timestamp") == None or timestamp:
             # the parameter should be timestamp, instead we are loading the first day september 
             edit_data("last_timestamp",1693526400)  # First day september
@@ -36,7 +41,9 @@ def server_process(token,timestamp):
             edit_data("columnes",columns)
         if True or fetch_data_params("VINs") == None:
             #VINs = get it from the loaded DF
-            pass
+            vins = list(df['Id'].keys().unique())
+            edit_data("VINs",",".join(vins))
+
         write_log("OK Updated Database")
         return "Server Fetch OK"
 

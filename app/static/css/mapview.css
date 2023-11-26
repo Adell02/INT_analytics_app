@@ -4,8 +4,15 @@
     display: flex;
     flex-direction: row;
     height: 4rem;
+    width: calc(100vw - 10rem);
     margin-left: 2rem;
     margin-right: 2rem;
+    position: absolute;
+    top: 2rem;
+    left: 6rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    z-index: 11;
 }
 
 .search-graphic-mapview{
@@ -61,43 +68,16 @@
     display: block; 
   }
 
-.red-marker {
-    /* Estilo para el marcador en rojo */
-    background-color: red;
-    width: 10px;
-    height: 10px;
-    border: none;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
-}
-
-
-.contenido {
-    width: 100%;
-    height: 100%;
-}
 
 #map {
-    width: 100%;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-    position: relative;
-    z-index: 10;
-    outline: none;
-}
-
-
-.a {
-    background-color: transparent;
-    width: calc(100vw - 10rem);
-    height: 10rem;
-    z-index: 11;
-    position: absolute;
-    top: 2rem;
-    left: 6rem;
-    margin-right: 2rem;
+    width: calc(100% - 4rem);
+    height: calc(100vh - 8rem);
+    margin-top: 6rem;
     margin-left: 2rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
 }
 
 .form-control{

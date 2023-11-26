@@ -4,7 +4,6 @@ import os
 import pyarrow as pa
 import pyarrow.parquet as pq
 from datetime import datetime, timedelta
-import datetime
 
 from app import Config
 
@@ -204,23 +203,23 @@ def df_append_data(df_new:pd.DataFrame, type_name:str) -> int:
         TIMESTAMP_COLUMN = 'Timestamp CC'
    
     timestamp_max=df_new[TIMESTAMP_COLUMN].max()
-    date_max=datetime.datetime.utcfromtimestamp(timestamp_max)
+    date_max=datetime.utcfromtimestamp(timestamp_max)
     year_max=date_max.year
     month_max=date_max.month
     timestamp_min=df_new[TIMESTAMP_COLUMN].min()
-    date_min=datetime.datetime.utcfromtimestamp(timestamp_min)
+    date_min=datetime.utcfromtimestamp(timestamp_min)
     year_min=date_min.year
     month_min=date_min.month
 
-    date_start = datetime.datetime(year_min, month_min, 1) 
-    date_end = datetime.datetime(year_max, month_max, 31)  
+    date_start = datetime(year_min, month_min, 1) 
+    date_end = datetime(year_max, month_max, 31)  
 
     # Iterate through all months
     current_date = date_start
     while current_date <= date_end:
         # Get the timestamps of the beginning and end of each month
-        timestamp_i = datetime.datetime(current_date.year, current_date.month, 1).timestamp()
-        timestamp_f = (datetime.datetime(current_date.year, current_date.month % 12 + 1, 1) - timedelta(days=1)).timestamp()
+        timestamp_i = datetime(current_date.year, current_date.month, 1).timestamp()
+        timestamp_f = (datetime(current_date.year, current_date.month % 12 + 1, 1) - timedelta(days=1)).timestamp()
 
         # Generate a new dataframe that contains only data from the corresponding month
         df_month = df_new[(df_new[TIMESTAMP_COLUMN] > timestamp_i) & (df_new[TIMESTAMP_COLUMN] <= timestamp_f)]

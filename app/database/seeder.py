@@ -53,12 +53,11 @@ def opening_connection_RAY():
     global cursor_ray,conn_ray
         
     db_config_ray=(
-        'Driver={ODBC Driver 18 for SQL Server};'
-        f'Server={Config.MYSQL_HOST_RAY};'
+        'Driver={SQL Server};'
+        f'Server=127.0.0.1,1433;'
         f'Database={Config.MYSQL_DB_RAY};'
         f'UID={Config.MYSQL_USER_RAY}@{Config.MYSQL_HOST_RAY};'
-        f'PWD={Config.MYSQL_PASSWORD_RAY};'
-        'Encrypt:yes;'
+        f'PWD={Config.MYSQL_PASSWORD_RAY};'        
     )
     
     conn_ray = sql.connect(db_config_ray)

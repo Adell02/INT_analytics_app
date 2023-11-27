@@ -149,6 +149,9 @@ select{
 .icono-ai_chat{
     color: white
 }
+.icono-production{
+    color: white
+}
 .icono-settings{
     color: white
 }
@@ -157,7 +160,6 @@ select{
 }
 .icono-boton-options{
     color:#0b1f3f;
-
 }
 
 /*      BARRA DESPLEGADA        */

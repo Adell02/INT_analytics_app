@@ -1,10 +1,11 @@
-import json,zlib
+import json,zlib,requests
 from datetime import datetime
-from flask import Blueprint
+from flask import Blueprint,request,url_for
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from app import socketio
 from app.utils.account.token import *
 from app.database.seeder import edit_data,fetch_data_params
 from app.utils.DataframeManager.load_df import *
@@ -109,3 +110,24 @@ def cache_analytics(token):
         return plots
     write_log("KO Cache Analytics (Token Confirmation)")
     return "Authentication error"
+
+
+@api_bp.route("/<token>/production_api", methods=['GET','POST'])
+def production_api_call(token):
+    if token == Config.SERVER_TOKEN:
+        content = request.get_json(silent=True)
+        df_received = pd.DataFrame(content)
+        if os.path.isfile(Config.PATH_PRODUCTION_DATA):
+            df_received = pd.concat([df_received,pd.read_parquet(Config.PATH_PRODUCTION_DATA)])        
+        table = pa.Table.from_pandas(df_received)
+        pq.write_table(table,Config.PATH_PRODUCTION_DATA)
+
+        html_table = df_received.to_html(classes="table_class",header=True)    
+        socketio.emit("html_table",html_table)
+    return "API - Data received correctly."
+
+
+@api_bp.route("/production_api_test", methods=['GET','POST'])
+def production_api_call_test():
+    requests.post(url_for("api.production_api_call",token=Config.SERVER_TOKEN,_external=True),json=[{"Data1":1,"Data2":1},{"Data1":2,"Data2":2}])    
+    return "API - Data sent correctly."

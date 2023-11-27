@@ -1,6 +1,7 @@
 from flask import Flask,url_for,redirect,session
 from flask_mail import Mail
 from flask_session import Session
+from flask_socketio import SocketIO
 import openai
 
 from app.config import Config
@@ -11,15 +12,17 @@ cursor = None
 conn_ray = None
 cursor_ray = None
 mail = None
+socketio = None
 
 def create_app(config_class=Config):
-    global mail
+    global mail,socketio
     
     app = Flask(__name__)
     app.config.from_object(config_class) 
 
     Session(app)   
     mail = Mail(app)
+    socketio = SocketIO(app)
 
     openai.api_key = Config.OPENAI_KEY
     
@@ -33,6 +36,7 @@ def create_app(config_class=Config):
     from app.routes.analytics import analytics_bp
     from app.routes.mapview import mapview_bp
     from app.routes.ai_chat import ai_chat_bp
+    from app.routes.production import production_bp
     from app.routes.settings import settings_bp
     
     app.register_blueprint(auth_bp, url_prefix='/auth')
@@ -44,6 +48,7 @@ def create_app(config_class=Config):
     app.register_blueprint(analytics_bp, url_prefix='/private')
     app.register_blueprint(mapview_bp, url_prefix='/private')
     app.register_blueprint(ai_chat_bp, url_prefix='/private')
+    app.register_blueprint(production_bp, url_prefix='/private')
     app.register_blueprint(settings_bp,url_prefix="/private")
     
     @app.route("/")

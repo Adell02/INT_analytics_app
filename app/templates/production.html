@@ -1,0 +1,39 @@
+{% extends 'template.html' %}
+
+{% block title %} Production Log {% endblock %}
+
+{% block head%} 
+<link rel="stylesheet" href="../static/css/production.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+{% endblock %}
+
+{% block content %} 
+
+<div class="wrapper-production">
+    <div class="header-container-prod">
+        <h2>Start the production battery validation system</h2>
+        <p>Make use of the API to visualise data in the table below.</b>
+    </div>
+    <div class="table_container">
+        {{ table | safe}}
+    </div>
+</div>
+
+<script>
+    const socket = io.connect('http://' + document.domain + ':' + location.port);
+    const container = document.getElementsByClassName("table_container")[0]
+    
+    socket.on('html_table', function(table_html)
+    {        
+        var table_div = document.getElementsByClassName("table_class")[0]
+        if (typeof table_div == 'undefined'){
+            table_div = document.createElement("div");
+            table_div.className = "table_class";
+            container.appendChild(table_div);        
+        }
+        table_div.innerHTML = table_html;
+    });
+    
+</script>
+
+{% endblock %}

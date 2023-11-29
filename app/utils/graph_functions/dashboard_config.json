@@ -8,14 +8,14 @@
         "child_config":
             [
                 {
-                    "height":50,
+                    "height":100,
                     "width":33,
                     "child":true,
                     "flex-direction":"column",
                     "child_config":
                         [
                             {
-                                "height":25,
+                                "height":50,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -24,7 +24,7 @@
                                 "title":"Modos de Conducción por km"
                             },
                             {
-                                "height":25,
+                                "height":50,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -36,14 +36,14 @@
 
                 },
                 {
-                    "height":50,
+                    "height":100,
                     "width":33,
                     "child":true,
                     "flex-direction":"column",
                     "child_config":
                         [
                             {
-                                "height":25,
+                                "height":50,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",
@@ -52,7 +52,7 @@
                                 "title":"Modos de Conducción por Wh"
                             },
                             {
-                                "height":25,
+                                "height":50,
                                 "width":100,
                                 "child":false,
                                 "function":"generate_pie_chart",

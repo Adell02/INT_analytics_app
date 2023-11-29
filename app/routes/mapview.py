@@ -26,6 +26,8 @@ def mapview():
     new_df['lat']=latitude
     new_df['lon']=longitude
     new_df[selected]=values
+    new_df['VIN'] = values.index
+    new_df['ID'] = df[df["Coordinates"] != ","]['Id']
     fig = generate_map(new_df,selected)
 
     return render_template('mapview.html',available_vin=available_vin,columns_list=columns_list,fig=fig,selected=selected)

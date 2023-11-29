@@ -11,8 +11,9 @@ def generate_map(df,selected):
         radius=10,
         center=dict(lat=df['lat'][0],lon=df['lon'][0]),
         zoom=5,
-        mapbox_style="open-street-map",                
-        #hover_data=dict(lat=False,lon=False)
+        mapbox_style="open-street-map",  
+        custom_data=["VIN","ID"],             
+        hover_data=["lat","lon",selected,"VIN","ID"]
     )
     fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 

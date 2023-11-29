@@ -10,7 +10,6 @@ from app.utils.graph_functions.functions import *
 from app.utils.graph_functions.generate_dashboard_graphics import *
 from app.utils.DataframeManager.DataBase import df_from_scratch
 from app.utils.DataframeManager.dataframe_treatment import df_filter_data
-from app.utils.DataframeManager.dataframe_storage import df_append_data
 from app.database.seeder import fetch_ray_gps
 
 

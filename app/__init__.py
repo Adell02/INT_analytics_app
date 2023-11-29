@@ -57,7 +57,7 @@ def create_app(config_class=Config):
     
     @app.context_processor
     def global_variables():
-        return{'session':session,'port':'5000'}        
+        return{'session':session,'port':'80'}        
     return app
 
 

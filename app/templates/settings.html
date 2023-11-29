@@ -59,30 +59,24 @@
                 <span class="texto">Data Retrieval:</span>
                 
                 <div class="recuadro1" >
-                    <select id="data_read" name="data_read" placeholder="Select Data Read:">
+                    <input type="text" class="form-control" name="entity_name" placeholder="Enter Entity Name" value="Current Month" disabled>
                         <!--<option value="none">Select Data Read</option>-->
                          <!--<option value="30days">Last 30 Days</option>-->
-                        <option value="actual_month">Actual Month</option>
-                         <!--<option value="last_month">Last Month</option>-->
+                        <!--<option value="actual_month"></option>
+                         <option value="last_month">Last Month</option>-->
                          <!--<option value="last_3_months">Last 3 Months</option>-->
-                    </select>
+                    
                 </div>
             </div> 
 
-            <div class="fila"> 
-                <span class="texto">Default Scatter Data Points:</span>
-                <span class="recuadro">
-                    <input type="text" class="form-control" name="number_rows" placeholder="Enter Number of rows" value="1.000" readonly>
-                </span>
-            </div> 
 
 
             <div class="fila">
-                <span class="texto">Downsampling type function:</span>
+                <span class="texto">Distribution filter:</span>
                 
                 <div class="recuadro1" >
                     <select id="downsampling" name="downsampling" placeholder="Select function type">
-                        <option value="none">Select Function Type</option>
+                        <option value="none">Select Distribution Filter Type</option>
                         <option value="averaging">Averaging</option>
                         <option value="extremes">Extremes</option>
                     </select>
@@ -106,11 +100,8 @@
             <div class="fila">
                 <span class="texto">Data Source:</span>
                 <div class="recuadro1" >
-                    <select id="data-source" name="data-source" onchange="showUploadButton(this.value)" placeholder="Select Data Source:">
-                        <option value="none">Select Data Source</option>
-                        <option value="excel">Excel</option>
-                        <option value="SQL">SQL</option>
-                    </select>
+                    <input type="text" class="form-control" name="data_source"  value="SQL" disabled>
+
                 </div>
             </div> 
             <div id="uploadButton" style="display: none;">
@@ -130,25 +121,9 @@
         navigator.clipboard.writeText(token);
         alert("Token Copied!");
     }
-    function showUploadButton(value) {
-        var uploadButton = document.getElementById('uploadButton');
-        if(value === 'excel') {
-            uploadButton.style.display = 'block';
-        } else {
-            uploadButton.style.display = 'none';
-            document.getElementById('file-name').textContent = ''; 
-        }
-    }
+   
     
-    function updateFileName() {
-        var inputFile = document.getElementById('excelFile');
-        var fileNameSpan = document.getElementById('file-name');
-        if(inputFile.files.length > 0) {
-            fileNameSpan.textContent = inputFile.files[0].name;
-        } else {
-            fileNameSpan.textContent = 'No se ha seleccionado ningún archivo';
-        }
-    }
+    
     
 
 </script>

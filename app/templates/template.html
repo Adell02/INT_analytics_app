@@ -10,13 +10,15 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
     <script src="../static/js/load_graphs.js"></script>
+    <script src="../static/js/searchable_dropdown.js"></script>
     <script src='https://cdn.plot.ly/plotly-2.26.0.min.js'></script>
+    {% block head%} {% endblock %}
     
 </head>
 <body>
     <div id="loading">
         <div class="loading-gif">
-            <img src="/static/R.gif">
+            <img src="/static/gif/R.gif">
         </div>
     </div>
     <!-- Barra Vertical -->
@@ -77,6 +79,15 @@
                 <div class="dashboard-box-text">
                     <!-- Texto dentro de la barra -->
                      <a class="texto-dentro" href="/private/aichat"> AI Chat</a> 
+                </div>
+            </div>
+            <div class="dashboard-box">
+                <div class="dashboard-box-icon">
+                    <a href="/private/production"> <i class="fa fa-wrench fa-3x icono-production"> </i> </a>
+                </div>
+                <div class="dashboard-box-text">
+                    <!-- Texto dentro de la barra -->
+                     <a class="texto-dentro" href="/private/production"> Production</a> 
                 </div>
             </div>
             <div class="dashboard-box">

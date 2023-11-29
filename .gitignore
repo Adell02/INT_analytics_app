@@ -30,6 +30,7 @@ docs/_build/
 flask_session/
 *.xlsx
 *.zlib
+log_server.txt
 
 
 # Coverage reports

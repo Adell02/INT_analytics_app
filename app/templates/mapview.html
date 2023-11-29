@@ -1,56 +1,68 @@
 {% extends 'template.html' %}
 
 {% block title %} Mapview {% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="../static/css/mapview.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="../static/js/map.js"></script>
+{% endblock %}
+
 {% block content %} 
-    <div class="contenido">
-        <div class="a">
-            <div class="recuadro-superior-analytics">
-                <div class="new-graphic">
-                </div>
-                <div class="search-graphic">
-                </div>
-                <div class="visualise-options">
-                    <i class="fa fa-bars fa-2x icono-boton-options" aria-hidden="true"></i>
+
+<form method='POST' name="mapview_form">    
+
+    <div class="recuadro-superior-mapview">
+            
+            <div class="filter-axis-mapview">
+                <select name="map_data" id="map_data">
+                <option value="none">Select Graph Data:</option>
+                {% for column in columns_list %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            </div>
+            <div class="visualise-options-mapview">
+                <div class="dropdown">
+                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
+                    <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
+                        <!-- Dropdown options will be dynamically added here -->
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="contenedorfilter-mapview">      
+                <button type="submit" id="filter-button-mapview" class="filter-button-mapview">Filter</button>
+            </div>
         
-        <head>
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-            <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-        </head>
-        <body>
-            <div id="map-container">
-                <div id="map" class="grayscale-map"></div>
-            </div>
-            <script>
-                var map = L.map('map').setView([41.373349, 2.06085], 10);
-
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '© <a href="https://carto.com/attributions">CARTO</a>'
-                }).addTo(map);
-
-                //añadimos los puntos
-                var puntos = [
-                    [41.373349, 2.06085],
-                    [41.37457763574095, 2.062641146649088],
-                    [41.37467827273396, 2.064851286867785]
-                    
-                ];
-
-                
-                var heatLayer = L.heatLayer(puntos, {
-                    radius: 20,
-                    gradient: { 0.4: 'white', 0.65: 'gray', 1: 'black' } // Define la paleta de colores
-                }).addTo(map);
-
-                
-                puntos.forEach(function (coordenada) {
-                    L.marker(coordenada, { icon: L.divIcon({ className: 'red-marker' }) }).addTo(map);
-                });
-            </script>
-        </body>
+        
     </div>
+</form>
+    
+    
+    <div id="map-container">
+        <div id="map" class="grayscale-map"></div>
+    </div>
+
+    
+    <script>
+        const fig = JSON.parse({{fig | tojson | safe}});
+                       
+        generate_map(fig);
+        
+        // Populate the dropdown with options
+        const options = {{available_vin | safe}};
+        var dropdownContent = document.getElementById("myDropdown");
+        options.forEach(function (option) {
+            var a = document.createElement("a");
+            a.textContent = option;
+            a.href = "#";
+            dropdownContent.appendChild(a);
+        });
+                        
+    </script>
+    
+    
+    
 {% endblock %}

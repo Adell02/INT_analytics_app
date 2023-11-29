@@ -1,0 +1,246 @@
+
+/*      NEW GRAPHIC CSS     */
+.recuadro-superior-newgraphic{
+  display: flex;
+  flex-direction: row;
+  height: 4rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  position: relative;
+  z-index: 99;
+}
+
+.recuadro-w100{
+    margin-left: 2rem;
+    margin-right: 2rem;
+    width:calc(100% - (4rem));
+    height: calc( 100% - (2rem));
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+
+    z-index: 1;
+}
+
+.recuadro-medio-newgraphic{
+    display: flex;
+    flex-direction: column;
+    height: calc( 100vh - (10rem));;
+    justify-content: space-evenly;
+    align-items: stretch;
+}
+.recuadro-inferior-newgraphic{
+    justify-content: space-evenly;
+    display: flex;
+    flex-direction: row;
+    height: 4rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+.recuadro-in-left-newgraphic{
+    justify-content: left;
+    display: flex;
+    width: 20%;
+}
+.recuadro-in-middle-newgraphic{
+    justify-content: space-evenly;
+    display: flex;
+    width: 60%;
+}
+.recuadro-in-right-newgraphic{
+    justify-content: space-evenly;
+    display: flex;
+    width: 20%;
+}
+
+.trendline-newgraphic{
+    margin-right: 1rem;
+    margin-left: 2rem;
+}
+.new-graphic-superior-left{
+    margin-right: 1rem;
+    width: 100%; 
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.new-graphic-superior{
+    margin-right: 1rem;
+    width: 20%; 
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.new-graphic-save{
+    margin-right: 1rem;
+    width: 32%; 
+    height: 3rem;
+    background-color: #45b3f7;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    border:none;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+    font-family: "Montserrat",'sans-serif';
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.new-graphic-save:hover{
+    background-color: #094f7a;
+}
+
+.new-graphic-input{
+    height: 3rem;
+    background-color: #ffffff;
+    width:100%;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    border:none;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+
+form[name="newgraphic_form"]{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
+
+/*    BUTTON    */
+
+.custom-select-newgraphic {
+    position: relative;
+    margin-right: 1rem;
+    width: 20%; 
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+select[multiple] {
+    height: 3rem;
+    position: relative;    
+  }
+  
+  select[multiple]:hover,
+  select[multiple]:active {
+    position: absolute;
+    top: 00%;
+    left: 0;
+    height: 9rem; 
+    z-index: 9999;
+  }
+  
+
+  
+  select {
+    appearance: none;
+    /*  safari  */
+    -webkit-appearance: none;
+    /*  other styles for aesthetics */
+    width: 100%;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+    padding: 0.675em 1em 0.675em 1em;
+    background-color: #fff;
+    border:none;
+    border-radius: 15px 15px 15px 15px;
+    color: black;
+    cursor:default;
+  }
+  
+  
+  .custom-select-newgraphic::before,
+  .custom-select-newgraphic::after {
+    --size: 0.3rem;
+    content: "";
+    position: absolute;
+    right: 1rem;
+    pointer-events: none;
+    z-index: 4;
+  }
+  
+  .custom-select-newgraphic::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid black;
+    top: 40%;
+    z-index: 4;
+  }
+  
+  .custom-select-newgraphic::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid black;
+    top: 55%;
+    z-index: 4;
+  }
+
+
+  /* Point the arrow upwards when the select box is open (active): */
+  .select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+  }
+  
+  /* style the items (options), including the selected item: */
+  .select-items div,.select-selected {
+    color: #ffffff;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+  }
+  
+  /* Style items (options): */
+  .select-items {
+    position: absolute;
+    background-color: DodgerBlue;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  }
+  
+  /* Hide the items when the select box is closed: */
+  .select-hide {
+    display: none;
+  }
+  
+  .select-items div:hover, .same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  

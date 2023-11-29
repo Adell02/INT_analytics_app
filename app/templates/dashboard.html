@@ -1,42 +1,56 @@
 {% extends 'template.html' %}
 
 {% block title %} Dashboard {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/dashboard.css">
+{% endblock %}
+
 {% block content %} 
-        <div class="margen">
-        </div>
-        <form method='POST'>
-            <div class="recuadro-superior-analytics" >
-                <div class="new-graphic-superior">
-                    <select id="VIN_selector" name="VIN_selector" placeholder="Select VIN:">
-                        <option value=""> Select VIN </option>
-                        {% for VIN in available_vin %}
-                            <option value={{ VIN }}> {{VIN}} </option>
-                        {% endfor %}
-                      </select>
-                </div>
-                <div class="new-graphic-superior">
-                    Time:
-                </div>
-                <div class="new-graphic-superior">
-                    <select id="Optimization" name="Optimization" placeholder="Select Optimization:">
-                        <option value="Optimized"> Optimized </option>
-                        <option value="Fast"> Fast </option>
-                        <option value="All Data"> All Data </option>
-                      </select>
-                </div>
-                <div class="contenedorsave">      
-                    <button type="submit"  class="save-button">Update</button>
+    
+    <div class="margen">
+    </div>
+    <form method='POST'>
+        <div class="recuadro-superior-dashboard" >
+            <div class="dashboard-superior custom-select">                
+                <div class="dropdown">
+                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
+                    <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
+                        <!-- Dropdown options will be dynamically added here -->
+                    </div>
                 </div>
             </div>
-
-        </form>
-        
-        {{ html_string | safe }}
+            <div class="dashboard-superior">
+                Time selected: Current Month
+            </div>
+            <div class="dashboard-superior custom-select">
+                <select id="Optimization" name="Optimization" placeholder="Select Optimization:">
+                    <option value="Optimized"> Optimized </option>
+                    <option value="Fast"> Fast </option>
+                    <option value="All Data"> All Data </option>
+                  </select>
+            </div>
+            <div class="dashboard-update-box">      
+                <button type="submit"  class="dashboard-update-button">Update</button>
+            </div>
+        </div>
+    </form>
+    
+    {{ html_string | safe }}
         
         
     <script>
-        const plot = {{ plots | tojson | safe }}; 
+        // Populate the dropdown with options
+        const options = {{available_vin | safe}};
+        var dropdownContent = document.getElementById("myDropdown");
+        options.forEach(function (option) {
+            var a = document.createElement("a");
+            a.textContent = option;
+            a.href = "#";
+            dropdownContent.appendChild(a);
+        });
 
+        const plot = {{ plots | tojson | safe }}; 
         const containers = document.getElementsByClassName("graph-container"); 
         var graph_divs = []; 
             
@@ -46,25 +60,31 @@
         
         var optimization = '{{ session["Optimization"] }}';
         var desiredDataPoints;
+        var func_load;
 
         if (optimization == 'Optimized'){
             desiredDataPoints = 1000;
-            window.onload = load_all_optimized;
+            func_load = load_all_optimized;
         }
         else if (optimization == 'Fast'){
             desiredDataPoints = 10000;
-            window.onload = load_all_optimized;
+            func_load = load_all_optimized;
         }
         else{
-            window.onload = load_all;
+            func_load = load_all;
         }
         
         window.addEventListener('resize',resize_all);  
+
+        window.onload = function(){
+            func_load();
+            window.dispatchEvent(new Event('resize'));
+        }
       
 
         // Set the selected VIN on the dropdown as default
         var selected_vin = '{{ default_vin | safe}}';
-        document.getElementById("VIN_selector").value = selected_vin;  
+        document.getElementsByName("VIN_selector")[0].value = selected_vin;  
 
         // Set the selected Optimization on the dropdown as default
         document.getElementById("Optimization").value = optimization;

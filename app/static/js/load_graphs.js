@@ -165,8 +165,7 @@ function load_graph(div_id,idx) {
 }
 
 function resize_graph(div_id,idx){
-    var figure = document.getElementById(div_id)
-
+    var figure = document.getElementById(div_id);
     figure.layout.width = containers[idx].offsetWidth;
     figure.layout.height = containers[idx].offsetHeight;
 
@@ -204,34 +203,200 @@ function load_all_optimized(){
     }  
 }
 
+function resize_all(){
+    // Iterate through each container
+    for (let i = 0; i < graph_divs.length; i++) {    
+        resize_graph(graph_divs[i].id,i)
+    }  
+}
+
 
 // ANALYTICS
 
 function load_graph_analytics(div_id,idx,idx_page) {        
-    var figure = JSON.parse(plot[idx_page]);
+    var figure = JSON.parse(plotFiltrado[idx_page]);
     figure.layout.width = containers[idx].offsetWidth;
     figure.layout.height = containers[idx].offsetHeight;
 
     Plotly.newPlot(div_id,figure.data,figure.layout);
 }
 
+function create_newgraphic(){
+            
+    const container = containers[0];
+
+    // Create an inner div for the graph
+    const graphDiv = document.createElement("div");
+    graphDiv.id = "plotly_graph" ;
+    container.appendChild(graphDiv);
+    graph_divs.push(graphDiv)
+    if (plot.length > 0){
+        load_graph(graphDiv,0)
+    }
+        
+}
+
 function load_4(){
+    const desiredDataPoints = 1000;
 
     // Iterate through each container
     for (let i = 0; i < 4; i++) {    
-        if (pageIndex*4+i<plot.length){
-            load_graph_analytics(graph_divs[i].id,i,pageIndex*4+i);
+        if (pageIndex*4+i<plotFiltrado.length){
+            load_graph_optimized_analytics(graph_divs[i].id,i,pageIndex*4+i,desiredDataPoints);
         }
         else{
             Plotly.purge(graph_divs[i]);
         }
         
     }  
+    resize_4();
 }
 
-function resize_all(){
+function resize_4(){
     // Iterate through each container
-    for (let i = 0; i < graph_divs.length; i++) {    
+    for (let i = 0; i < Math.min(plotFiltrado.length,graph_divs.length); i++) {    
         resize_graph(graph_divs[i].id,i)
     }  
+}
+
+function load_graph_optimized_analytics(div_id,idx,idx_page,desiredDataPoints) {        
+    var figure = JSON.parse(plotFiltrado[idx_page]);
+
+    figure.layout.width = containers[idx].offsetWidth;
+
+    var downsampledData = [];
+
+    figure.data.forEach(function (trace) {
+        if (trace.type === 'scatter') {
+            var downsampled_trace = downsample(trace, desiredDataPoints);
+            downsampledData.push(downsampled_trace);
+        } else {
+            downsampledData.push(trace);
+        }
+    });
+
+    Plotly.newPlot(div_id,downsampledData,figure.layout);
+
+    var GraphDiv = document.getElementById(div_id);
+    GraphDiv.on('plotly_relayout',
+        function(eventdata){
+
+            var start_x = eventdata['xaxis.range[0]'];
+            var end_x = eventdata['xaxis.range[1]'];
+            var start_y = eventdata['yaxis.range[0]'];
+            var end_y = eventdata['yaxis.range[1]'];
+
+            var new_traces = JSON.parse(plotFiltrado[idx_page]).data;
+            
+            for (let i=0;i<new_traces.length;i++){
+
+                if (new_traces[i].type == "scatter" && start_x != undefined && start_y != undefined){
+                    x=[]
+                    y=[]
+                    for (let s=0;s<new_traces[i].x.length;s++){
+                        if (new_traces[i].x[s]>start_x && new_traces[i].x[s]<end_x && new_traces[i].y[s]>start_y && new_traces[i].y[s]<end_y){
+                            x.push(new_traces[i].x[s]);
+                            y.push(new_traces[i].y[s]);
+                        }
+                    }
+                    new_traces[i].x = [...x];
+                    new_traces[i].y = [...y];
+                }else if(new_traces[i].type == "scatter" && start_x != undefined){
+                    x=[]
+                    y=[]
+                    for (let s=0;s<new_traces[i].x.length;s++){
+                        if (new_traces[i].x[s]>start_x && new_traces[i].x[s]<end_x){
+                            x.push(new_traces[i].x[s]);
+                            y.push(new_traces[i].y[s]);
+                        }
+                    }
+                    new_traces[i].x = [...x];
+                    new_traces[i].y = [...y];
+                } else if(new_traces[i].type == "scatter" && start_y != undefined){
+                    x=[]
+                    y=[]
+                    for (let s=0;s<new_traces[i].x.length;s++){
+                        if (new_traces[i].y[s]>start_y && new_traces[i].y[s]<end_y){
+                            x.push(new_traces[i].x[s]);
+                            y.push(new_traces[i].y[s]);
+                        }
+                    }
+                    new_traces[i].x = [...x];
+                    new_traces[i].y = [...y];
+                }
+                
+            }
+            zoom_resample(GraphDiv,new_traces,desiredDataPoints);
+            
+            
+        }
+    );
+}
+
+function filtrarPlot() {
+    plotFiltrado=[];
+    let typeFilter = document.getElementById('graph_type').value;
+    let dataFilter = document.getElementById('graph_data_x').value; 
+    let userInput = document.getElementById('userInput').value.trim().toLowerCase();
+    let userWords = userInput ? userInput.split(" ") : [];
+    
+    for (let i = 0; i < plot.length; i++) {
+        let elemento = JSON.parse(plot[i]);
+        let cumpleCondicionvariable = false;
+        let cumpleCondiciontype = false;
+        let cumplePalabrasUsuario = userWords.length === 0 ? true : userWords.every(word => 
+        elemento.layout && elemento.layout.title && elemento.layout.title.text && elemento.layout.title.text.toLowerCase().includes(word));
+        
+        for (let y = 0; y < elemento.data.length; y++) {
+            //pongo el or porqueen algunas graficas no se llamama label, sino name
+            if ((elemento.data[y] && elemento.data[y].labels && elemento.data[y].labels.includes(dataFilter)) || (elemento.data[y] && elemento.data[y].name && elemento.data[y].name.includes(dataFilter))) { // Añado elemento.data[y] && elemento.data[y].labels && para verificar que la posicion que busco exista
+                cumpleCondicionvariable = true;
+            }
+            if (elemento.data[y] && elemento.data[y].type === typeFilter) {
+                cumpleCondiciontype = true;
+            }
+            
+        }
+        
+        if (typeFilter==="none" && dataFilter==="none" && userWords.length === 0){
+            plotFiltrado=[...plot];
+        }
+        else if ((typeFilter !== "none" && dataFilter!=="none" && userWords.length !== 0)){
+
+            if (cumpleCondiciontype && cumpleCondicionvariable && cumplePalabrasUsuario) {
+                plotFiltrado.push(plot[i]);
+            } 
+        }
+        else {
+            if ( typeFilter === "none" && dataFilter ==="none"){
+                if (cumplePalabrasUsuario){
+                    plotFiltrado.push(plot[i]);
+                }
+            }
+            else if (typeFilter === "none"){
+                if (cumpleCondicionvariable && cumplePalabrasUsuario){
+                    plotFiltrado.push(plot[i]);
+                }
+
+            }
+            else if(dataFilter==="none"){
+                if (cumpleCondiciontype && cumplePalabrasUsuario){
+                    plotFiltrado.push(plot[i]);
+                }
+
+            }
+            else if(userWords.length === 0){
+                if (cumpleCondiciontype && cumpleCondicionvariable){
+                    plotFiltrado.push(plot[i]);
+                }
+                
+            }
+            
+
+        }
+        
+    }
+    pageIndex=0;    
+    load_4();
+    
 }

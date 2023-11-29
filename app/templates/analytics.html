@@ -1,13 +1,44 @@
 {% extends 'template.html' %}
 
 {% block title %} Analytics {% endblock %}
+{% block head%} 
+<link rel="stylesheet" href="../static/css/analytics.css">
+{% endblock %}
+
 {% block content %} 
+
 <div class="margen"></div>
 <div class="recuadro-superior-analytics">
     <button class="go-left" onclick="moveLeft()">
         <i class="fa fa-arrow-left fa-2x icono-boton-options" aria-hidden="true"></i>
     </button>
-    <div class="search-graphic"></div>
+    <div class="graphic-type-analytics">
+        <select id="graph_type" name="graph_type" placeholder="Select Graph Type:">
+            <option value="none">Select Graph Type:</option>
+            <option value="pie">Pie Chart</option>
+            <option value="barchart">Bar Chart</option>
+            <option value="histogram">Histogram / Distribution</option>
+            <option value="scatter">Scatter Plot</option>
+            <option value="linechart">Line Chart</option>
+          </select>
+    </div>
+    <div class="graphic-title-analytics">
+        <input type="text" class="new-graphic-input-analytics" id="userInput" name="userInput" placeholder="Enter Graph Title" value="">
+    </div>
+    <div class="graphic-data-analytics">
+        <select name="graph_data_x" id="graph_data_x">
+            <option value="none">Select Graph Data:</option>
+            {% for column in columns_list %}
+                <option value="{{ column }}">{{ column }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="contenedorfilter-analytics">      
+        <button type="submit" id="filter-button" class="filter-button-analytics">Filter</button>
+    </div>
+
+
+
     <button class="go-right" onclick="moveRight()">
         <i class="fa fa-arrow-right fa-2x icono-boton-options" aria-hidden="true"></i>
     </button>
@@ -24,25 +55,26 @@
 </div>
 
 <script>
+     
     const plot = {{ plots | tojson | safe }};
+    var plotFiltrado=[...plot];
     const containers = document.getElementsByClassName("graph-container");
     var graph_divs = [];
-
-    // Creamos index para saber en qué página estamos
     let pageIndex = 0;
-    
+
+    document.getElementById('filter-button').addEventListener('click', filtrarPlot);
+
+
     // Función para cargar las gráficas
     function load_page() {
         // Carga las gráficas al cargar la página
         create_all();
         window.onload = load_4;
-        window.addEventListener('resize',load_4);
-    }
-
-    
+        window.addEventListener('resize',resize_4);
+    } 
 
     function moveRight() {
-        if (plot.length>(pageIndex+1)*4)
+        if (plotFiltrado.length>(pageIndex+1)*4)
         {
             pageIndex++;
             load_4();
@@ -69,6 +101,7 @@
     }
 
     load_page();
+    
 </script>
 
 {% endblock %}

@@ -1,0 +1,129 @@
+/*   MAPVIEW    */
+
+.recuadro-superior-mapview{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 4rem;
+    width: calc(100vw - 10rem);
+    margin-left: 2rem;
+    margin-right: 2rem;
+    position: absolute;
+    top: 2rem;
+    left: 6rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    z-index: 11;
+}
+
+.filter-axis-mapview{
+    position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.visualise-options-mapview{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    
+
+}
+.contenedorfilter-mapview{
+  position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #45b3f7;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+.filter-button-mapview{
+  background-color: #45b3f7;
+    color: white; 
+    width: 100%;
+    border-radius: none; 
+    cursor: pointer; 
+    font-size: 20px; 
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 600;
+    display: block; 
+    box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
+    border: none;
+    height: 100%;
+    border-radius: 15px 15px 15px 15px;
+}
+.filter-button-mapview:hover {
+  background-color: #094f7a; 
+}
+
+#graph_type_mapview{
+    text-align: center;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 400;
+    font-size: 1rem;
+    padding: 0.675em 1em 0.675em 1em;
+    background-color: #fff;
+    border: none;
+    color: black;
+    cursor: default;
+    text-align: center;
+}
+
+ 
+  #graph_type1 {
+    display: none;
+  }
+  
+  
+  .show-select #graph_type1 {
+    display: block; 
+  }
+
+
+#map {
+    width: calc(100% - 4rem);
+    height: calc(100vh - 8rem);
+    margin-top: 6rem;
+    margin-left: 2rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+}
+
+.form-control{
+    border: none; 
+    background: none; 
+    font-size: 18px; 
+    width: 100%; 
+    outline: none; 
+    text-align: center; 
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+}
+
+
+

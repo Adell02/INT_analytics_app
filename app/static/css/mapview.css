@@ -3,6 +3,7 @@
 .recuadro-superior-mapview{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     height: 4rem;
     width: calc(100vw - 10rem);
     margin-left: 2rem;
@@ -15,10 +16,10 @@
     z-index: 11;
 }
 
-.search-graphic-mapview{
+.filter-axis-mapview{
     position: relative;
     margin-right: 1rem;
-    width: 85%;
+    width: 22.5%;
     height: 3rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -33,7 +34,8 @@
     display: flex;
     align-items: center; 
     justify-content: center;
-    width: 15%;
+    margin-right: 1rem;
+    width: 22.5%;
     height: 3rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -42,6 +44,38 @@
     
 
 }
+.contenedorfilter-mapview{
+  position: relative;
+    margin-right: 1rem;
+    width: 22.5%;
+    height: 3rem;
+    background-color: #45b3f7;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+.filter-button-mapview{
+  background-color: #45b3f7;
+    color: white; 
+    width: 100%;
+    border-radius: none; 
+    cursor: pointer; 
+    font-size: 20px; 
+    font-family: "Montserrat",'sans-serif';
+    font-weight: 600;
+    display: block; 
+    box-shadow: 2px 2px 5px rgba(108, 108, 108, 0.5);
+    border: none;
+    height: 100%;
+    border-radius: 15px 15px 15px 15px;
+}
+.filter-button-mapview:hover {
+  background-color: #094f7a; 
+}
+
 #graph_type_mapview{
     text-align: center;
     appearance: none;

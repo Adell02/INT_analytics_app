@@ -60,6 +60,14 @@
             a.href = "#";
             dropdownContent.appendChild(a);
         });
+
+        // Set the selected VIN on the dropdown as default
+        var vin_selected = '{{ vin_selected | safe}}';
+        document.getElementsByName("VIN_selector")[0].value = vin_selected;
+
+        // Set the selected variable on the dropdown as default
+        var column_selected = '{{ column_selected | safe}}';
+        document.getElementsByName("map_data")[0].value = column_selected;
                         
     </script>
     

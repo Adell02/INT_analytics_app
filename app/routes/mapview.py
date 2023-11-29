@@ -52,7 +52,7 @@ def mapview():
         new_df['ID'] = df[df["Coordinates"] != ","]['Id']
         fig = generate_map(new_df,column_selected)    
 
-    return render_template('mapview.html',available_vin=available_vin,columns_list=columns_list,fig=fig,selected=column_selected)
+    return render_template('mapview.html',available_vin=available_vin,columns_list=columns_list,fig=fig,column_selected=column_selected,vin_selected=vin_selected)
 
 
 def get_latitude(df:pd.DataFrame):

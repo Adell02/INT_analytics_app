@@ -124,10 +124,12 @@ def production_api_call(token):
 
         html_table = df_received.to_html(classes="table_class",header=True)    
         socketio.emit("html_table",html_table)
-    return "API - Data received correctly."
+        return "API - Data received correctly."
+    return "API - Authentication Error"
 
 
 @api_bp.route("/production_api_test", methods=['GET','POST'])
 def production_api_call_test():
-    requests.post(url_for("api.production_api_call",token=Config.SERVER_TOKEN,_external=True),json=[{"Data1":1,"Data2":1},{"Data1":2,"Data2":2}])    
-    return "API - Data sent correctly."
+    url = "http://13.48.135.195/"+Config.SERVER_TOKEN+"/production_api"
+    response = requests.post(url,json=[{"Data1":1,"Data2":1},{"Data1":2,"Data2":2}])    
+    return response.text

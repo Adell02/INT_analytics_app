@@ -99,19 +99,33 @@ def load_map_df(samples = None)->pd.DataFrame:
         return table.to_pandas()
     
 def process_coords_for_df(df_:pd.DataFrame) -> pd.DataFrame:
+    df_gps = None
+    if os.path.exists(Config.PATH_MAP_DATAFRAME):
+        df_gps = pq.read_table(Config.PATH_MAP_DATAFRAME).to_pandas()
     
+
     batch_size = 1000
     for start_row in range(0, len(df_),batch_size):
+        print(start_row)
         end_row = min(start_row+batch_size,len(df_))
         
         df = df_.iloc[start_row:end_row]
-        def pass_parameters_fetch_ray_gps(row):
-            return ",".join(fetch_ray_gps(row.name,row['Start'],row['End'],row['Id']))
-        df['Coordinates'] = df.apply(pass_parameters_fetch_ray_gps,axis=1)
-        table = pa.Table.from_pandas(df)
-        if start_row == 0:
-            pqwriter = pq.ParquetWriter(Config.PATH_MAP_DATAFRAME, table.schema)              
-        pqwriter.write_table(table)        
+
+        is_row = False
+        if type(df_gps) != type(None):
+            if len(df_gps) > start_row:
+                first_row = df.iloc[0]
+                equivalent_gps_row = df_gps.iloc[start_row]
+                is_row = (first_row.name == equivalent_gps_row.name) & (first_row['Timestamp CT']==equivalent_gps_row['Timestamp CT']) & (first_row['Id']==equivalent_gps_row['Id'])
+            
+        if is_row == False:
+            def pass_parameters_fetch_ray_gps(row):
+                return ",".join(fetch_ray_gps(row.name,row['Start'],row['End'],row['Id']))
+            df['Coordinates'] = df.apply(pass_parameters_fetch_ray_gps,axis=1)
+            table = pa.Table.from_pandas(df)
+            if start_row == 0:
+                pqwriter = pq.ParquetWriter(Config.PATH_MAP_DATAFRAME, table.schema)              
+            pqwriter.write_table(table)        
     if pqwriter:
         pqwriter.close()
     

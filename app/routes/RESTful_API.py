@@ -33,7 +33,7 @@ def server_process(token,timestamp):
         # update Timestamp, VINs and Columns : Mysql params = org_token,last_timestamp,columnes,VINs
         df_ = load_current_df_memory()
         df = process_coords_for_df(df_)        
-
+        """
         if True or fetch_data_params("last_timestamp") == None or timestamp:
             # the parameter should be timestamp, instead we are loading the first day september 
             edit_data("last_timestamp",1693526400)  # First day september
@@ -47,7 +47,7 @@ def server_process(token,timestamp):
 
         write_log("OK Updated Database")
         return "Server Fetch OK"
-
+        """
     write_log("KO Updated Database (Token Confirmation)")
     return "Server KO"
 
@@ -65,6 +65,10 @@ def cache_dashboard(token):
         plots = generate_dashboard_graphics(Config.PATH_DASHBOARD_CONFIG,dataframe)                        
             
         compressed_dashboard = zlib.compress(json.dumps(plots).encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
+        
+        if not os.path.exists(Config.PATH_CACHE):
+            os.makedirs(Config.PATH_CACHE)
+
         with open(cache_path, "wb") as file:
             file.write(compressed_dashboard)
         write_log("OK Cache Database")

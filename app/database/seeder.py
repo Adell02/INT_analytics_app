@@ -55,7 +55,7 @@ def opening_connection_RAY():
         
     db_config_ray=(
         'Driver={SQL Server};'
-        f'Server=127.0.0.1,1433;'
+        f'Server={Config.MYSQL_HOST_RAY},1433;'
         f'Database={Config.MYSQL_DB_RAY};'
         f'UID={Config.MYSQL_USER_RAY}@{Config.MYSQL_HOST_RAY};'
         f'PWD={Config.MYSQL_PASSWORD_RAY};'        

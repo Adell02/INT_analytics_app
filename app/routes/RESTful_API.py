@@ -82,18 +82,29 @@ def server_process(token,timestamp_i,timestamp_f):
         # update Timestamp, VINs and Columns : Mysql params = org_token,last_timestamp,columnes,VINs
         # df_ = load_current_df_memory()
         # df = process_coords_for_df(df_trip_appended)        
-        """
-        if True or fetch_data_params("last_timestamp") == None or timestamp:
+        
+        last_timestamp = fetch_data_params("last_timestamp")
+        if last_timestamp is None:
             # the parameter should be timestamp, instead we are loading the first day september 
-            edit_data("last_timestamp",1693526400)  # First day september
-        if True or fetch_data_params("columnes") == None:
-            columns = list(pd.read_json(Config.PATH_BATTERY_PARAMS).columns)
-            edit_data("columnes",columns)
-        if True or fetch_data_params("VINs") == None:
-            #VINs = get it from the loaded DF
-            vins = list(df['Id'].keys().unique())
-            edit_data("VINs",",".join(vins))
-        """
+            last_timestamp = 1693526400
+        
+        df = load_current_df_memory()
+
+        if not process_coords_for_df(df):
+            write_log("NAK Coords Error")
+            return "GPS Coords Fetch Error"
+        write_log("OK Coords Fetch")
+
+
+        last_timestamp = df['Timestamp CT'].max()
+        columns = list(pd.read_json(Config.PATH_BATTERY_PARAMS).columns)
+        vins = list(df['Id'].keys().unique())
+        
+        edit_data("last_timestamp",last_timestamp)
+        edit_data("columnes",columns)
+        edit_data("VINs",",".join(vins))
+        
+        
         write_log("OK Updated Database")
         return "Server Fetch OK"
         

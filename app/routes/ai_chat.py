@@ -18,8 +18,8 @@ def ai_chat():
     if request.method == "POST":
         if request.form['data'] != '':            
             dataframe = load_current_df_memory()
-            #response_ai = ai_request(dataframe,request.form['data'],dataframe.columns)
-            response_ai = 'City mode percentage: 623.8823872683247%\nSport mode percentage: 195.69808216863078%\nFlow mode percentage: 180.41953056304445%'
+            response_ai = ai_request(dataframe,request.form['data'],dataframe.columns)
+            #response_ai = 'City mode percentage: 623.8823872683247%\nSport mode percentage: 195.69808216863078%\nFlow mode percentage: 180.41953056304445%'
             if 'chat' not in session.keys():
                 session['chat'] = [{'role':'user','value':request.form['data']},{'role':'assistant','value':response_ai}]
             else:

@@ -111,6 +111,7 @@ def load_map_df(samples = None)->pd.DataFrame:
     
 def process_coords_for_df(df:pd.DataFrame) -> pd.DataFrame:
     df_gps = None
+    ret = True
     map_df_path = generate_map_df_name()
     if os.path.exists(map_df_path):
         df_gps = pq.read_table(map_df_path).to_pandas()        
@@ -121,17 +122,21 @@ def process_coords_for_df(df:pd.DataFrame) -> pd.DataFrame:
     for idx_row in range(start_row,len(df)):
         print(idx_row)
         row = df.iloc[[idx_row]] 
-        coords = ",".join(fetch_ray_gps(row.index[0],row['Start'],row['End'],row['Id']))
-        row['Coordinates'] = coords
-        if df_gps is not None:
-            df_gps = pd.concat([df_gps,row])
-        else:
-            df_gps = row                          
-    
+        try:
+            coords = ",".join(fetch_ray_gps(row.index[0],row['Start'],row['End'],row['Id']))
+            row['Coordinates'] = coords
+            if df_gps is not None:
+                df_gps = pd.concat([df_gps,row])
+            else:
+                df_gps = row                          
+        except:
+            ret = False
+            break
     if df_gps is not None:
         table = pa.Table.from_pandas(df_gps)
         pqwriter = pq.ParquetWriter(map_df_path, table.schema)              
         pqwriter.write_table(table)
         pqwriter.close()
+    return ret
 
     

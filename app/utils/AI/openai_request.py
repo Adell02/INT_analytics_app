@@ -5,7 +5,7 @@ import numpy
 def ai_request(df:pandas.DataFrame,request:str,columns:list) -> str:
     error_log = "Service not available"
     not_answerable = "I can't answer your request"
-    #is_checked = check_user_input(request,columns)
+    is_checked = check_user_input(request,columns)
     is_checked = "yes"
 
     if is_checked == -1:

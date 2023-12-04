@@ -4,6 +4,8 @@ from flask import Blueprint,request
 import mysql.connector
 import pyodbc as sql
 import bcrypt
+import warnings
+warnings.filterwarnings('ignore')
 import pandas as pd
 
 from app import conn,cursor

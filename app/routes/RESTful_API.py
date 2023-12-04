@@ -44,10 +44,10 @@ def server_process(token,timestamp):
             #VINs = get it from the loaded DF
             vins = list(df['Id'].keys().unique())
             edit_data("VINs",",".join(vins))
-
+        """
         write_log("OK Updated Database")
         return "Server Fetch OK"
-        """
+        
     write_log("KO Updated Database (Token Confirmation)")
     return "Server KO"
 

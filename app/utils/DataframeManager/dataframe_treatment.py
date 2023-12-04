@@ -203,6 +203,6 @@ def df_filter_data(df:pd.DataFrame, type_name:str, from_excel:bool=False):
         return -4
     
     # Step 5 (it does not return any error if previous steps are ok)
-    df == apply_resolution(df)
+    df = apply_resolution(df)
     
     return df

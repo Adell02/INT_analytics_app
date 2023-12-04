@@ -1,5 +1,21 @@
-
+from app import Config
 from app.utils.graph_functions.plots_generation import*
+
+def generate_note(dataframe,notes):
+    from app.utils.DataframeManager.load_df import generate_df_name
+    critical_data = pd.read_parquet(Config.PATH_CRITICAL_DATA)
+    current_df_name = generate_df_name("trip")
+    current_date = current_df_name.split("_")[0].split("/")[-1]+"-" +current_df_name.split("_")[1]+"-01"
+
+    notes = critical_data[critical_data['Date'] == current_date].to_dict('records')
+    
+    html_note = "<div class='note-container'>"+ "<ul class='list-notes'>"
+    for key,note in notes[0].items():
+        html_note += "<li class='list-notes-element'><b>"+key+"</b>: "+str(note)+"</li>"
+    html_note += "</ul></div>"
+
+    return html_note
+
 def delta_SoC_vs_Total_Energy(df_trip):
     '''
     This function takes a DataFrame df_trip as input. It calculates the change in State of Charge (SoC) and the total energy consumption from the DataFrame. It then generates a scatter plot using the generate_scatter_plot function, with the total energy on the x-axis and the change in SoC on the y-axis. The function returns the generated scatter plot.

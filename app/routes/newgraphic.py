@@ -4,7 +4,7 @@ from app.routes.auth import login_required
 from app.database.seeder import *
 from app.utils.account.token import *
 
-from app.utils.graph_functions.functions import * 
+from app.utils.graph_functions.plots_generation import *
 from app.utils.graph_functions.consumption_vs_temp import *
 from app.utils.DataframeManager.load_df import generate_df_name, load_current_df_memory
 
@@ -23,7 +23,7 @@ def new_graph():
     df = load_current_df_memory()
     available_vin = list(df['Id'].keys().unique())  
 
-    columns_list=df_get_columns_tag(df)
+    columns_list=df.columns
 
     
     

@@ -1,16 +1,10 @@
 import pandas as pd
-import os
-from app.utils.graph_functions.functions import *
-from app import Config
 
 
 def df_from_scratch() -> tuple[pd.DataFrame,pd.DataFrame]:
     # Initialises parquets files from the xlsx file given by Ray
 
     ruta_archivo = 'app/database/dfs/Ray 7.7_modificat.xlsx'
-
-    # Lista para almacenar los DataFrames de las 9 hojas
-    dataframes = []
 
     # Nombres de las hojas en el archivo Excel
     nombres_hojas_traj = ["G1", "G2","C2","C3","IE","B1","B2","B3","B4"]

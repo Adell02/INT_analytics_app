@@ -4,7 +4,6 @@ import numpy as np
 
 from app.routes.auth import login_required
 from app.utils.DataframeManager.load_df import load_map_df
-from app.utils.graph_functions.functions import df_get_columns_tag
 from app.utils.graph_functions.generate_map import generate_map,generate_void_map
 
 mapview_bp = Blueprint("mapview",__name__)
@@ -14,7 +13,7 @@ mapview_bp = Blueprint("mapview",__name__)
 def mapview():
     df = load_map_df()
     available_vin = list(df['Id'].keys().unique())  
-    columns_list=df_get_columns_tag(df)
+    columns_list=list(df.columns)
     columns_list.pop(-1)
     vin_selected =""
     column_selected =""

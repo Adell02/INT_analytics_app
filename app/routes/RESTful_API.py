@@ -45,7 +45,11 @@ def server_process(token,timestamp_i,timestamp_f):
         if timestamp_i == '' and timestamp_f == '':
             # timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
             # timestamp_f = int(datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
-            timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1,weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+            last_timestamp = fetch_data_params("last_timestamp")
+            if last_timestamp is not None:
+                timestamp_i = last_timestamp
+            else:
+                timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1,weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
             timestamp_f = int((datetime.now(timezone.utc)-timedelta(weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
             df_trip = fetch_ray_trip(timestamp_i,timestamp_f)
             df_charge = fetch_ray_charge(timestamp_i,timestamp_f)
@@ -75,30 +79,17 @@ def server_process(token,timestamp_i,timestamp_f):
         df_trip_appended = from_server_to_parquet(df_trip)
         from_server_to_parquet(df_charge)
 
-        write_log("OK Parquet Generation")
-
-        # Pass to Miquel's function -> generate df
-        # Pass to df_append -> generate .parquet for months and filter
-        # update Timestamp, VINs and Columns : Mysql params = org_token,last_timestamp,columnes,VINs
-        # df_ = load_current_df_memory()
-        # df = process_coords_for_df(df_trip_appended)        
+        write_log("OK Parquet Generation")   
         
-        last_timestamp = fetch_data_params("last_timestamp")
-        if last_timestamp is None:
-            # the parameter should be timestamp, instead we are loading the first day september 
-            last_timestamp = 1693526400
-        
-        df = load_current_df_memory()
-
-        if not process_coords_for_df(df):
+        if not process_coords_for_df(df_trip_appended):
             write_log("NAK Coords Error")
             return "GPS Coords Fetch Error"
         write_log("OK Coords Fetch")
 
 
-        last_timestamp = df['Timestamp CT'].max()
+        last_timestamp = df_trip_appended['Timestamp CT'].max()
         columns = list(pd.read_json(Config.PATH_BATTERY_PARAMS).columns)
-        vins = list(df['Id'].keys().unique())
+        vins = list(df_trip_appended['Id'].keys().unique())
         
         edit_data("last_timestamp",last_timestamp)
         edit_data("columnes",columns)

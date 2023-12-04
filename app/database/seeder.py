@@ -252,16 +252,18 @@ def fetch_ray_gps(vin,timestamp_init,timestamp_end,journey_id):
     query = f'''SELECT TOP(1) DeviceId,Timestamp,OriginalMessage FROM PRORawData WHERE (DeviceId = '{vin}' AND Timestamp >= '{int(timestamp_init)}' AND Timestamp <= '{int(timestamp_end)}' AND OriginalMessage LIKE '$P1%' AND OriginalMessage LIKE '%{int(journey_id)},#&' AND SUBSTRING(OriginalMessage, CHARINDEX(',',OriginalMessage)+1,CHARINDEX(',', OriginalMessage, CHARINDEX(',', OriginalMessage) + 1) - CHARINDEX(',', OriginalMessage) - 1) <> '');'''    
     read_df = pd.read_sql_query(query,conn_ray)
     if len(read_df):
+        if read_df['OriginalMessage'][0].split(",")[6] == 'V':
+            return ("","")
         split = read_df['OriginalMessage'][0].split(",")[1:5]
         if split[1] == 'N':
             lat = split[0]
         else:
             lat = "-"+split[0]
-        if split[2] == 'E':
+        if split[3] == 'E':
             long = split[2]
         else:
             long = "-"+split[2]
-
+        
         return (lat,long)
     else:
         return ("","")

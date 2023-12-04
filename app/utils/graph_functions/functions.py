@@ -11,6 +11,8 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from datetime import datetime
 
+from app import Config
+
 #Protocol Dictionary
 protocol_dict={"G1":["Timestamp CT", "Start", "End", "Start odometer", "Id"],
                    "G2":["Timestamp CT", "End odometer", "Max speed", "Id"],
@@ -488,9 +490,16 @@ def generate_box_plot(dataframe:pd.DataFrame,elements,title='Unamed Box Plot'):
     return fig
 
 def generate_note(dataframe,notes):
+    from app.utils.DataframeManager.load_df import generate_df_name
+    critical_data = pd.read_parquet(Config.PATH_CRITICAL_DATA)
+    current_df_name = generate_df_name("trip")
+    current_date = current_df_name.split("_")[0].split("/")[-1]+"-" +current_df_name.split("_")[1]+"-01"
+
+    notes = critical_data[critical_data['Date'] == current_date].to_dict('records')
+    
     html_note = "<div class='note-container'>"+ "<ul class='list-notes'>"
-    for note in notes:
-        html_note += "<li class='list-notes-element'>"+note+"</li>"
+    for key,note in notes[0].items():
+        html_note += "<li class='list-notes-element'><b>"+key+"</b>: "+str(note)+"</li>"
     html_note += "</ul></div>"
 
     return html_note
@@ -1038,11 +1047,6 @@ def df_add_df_to_parquet_file(file_path:str,df_new:pd.DataFrame) -> pd.DataFrame
         pq.write_table(table,file_path)
        
         return df_final
-
-    # If file does not exist, check if there's a folder to add
-    # the new file. If there is not any directory, create one
-    if not (os.path.exists('df') and os.path.isdir('df')):
-       os.makedirs('df')
 
     # Generate the new file
     table = pa.Table.from_pandas(df_new)

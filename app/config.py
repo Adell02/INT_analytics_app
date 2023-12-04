@@ -39,8 +39,9 @@ class Config:
     OPENAI_KEY = os.getenv("OPENAI_KEY")
 
     PATH_DATAFRAMES = "app/database/dfs/"
+    PATH_CACHE = "app/database/cache"
     PATH_CRITICAL_DATA = "app/database/dfs/critical_data.parquet"
-    PATH_MAP_DATAFRAME = "app/database/dfs/map_parquet.parquet"
+    PATH_PRODUCTION_DATA = "app/database/dfs/production.parquet"
     PATH_CACHE_DASHBOARD = "app/database/cache/dashboard"
     PATH_CACHE_ANALYTICS = "app/database/cache/analytics"
     PATH_DASHBOARD_CONFIG = "app/utils/graph_functions/dashboard_config.json"

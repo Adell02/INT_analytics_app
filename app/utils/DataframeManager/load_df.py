@@ -10,7 +10,6 @@ from app.utils.graph_functions.functions import *
 from app.utils.graph_functions.generate_dashboard_graphics import *
 from app.utils.DataframeManager.DataBase import df_from_scratch
 from app.utils.DataframeManager.dataframe_treatment import df_filter_data
-from app.utils.DataframeManager.dataframe_storage import df_append_data
 from app.database.seeder import fetch_ray_gps
 
 
@@ -38,6 +37,15 @@ def generate_df_name(type:str) -> str:
     # current_month = "07"
     # current_year = "2023"
     name = Config.PATH_DATAFRAMES + str(current_year) + "_" + str(current_month) + "_" + type +".parquet"
+
+    return name
+
+def generate_map_df_name() -> str:
+    #current_month = datetime.now().month
+    #current_year = datetime.now().year
+    current_month = "07"
+    current_year = "2023"
+    name = Config.PATH_DATAFRAMES + str(current_year) + "_" + str(current_month) + "_" +"map.parquet"
 
     return name
 
@@ -87,7 +95,7 @@ def load_current_df_memory(samples=None) -> pd.DataFrame:
         
 
 def load_map_df(samples = None)->pd.DataFrame:
-    name = Config.PATH_MAP_DATAFRAME
+    name = generate_map_df_name()
 
     # WHAT HAPPENS IF DOES NOT EXIST? 
     if not check_exists_df(name):
@@ -101,20 +109,29 @@ def load_map_df(samples = None)->pd.DataFrame:
         table = pq.read_table(name)
         return table.to_pandas()
     
-def process_coords_for_df(df_:pd.DataFrame) -> pd.DataFrame:
+def process_coords_for_df(df:pd.DataFrame) -> pd.DataFrame:
+    df_gps = None
+    map_df_path = generate_map_df_name()
+    if os.path.exists(map_df_path):
+        df_gps = pq.read_table(map_df_path).to_pandas()        
+        start_row = len(df_gps)    
+    else:
+        start_row = 0
     
-    batch_size = 1000
-    for start_row in range(0, len(df_),batch_size):
-        end_row = min(start_row+batch_size,len(df_))
-        
-        df = df_.iloc[start_row:end_row]
-        def pass_parameters_fetch_ray_gps(row):
-            return ",".join(fetch_ray_gps(row.name,row['Start'],row['End'],row['Id']))
-        df['Coordinates'] = df.apply(pass_parameters_fetch_ray_gps,axis=1)
-        table = pa.Table.from_pandas(df)
-        if start_row == 0:
-            pqwriter = pq.ParquetWriter(Config.PATH_MAP_DATAFRAME, table.schema)              
-        pqwriter.write_table(table)        
-    if pqwriter:
+    for idx_row in range(start_row,len(df)):
+        print(idx_row)
+        row = df.iloc[[idx_row]] 
+        coords = ",".join(fetch_ray_gps(row.index[0],row['Start'],row['End'],row['Id']))
+        row['Coordinates'] = coords
+        if df_gps is not None:
+            df_gps = pd.concat([df_gps,row])
+        else:
+            df_gps = row                          
+    
+    if df_gps is not None:
+        table = pa.Table.from_pandas(df_gps)
+        pqwriter = pq.ParquetWriter(map_df_path, table.schema)              
+        pqwriter.write_table(table)
         pqwriter.close()
+
     

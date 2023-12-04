@@ -2,7 +2,7 @@
 import os
 from flask import Blueprint, render_template,url_for,request,session
 import zlib
-import requests,json
+import json
 
 from app.config import Config
 from app.routes.auth import login_required

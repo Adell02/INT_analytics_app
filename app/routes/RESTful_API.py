@@ -1,10 +1,11 @@
-import json,zlib
-from datetime import datetime, timedelta, timezone
-from flask import Blueprint
+import json,zlib,requests
+from datetime import datetime,timedelta, timezone
+from flask import Blueprint,request,url_for
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+from app import socketio
 from app.utils.account.token import *
 from app.database.seeder import edit_data,fetch_data_params, fetch_ray_trip, fetch_ray_charge
 from app.utils.DataframeManager.load_df import *
@@ -95,7 +96,7 @@ def server_process(token,timestamp_i,timestamp_f):
         """
         write_log("OK Updated Database")
         return "Server Fetch OK"
-
+        
     write_log("KO Updated Database (Token Confirmation)")
     return "Server KO"
 
@@ -113,6 +114,10 @@ def cache_dashboard(token):
         plots = generate_dashboard_graphics(Config.PATH_DASHBOARD_CONFIG,dataframe)                        
             
         compressed_dashboard = zlib.compress(json.dumps(plots).encode('utf-8'),level=zlib.Z_BEST_COMPRESSION)
+        
+        if not os.path.exists(Config.PATH_CACHE):
+            os.makedirs(Config.PATH_CACHE)
+
         with open(cache_path, "wb") as file:
             file.write(compressed_dashboard)
         write_log("OK Cache Database")
@@ -158,3 +163,26 @@ def cache_analytics(token):
         return plots
     write_log("KO Cache Analytics (Token Confirmation)")
     return "Authentication error"
+
+
+@api_bp.route("/<token>/production_api", methods=['GET','POST'])
+def production_api_call(token):
+    if token == Config.SERVER_TOKEN:
+        content = request.get_json(silent=True)
+        df_received = pd.DataFrame(content)
+        if os.path.isfile(Config.PATH_PRODUCTION_DATA):
+            df_received = pd.concat([df_received,pd.read_parquet(Config.PATH_PRODUCTION_DATA)])        
+        table = pa.Table.from_pandas(df_received)
+        pq.write_table(table,Config.PATH_PRODUCTION_DATA)
+
+        html_table = df_received.to_html(classes="table_class",header=True)    
+        socketio.emit("html_table",html_table)
+        return "API - Data received correctly."
+    return "API - Authentication Error"
+
+
+@api_bp.route("/production_api_test", methods=['GET','POST'])
+def production_api_call_test():
+    url = "http://13.48.135.195/"+Config.SERVER_TOKEN+"/production_api"
+    response = requests.post(url,json=[{"Data1":1,"Data2":1},{"Data1":2,"Data2":2}])    
+    return response.text

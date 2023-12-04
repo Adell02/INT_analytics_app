@@ -49,7 +49,7 @@ def build_html(config_file:str,df,plots:list,vin=None):
                         if sub_sub_row['child']:
                             print("Too complex layout")
                         elif sub_sub_row['function'] != 'generate_note':
-                            html_string += '<div class="graph-container recuadro-h'+ str(sub_sub_row['height'])+' recuadro-w'+str(sub_sub_row['width'])+'">'
+                            html_string += '<div class="graph-container sub-recuadro-h'+ str(sub_sub_row['height'])+' sub-recuadro-w'+str(sub_sub_row['width'])+'">'
                             
                             html_string += '</div>'
                         else:

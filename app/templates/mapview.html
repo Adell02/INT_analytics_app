@@ -12,23 +12,33 @@
 
 {% block content %} 
 
-    
+<form method='POST' name="mapview_form">    
+
     <div class="recuadro-superior-mapview">
-        
-        <div class="search-graphic-mapview">
-            <input type="text" class="form-control" name="entity_name" placeholder="Search" >
-        </div>
-        <div class="visualise-options-mapview">
-            <div class="dropdown">
-                <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
-                <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
-                    <!-- Dropdown options will be dynamically added here -->
+            
+            <div class="filter-axis-mapview">
+                <select name="map_data" id="map_data">
+                <option value="none">Select Graph Data:</option>
+                {% for column in columns_list %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            </div>
+            <div class="visualise-options-mapview">
+                <div class="dropdown">
+                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
+                    <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
+                        <!-- Dropdown options will be dynamically added here -->
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="contenedorfilter-mapview">      
+                <button type="submit" id="filter-button-mapview" class="filter-button-mapview">Filter</button>
+            </div>
         
         
     </div>
+</form>
     
     
     <div id="map-container">
@@ -50,6 +60,14 @@
             a.href = "#";
             dropdownContent.appendChild(a);
         });
+
+        // Set the selected VIN on the dropdown as default
+        var vin_selected = '{{ vin_selected | safe}}';
+        document.getElementsByName("VIN_selector")[0].value = vin_selected;
+
+        // Set the selected variable on the dropdown as default
+        var column_selected = '{{ column_selected | safe}}';
+        document.getElementsByName("map_data")[0].value = column_selected;
                         
     </script>
     

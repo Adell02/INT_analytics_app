@@ -3,7 +3,7 @@ import pandas as pd
 import os 
 import pyarrow as pa
 import pyarrow.parquet as pq
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from app import Config
 from app.utils.graph_functions.functions import *
@@ -31,10 +31,12 @@ def generate_cache_analytics_name():
     return name
 
 def generate_df_name(type:str) -> str:
-    #current_month = datetime.now().month
-    #current_year = datetime.now().year
-    current_month = "07"
-    current_year = "2023"
+    current_date = datetime.now(timezone.utc) - timedelta(weeks=8)
+    current_month = current_date.month
+    current_year = current_date.year
+
+    # current_month = "07"
+    # current_year = "2023"
     name = Config.PATH_DATAFRAMES + str(current_year) + "_" + str(current_month) + "_" + type +".parquet"
 
     return name

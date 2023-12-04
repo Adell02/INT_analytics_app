@@ -53,12 +53,11 @@ def opening_connection_RAY():
     global cursor_ray,conn_ray
         
     db_config_ray=(
-        'Driver={ODBC Driver 18 for SQL Server};'
-        f'Server={Config.MYSQL_HOST_RAY};'
+        'Driver={SQL Server};'
+        f'Server=127.0.0.1,1433;'
         f'Database={Config.MYSQL_DB_RAY};'
         f'UID={Config.MYSQL_USER_RAY}@{Config.MYSQL_HOST_RAY};'
         f'PWD={Config.MYSQL_PASSWORD_RAY};'
-        'Encrypt:yes;'
     )
     
     conn_ray = sql.connect(db_config_ray)
@@ -207,7 +206,7 @@ def confirm_user(email=None):
     return "User confirmed successfully"
 
 @connection_sql_ray
-def fetch_ray_trip(timestamp):
+def fetch_ray_trip(timestamp_i,timestamp_f):
     CATEGORIES = ["G1","G2","C2","C3","IE","B1","B2","B3","B4"]
     query = '''SELECT DeviceId,OriginalMessage FROM PRORawData WHERE (('''
     for c in CATEGORIES:
@@ -217,10 +216,26 @@ def fetch_ray_trip(timestamp):
         else:
             query += " OR "
     
-    query += f" AND TimeStamp >= {timestamp});"
+    query += f" AND TimeStamp >= {timestamp_i} AND TimeStamp < {timestamp_f});"
     
     read_df = pd.read_sql_query(query,conn_ray)
-    read_df.to_csv("fetched_RAY_data.csv",index=False)
+    return read_df
+
+@connection_sql_ray
+def fetch_ray_charge(timestamp_i,timestamp_f):
+    CATEGORIES = ["H2","H3","H4","H5","H8"]
+    query = '''SELECT DeviceId,OriginalMessage FROM PRORawData WHERE (('''
+    for c in CATEGORIES:
+        query += f"OriginalMessage LIKE '${c}%'"
+        if c == CATEGORIES[len(CATEGORIES)-1]:
+            query += ")"
+        else:
+            query += " OR "
+    
+    query += f" AND TimeStamp >= {timestamp_i} AND TimeStamp < {timestamp_f});"
+    
+    read_df = pd.read_sql_query(query,conn_ray)
+    return read_df
 
 @connection_mysql
 def edit_data(field,value):

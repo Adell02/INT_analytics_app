@@ -6,7 +6,6 @@ def ai_request(df:pandas.DataFrame,request:str,columns:list) -> str:
     error_log = "Service not available"
     not_answerable = "I can't answer your request"
     is_checked = check_user_input(request,columns)
-    is_checked = "yes"
 
     if is_checked == -1:
         return error_log
@@ -55,7 +54,7 @@ def check_user_input(request:str,columns:list):
   
 
 def request_python_function(request:str,columns:list):
-    s = "Give a python function named ai_process(df), where \"df\" is a pandas dataframe with the following columns: " +",".join(map(str,columns))+". This function will compute the following request: \'"+request+"\'. return a string containing the answer. (PRINT JUST THE CODE)"
+    s = "Give a python function named ai_process(df), where \"df\" is a pandas dataframe with the following columns: " +",".join(map(str,columns))+". This function will compute the following request: \'"+request+"\'. return a string containing the answer where numbers should have only 2 decimals. (PRINT JUST THE CODE)"
     response = openai.ChatCompletion.create(
       model="gpt-3.5-turbo",
       messages=[

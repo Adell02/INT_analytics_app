@@ -38,68 +38,77 @@ def server_process(token,timestamp_i,timestamp_f):
                                         are None, that means the function has been executed automatically and only last
                                         day's data is needed.
     """
-    if token == Config.SERVER_TOKEN:
-        
-        # If timestamps are None, get all data since the day before @ 00:00:00 UTC until today @ 00:00:00 UTC
-        # For debugging purposes, this operation is done for two months before, since there's no data for "today".
-        if timestamp_i == '' and timestamp_f == '':
-            # timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
-            # timestamp_f = int(datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
-            last_timestamp = fetch_data_params("last_timestamp")
-            if last_timestamp is not None:
-                timestamp_i = last_timestamp
+    write_log(" ####### - START SERVER PROCESS - #######")
+    try:
+        if token == Config.SERVER_TOKEN:
+
+            # If timestamps are None, get all data since the day before @ 00:00:00 UTC until today @ 00:00:00 UTC
+            # For debugging purposes, this operation is done for two months before, since there's no data for "today".
+            if timestamp_i == '' and timestamp_f == '':
+                # timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+                # timestamp_f = int(datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+                last_timestamp = fetch_data_params("last_timestamp")
+                if last_timestamp is not None:
+                    timestamp_i = last_timestamp
+                else:
+                    timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1,weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+                timestamp_f = int((datetime.now(timezone.utc)-timedelta(weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+                df_trip = fetch_ray_trip(timestamp_i,timestamp_f)
+                df_charge = fetch_ray_charge(timestamp_i,timestamp_f)
+
+            # If the first timestamp is not None, that means we want to fetch all data since timestamp_i and until now (if timestamp_f)
+            # is None, or until the specified timestamp_f 
+
+            # If a specific timestamp_i, two situations are possible:
+            # 1) No timestamp_f is specified --> In this case, get the current timestamp and set it as timestamp_f
+            # 2) timestamp_f has been specified as well --> Fetch with timestamp_i and timestamp_f with theur respective values.
+
+            elif(timestamp_i != ''):
+                if timestamp_f == '':
+                    timestamp_f = int(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+
+                df_trip = fetch_ray_trip(timestamp_i,timestamp_f)
+                df_charge = fetch_ray_charge(timestamp_i,timestamp_f)
+
+
+            # Under no circumstances timestamp_f != None while timestamp_i == None, so that call will be discarted
             else:
-                timestamp_i = int((datetime.now(timezone.utc) - timedelta(days=1,weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
-            timestamp_f = int((datetime.now(timezone.utc)-timedelta(weeks=8)).replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
-            df_trip = fetch_ray_trip(timestamp_i,timestamp_f)
-            df_charge = fetch_ray_charge(timestamp_i,timestamp_f)
-        
-        # If the first timestamp is not None, that means we want to fetch all data since timestamp_i and until now (if timestamp_f)
-        # is None, or until the specified timestamp_f 
+                return
 
-        # If a specific timestamp_i, two situations are possible:
-        # 1) No timestamp_f is specified --> In this case, get the current timestamp and set it as timestamp_f
-        # 2) timestamp_f has been specified as well --> Fetch with timestamp_i and timestamp_f with theur respective values.
+            write_log("OK Data Fetch")
 
-        elif(timestamp_i != ''):
-            if timestamp_f == '':
-                timestamp_f = int(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+            # With df_trip and df_charge, convert them into "depurated" dataframes.
+            df_trip_appended = from_server_to_parquet(df_trip)
+            from_server_to_parquet(df_charge)
 
-            df_trip = fetch_ray_trip(timestamp_i,timestamp_f)
-            df_charge = fetch_ray_charge(timestamp_i,timestamp_f)
+            write_log("OK Parquet Generation")   
+
+            if not process_coords_for_df(df_trip_appended):
+                write_log("NAK Coords Error")
+                return "GPS Coords Fetch Error"
+            write_log("OK Coords Fetch")
 
 
-        # Under no circumstances timestamp_f != None while timestamp_i == None, so that call will be discarted
-        else:
-            return
+            last_timestamp = df_trip_appended['Timestamp CT'].max()
+            columns = list(pd.read_json(Config.PATH_BATTERY_PARAMS).columns)
+            vins = list(df_trip_appended['Id'].keys().unique())
 
-        write_log("OK Data Fetch")
-       
-        # With df_trip and df_charge, convert them into "depurated" dataframes.
-        df_trip_appended = from_server_to_parquet(df_trip)
-        from_server_to_parquet(df_charge)
+            edit_data("last_timestamp",last_timestamp)
+            edit_data("columnes",columns)
+            edit_data("VINs",",".join(vins))
 
-        write_log("OK Parquet Generation")   
-        
-        if not process_coords_for_df(df_trip_appended):
-            write_log("NAK Coords Error")
-            return "GPS Coords Fetch Error"
-        write_log("OK Coords Fetch")
+            write_log("OK Updated Database")
 
+            cache_dashboard(Config.SERVER_TOKEN)
+            write_log("OK Cache Dashboard")
 
-        last_timestamp = df_trip_appended['Timestamp CT'].max()
-        columns = list(pd.read_json(Config.PATH_BATTERY_PARAMS).columns)
-        vins = list(df_trip_appended['Id'].keys().unique())
-        
-        edit_data("last_timestamp",last_timestamp)
-        edit_data("columnes",columns)
-        edit_data("VINs",",".join(vins))
-        
-        
-        write_log("OK Updated Database")
-        return "Server Fetch OK"
-        
-    write_log("KO Updated Database (Token Confirmation)")
+            cache_analytics(Config.SERVER_TOKEN)
+            write_log("OK Cache Analytics")
+            write_log(" ####### - END SERVER PROCESS - #######")
+            return "Server Fetch OK"
+    except:
+        write_log("KO Server Process")
+        write_log(" ####### - END SERVER PROCESS - #######")
     return "Server KO"
 
 @api_bp.route("/<token>/cache_dashboard", methods=['GET'])

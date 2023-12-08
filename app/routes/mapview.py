@@ -20,7 +20,7 @@ def mapview():
     
     if request.method == 'POST':
         vin_selected = request.form['VIN_selector']
-        column_selected = request.form['map_data']
+        column_selected = request.form['graph_data_x']
 
         if column_selected not in columns_list:
             column_selected=""

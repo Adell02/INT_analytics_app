@@ -16,7 +16,7 @@ analytics_bp = Blueprint("analytics",__name__)
 def analytics():
     
     dataframe = load_current_df_memory()
-    columns_list = dataframe.columns
+    columns_list = list(dataframe.columns)
 
     cached_path = generate_cache_analytics_name()
     if os.path.isfile(cached_path):

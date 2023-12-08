@@ -435,7 +435,7 @@ select[multiple] {
 
 /* SEARCHABLE DROPDOWN TEST */
 /* Style for the dropdown container */
-.dropdown {
+.dropdown,.VINdropdown,.Xdropdown,.Ydropdown {
     position: relative;
     display: inline-block;
     height: inherit;
@@ -443,12 +443,13 @@ select[multiple] {
 }
 
 /* Style for the dropdown button */
-.dropdown input {
+.dropdown input,.VINdropdown input,.Xdropdown input,.Ydropdown input{
     padding: 10px;
     font-size: 16px;
     border: none;
     outline: none;
     height: -webkit-fill-available;
+    width:80%;
 }
 
 
@@ -470,7 +471,11 @@ select[multiple] {
     display: block;
     text-decoration: none;
     color:black;
-    
+    font-size: 1.1vw;
+}
+
+.dropdown-content a.selected{
+    background-color: #ddd;
 }
 
 /* Highlight the selected option */

@@ -4,7 +4,7 @@ from app.routes.auth import login_required
 from app.database.seeder import *
 from app.utils.account.token import *
 
-from app.utils.graph_functions.functions import * 
+from app.utils.graph_functions.plots_generation import *
 from app.utils.graph_functions.consumption_vs_temp import *
 from app.utils.DataframeManager.load_df import generate_df_name, load_current_df_memory
 
@@ -23,16 +23,16 @@ def new_graph():
     df = load_current_df_memory()
     available_vin = list(df['Id'].keys().unique())  
 
-    columns_list=df_get_columns_tag(df)
+    columns_list=list(df.columns)
 
     
     
     if request.method == 'POST':
         graph_type = request.form['graph_type']
+        VIN_select = request.form['VIN_selector']
         graph_title =request.form['graph_title']
         graph_data_x =request.form['graph_data_x']
-        graph_data_y=request.form.getlist('graph_data_y[]')
-        VIN_select = request.form['VIN_select']
+        graph_data_y=request.form['graph_data_y']
 
         
         if VIN_select != "":
@@ -50,10 +50,12 @@ def new_graph():
         
         fig_vector = []
 
-        if  graph_type == "none" or len(graph_data_y)==0 or graph_data_y[0]=="":
+        if  graph_type == "none" or graph_data_y=="":
             pass
         else :
-            
+            graph_data_y = graph_data_y.split(",")
+            graph_data_y = [var.strip() for var in graph_data_y]
+
             if graph_type == "Pie_Chart":
 
                 fig_vector.append(

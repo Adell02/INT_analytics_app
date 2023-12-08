@@ -14,8 +14,8 @@
         <div class="recuadro-superior-dashboard" >
             <div class="dashboard-superior custom-select">                
                 <div class="dropdown">
-                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
-                    <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
+                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions('myDropdown','.dropdown')" oninput="filterOptions('myDropdown','dropdownInput')" id="dropdownInput" name="VIN_selector" autocomplete='off'>
+                    <div id="myDropdown" class="dropdown-content" onclick="selectOption(event,'myDropdown','dropdownInput','.dropdown')">
                         <!-- Dropdown options will be dynamically added here -->
                     </div>
                 </div>

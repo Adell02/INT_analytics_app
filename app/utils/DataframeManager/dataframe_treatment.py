@@ -1,8 +1,6 @@
 import pandas as pd
-import os
 import json
-import pyarrow as pa
-import pyarrow.parquet as pq
+
 
 from app import Config
 
@@ -133,9 +131,6 @@ def verify_values(df:pd.DataFrame):
 
         condicion = (df[column] >= value_min) & (df[column] <= value_max)
         df = df.loc[condicion]
-        
-        if df.empty:
-            return -1
     
     return df
 
@@ -189,7 +184,7 @@ def df_filter_data(df:pd.DataFrame, type_name:str, from_excel:bool=False):
         df = update_column_tags(df,type_name)
         if  not isinstance(df,pd.DataFrame):
             return -1
-    else:
+    elif type_name == 'trip':
         del df['Start odometer']
 
     # Step 2
@@ -204,10 +199,10 @@ def df_filter_data(df:pd.DataFrame, type_name:str, from_excel:bool=False):
     
     # Step 4
     df = verify_values(df)
-    if not isinstance(df,pd.DataFrame):
+    if df.empty:
         return -4
     
     # Step 5 (it does not return any error if previous steps are ok)
-    df == apply_resolution(df)
+    df = apply_resolution(df)
     
     return df

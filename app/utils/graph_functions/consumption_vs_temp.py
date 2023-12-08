@@ -6,8 +6,7 @@ import numpy as np
 import statsmodels.api as sm
 import os
 
-from app.utils.graph_functions.functions import *
-
+from app.utils.graph_functions.plots_generation import *
 """
 Consumo vs temperatura.
 

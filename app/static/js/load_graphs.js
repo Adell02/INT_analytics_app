@@ -336,7 +336,7 @@ function load_graph_optimized_analytics(div_id,idx,idx_page,desiredDataPoints) {
 function filtrarPlot() {
     plotFiltrado=[];
     let typeFilter = document.getElementById('graph_type').value;
-    let dataFilter = document.getElementById('graph_data_x').value; 
+    let dataFilter = document.getElementsByName('graph_data_x')[0].value; 
     let userInput = document.getElementById('userInput').value.trim().toLowerCase();
     let userWords = userInput ? userInput.split(" ") : [];
     

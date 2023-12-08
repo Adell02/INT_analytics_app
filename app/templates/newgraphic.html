@@ -26,12 +26,12 @@
 
                 
                 <div class="custom-select-newgraphic" >
-                    <select  name="VIN_select" id="VIN_select" placeholder="Select VIN:" >
-                        <option value="">Select VIN:</option>
-                        {% for VIN in available_vin %}
-                            <option value={{ VIN }}> {{VIN}} </option>
-                        {% endfor %}
-                    </select>
+                    <div class="VINdropdown">
+                        <input type="text" placeholder="Search VIN..." onclick="showAllOptions('VIN_dropdown','.VINdropdown')" oninput="filterOptions('VIN_dropdown','VIN_dropdownInput')" id="VIN_dropdownInput" name="VIN_selector" autocomplete='off'>
+                        <div id="VIN_dropdown" class="dropdown-content" onclick="selectOption(event,'VIN_dropdown','VIN_dropdownInput','.VINdropdown')">
+                            <!-- Dropdown options will be dynamically added here -->
+                        </div>
+                    </div>
                 </div>
 
                 <div class="new-graphic-superior" >
@@ -39,21 +39,21 @@
                 </div>
 
                 <div class="custom-select-newgraphic" >
-                    <select  name="graph_data_x" id="graph_data_x" placeholder="Select Graph Data 'x':" >
-                        <option value="">Select Graph Data "x":</option>
-                        {% for col in columns_list %}
-                            <option value="{{ col }}"> {{ col }} </option>
-                        {% endfor %}
-                    </select>
+                    <div class="Xdropdown">
+                        <input type="text" placeholder="Select 'x' variable..." onclick="showAllOptions('X_dropdown','.Xdropdown')" oninput="filterOptions('X_dropdown','X_dropdownInput')" id="X_dropdownInput" name="graph_data_x" autocomplete='off'>
+                        <div id="X_dropdown" class="dropdown-content" onclick="selectOption(event,'X_dropdown','X_dropdownInput','.Xdropdown')">
+                            <!-- Dropdown options will be dynamically added here -->
+                        </div>
+                    </div>
                 </div>
 
                 <div class="custom-select-newgraphic"  >
-                    <select multiple name="graph_data_y[]" id = "graph_data_y[]" placeholder="Select Graph Data 'y':">
-                        <option value="">Select Graph Data "y":</option>
-                        {% for col in columns_list %}
-                            <option value="{{ col }}"> {{ col }} </option>
-                        {% endfor %}
-                    </select>
+                    <div class="Ydropdown">
+                        <input type="text" placeholder="Select 'Y' variable(s)..." onclick="Multiple_showAllOptions('Y_dropdown','.Ydropdown')" oninput="filterOptions('Y_dropdown','Y_dropdownInput')" id="Y_dropdownInput" name="graph_data_y" autocomplete='off'>
+                        <div id="Y_dropdown" class="dropdown-content" onclick="Multiple_selectOption(event,'Y_dropdown','Y_dropdownInput','.Ydropdown')">
+                            <!-- Dropdown options will be dynamically added here -->
+                        </div>
+                    </div>
                 </div>
 
 
@@ -79,6 +79,50 @@
 
 
         <script>
+            var config = {{config | safe }};
+            var graph_type ;
+            var graph_title ;
+            var graph_data_x;
+            var graph_data_y;
+            var trendline ;
+            var trendlineblock ;
+            var VIN_select;
+            
+            // CHECK IF ELEMENT IN MULTI-SELECTION IS DEFAULT SELECTED
+            const stringArray = config[3].split(',').map(item => item.trim());
+
+            // Populate the dropdown with options
+            const VIN_options = {{available_vin | safe}};
+            var VIN_dropdownContent = document.getElementById("VIN_dropdown");
+            VIN_options.forEach(function (option) {
+                var a = document.createElement("a");
+                a.textContent = option;
+                a.href = "#";
+                VIN_dropdownContent.appendChild(a);
+            });
+
+            // Populate the dropdown with options
+            const var_options = {{columns_list | safe}};
+            var X_dropdownContent = document.getElementById("X_dropdown");
+            var Y_dropdownContent = document.getElementById("Y_dropdown");
+            var_options.forEach(function (option) {
+                var a = document.createElement("a");
+                a.textContent = option;
+                a.href = "#";
+                X_dropdownContent.appendChild(a);
+            });
+            var_options.forEach(function (option) {
+                var a = document.createElement("a");
+                a.textContent = option;
+                a.href = "#";
+                // Check if the value is in the array
+                if (stringArray.includes(option)){
+                    a.classList.toggle("selected");
+                }
+                
+                Y_dropdownContent.appendChild(a);
+            });
+            
 
             const plot = {{ plots | tojson | safe }}; 
             const containers = document.getElementsByClassName("graph-container"); 
@@ -89,20 +133,7 @@
             }
 
             
-            var config = {{config | safe }};
-            var graph_type ;
-            var graph_title ;
-            var graph_data_x;
-            var graph_data_y;
-            var trendline ;
-            var trendlineblock ;
-            var VIN_select;
-
-            //graph_type.value = config[0];
-            //graph_title.value = config[1];
-            //graph_data_x.value = config[2];
-            //graph_data_y.value = config[3];
-            //VIN_select.value = config[4];
+            
             
 
             function default_config() {
@@ -124,12 +155,12 @@
 
             window.onload = function() {
                 graph_type = document.getElementById("graph_type") ;
+                VIN_select= document.getElementsByName("VIN_selector")[0];
                 graph_title = document.getElementById("graph_title");
-                graph_data_x = document.getElementById("graph_data_x");
-                graph_data_y = document.getElementById("graph_data_y[]");
+                graph_data_x = document.getElementsByName("graph_data_x")[0];
+                graph_data_y = document.getElementsByName("graph_data_y")[0];
                 trendline = document.getElementById("trendline");
                 trendlineblock = document.querySelector('.new-graphic-superior-left');
-                VIN_select= document.getElementById("VIN_select");
 
                 graph_type.value = config[0];
                 graph_title.value = config[1];

@@ -26,12 +26,12 @@
         <input type="text" class="new-graphic-input-analytics" id="userInput" name="userInput" placeholder="Enter Graph Title" value="">
     </div>
     <div class="graphic-data-analytics">
-        <select name="graph_data_x" id="graph_data_x">
-            <option value="none">Select Graph Data:</option>
-            {% for column in columns_list %}
-                <option value="{{ column }}">{{ column }}</option>
-            {% endfor %}
-        </select>
+        <div class="Xdropdown">
+            <input type="text" placeholder="Select variable..." onclick="showAllOptions('X_dropdown','.Xdropdown')" oninput="filterOptions('X_dropdown','X_dropdownInput')" id="X_dropdownInput" name="graph_data_x" autocomplete='off'>
+            <div id="X_dropdown" class="dropdown-content" onclick="selectOption(event,'X_dropdown','X_dropdownInput','.Xdropdown')">
+                <!-- Dropdown options will be dynamically added here -->
+            </div>
+        </div>
     </div>
     <div class="contenedorfilter-analytics">      
         <button type="submit" id="filter-button" class="filter-button-analytics">Filter</button>
@@ -55,7 +55,16 @@
 </div>
 
 <script>
-     
+    // Populate the dropdown with options
+    const var_options = {{columns_list | safe}};
+    var X_dropdownContent = document.getElementById("X_dropdown");
+    var_options.forEach(function (option) {
+        var a = document.createElement("a");
+        a.textContent = option;
+        a.href = "#";
+        X_dropdownContent.appendChild(a);
+    });
+
     const plot = {{ plots | tojson | safe }};
     var plotFiltrado=[...plot];
     const containers = document.getElementsByClassName("graph-container");

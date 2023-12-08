@@ -17,17 +17,17 @@
     <div class="recuadro-superior-mapview">
             
             <div class="filter-axis-mapview">
-                <select name="map_data" id="map_data">
-                <option value="none">Select Graph Data:</option>
-                {% for column in columns_list %}
-                    <option value="{{ column }}">{{ column }}</option>
-                {% endfor %}
-            </select>
+                <div class="Xdropdown">
+                    <input type="text" placeholder="Select variable..." onclick="showAllOptions('X_dropdown','.Xdropdown')" oninput="filterOptions('X_dropdown','X_dropdownInput')" id="X_dropdownInput" name="graph_data_x" autocomplete='off'>
+                    <div id="X_dropdown" class="dropdown-content" onclick="selectOption(event,'X_dropdown','X_dropdownInput','.Xdropdown')">
+                        <!-- Dropdown options will be dynamically added here -->
+                    </div>
+                </div>
             </div>
             <div class="visualise-options-mapview">
-                <div class="dropdown">
-                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions()" oninput="filterOptions()" id="dropdownInput" name="VIN_selector" autocomplete='off'>
-                    <div id="myDropdown" class="dropdown-content" onclick="selectOption(event)">
+                <div class="VINdropdown">
+                    <input type="text" placeholder="Search VIN..." onclick="showAllOptions('VIN_dropdown','.VINdropdown')" oninput="filterOptions('VIN_dropdown','VIN_dropdownInput')" id="VIN_dropdownInput" name="VIN_selector" autocomplete='off'>
+                    <div id="VIN_dropdown" class="dropdown-content" onclick="selectOption(event,'VIN_dropdown','VIN_dropdownInput','.VINdropdown')">
                         <!-- Dropdown options will be dynamically added here -->
                     </div>
                 </div>
@@ -50,16 +50,27 @@
         const fig = JSON.parse({{fig | tojson | safe}});
                        
         generate_map(fig);
-        
+
         // Populate the dropdown with options
-        const options = {{available_vin | safe}};
-        var dropdownContent = document.getElementById("myDropdown");
-        options.forEach(function (option) {
+        const VIN_options = {{available_vin | safe}};
+            var VIN_dropdownContent = document.getElementById("VIN_dropdown");
+            VIN_options.forEach(function (option) {
+                var a = document.createElement("a");
+                a.textContent = option;
+                a.href = "#";
+                VIN_dropdownContent.appendChild(a);
+            });
+
+        // Populate the dropdown with options
+        const var_options = {{columns_list | safe}};
+        var X_dropdownContent = document.getElementById("X_dropdown");
+        var_options.forEach(function (option) {
             var a = document.createElement("a");
             a.textContent = option;
             a.href = "#";
-            dropdownContent.appendChild(a);
+            X_dropdownContent.appendChild(a);
         });
+    
 
         // Set the selected VIN on the dropdown as default
         var vin_selected = '{{ vin_selected | safe}}';
@@ -67,7 +78,7 @@
 
         // Set the selected variable on the dropdown as default
         var column_selected = '{{ column_selected | safe}}';
-        document.getElementsByName("map_data")[0].value = column_selected;
+        document.getElementsByName("graph_data_x")[0].value = column_selected;
                         
     </script>
     

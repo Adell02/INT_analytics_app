@@ -6,6 +6,8 @@
     height: 4rem;
     margin-left: 2rem;
     margin-right: 2rem;
+    position: relative;
+    z-index: 99;
 }
 .go-left{
     margin-right: 1rem;

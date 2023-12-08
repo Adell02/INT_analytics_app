@@ -28,7 +28,6 @@ build/
 docs/_build/
 .vscode
 flask_session/
-*.xlsx
 *.zlib
 log_server.txt
 

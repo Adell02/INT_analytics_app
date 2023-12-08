@@ -4,6 +4,8 @@ from flask import Blueprint,request
 import mysql.connector
 import pyodbc as sql
 import bcrypt
+import warnings
+warnings.filterwarnings('ignore')
 import pandas as pd
 
 
@@ -58,7 +60,9 @@ def opening_connection_RAY():
         f'Server={Config.MYSQL_HOST_RAY},1433;'
         f'Database={Config.MYSQL_DB_RAY};'
         f'UID={Config.MYSQL_USER_RAY}@{Config.MYSQL_HOST_RAY};'
-        f'PWD={Config.MYSQL_PASSWORD_RAY};'        
+        f'PWD={Config.MYSQL_PASSWORD_RAY};'
+        'TrustServerCertificate=yes;' 
+        'Encrypt=yes;'       
     )
     
     conn_ray = sql.connect(db_config_ray)
@@ -207,7 +211,7 @@ def confirm_user(email=None):
     return "User confirmed successfully"
 
 @connection_sql_ray
-def fetch_ray_trip(timestamp):
+def fetch_ray_trip(timestamp_i,timestamp_f):
     CATEGORIES = ["G1","G2","C2","C3","IE","B1","B2","B3","B4"]
     query = '''SELECT DeviceId,OriginalMessage FROM PRORawData WHERE (('''
     for c in CATEGORIES:
@@ -217,10 +221,26 @@ def fetch_ray_trip(timestamp):
         else:
             query += " OR "
     
-    query += f" AND TimeStamp >= {timestamp});"
+    query += f" AND TimeStamp >= {timestamp_i} AND TimeStamp < {timestamp_f});"
     
     read_df = pd.read_sql_query(query,conn_ray)
-    read_df.to_csv("fetched_RAY_data.csv",index=False)
+    return read_df
+
+@connection_sql_ray
+def fetch_ray_charge(timestamp_i,timestamp_f):
+    CATEGORIES = ["H2","H3","H4","H5","H8"]
+    query = '''SELECT DeviceId,OriginalMessage FROM PRORawData WHERE (('''
+    for c in CATEGORIES:
+        query += f"OriginalMessage LIKE '${c}%'"
+        if c == CATEGORIES[len(CATEGORIES)-1]:
+            query += ")"
+        else:
+            query += " OR "
+    
+    query += f" AND TimeStamp >= {timestamp_i} AND TimeStamp < {timestamp_f});"
+    
+    read_df = pd.read_sql_query(query,conn_ray)
+    return read_df
 
 @connection_mysql
 def edit_data(field,value):
@@ -251,16 +271,18 @@ def fetch_ray_gps(vin,timestamp_init,timestamp_end,journey_id):
     query = f'''SELECT TOP(1) DeviceId,Timestamp,OriginalMessage FROM PRORawData WHERE (DeviceId = '{vin}' AND Timestamp >= '{int(timestamp_init)}' AND Timestamp <= '{int(timestamp_end)}' AND OriginalMessage LIKE '$P1%' AND OriginalMessage LIKE '%{int(journey_id)},#&' AND SUBSTRING(OriginalMessage, CHARINDEX(',',OriginalMessage)+1,CHARINDEX(',', OriginalMessage, CHARINDEX(',', OriginalMessage) + 1) - CHARINDEX(',', OriginalMessage) - 1) <> '');'''    
     read_df = pd.read_sql_query(query,conn_ray)
     if len(read_df):
+        if read_df['OriginalMessage'][0].split(",")[6] == 'V':
+            return ("","")
         split = read_df['OriginalMessage'][0].split(",")[1:5]
         if split[1] == 'N':
             lat = split[0]
         else:
             lat = "-"+split[0]
-        if split[2] == 'E':
+        if split[3] == 'E':
             long = split[2]
         else:
             long = "-"+split[2]
-
+        
         return (lat,long)
     else:
         return ("","")

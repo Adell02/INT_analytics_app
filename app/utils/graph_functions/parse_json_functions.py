@@ -1,5 +1,5 @@
 from plotly.graph_objects import Figure
-from app.utils.graph_functions.functions import * 
+from app.utils.graph_functions.plots_generation import *
 from app.utils.graph_functions.consumption_vs_temp import *
 from app.utils.graph_functions.analytic_functions import *
 

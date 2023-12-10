@@ -1,7 +1,7 @@
 import pandas as pd
 from .dataframe_storage import df_append_data
 from .dataframe_treatment import df_filter_data, df_get_column_tags_dictionary
-
+from app.utils.DataframeManager.load_df import generate_df_name
 
 #Protocol Dictionary
 protocol_dict={"G1":["Timestamp CT", "Start", "End", "Start odometer", "Id"],
@@ -203,7 +203,7 @@ def create_df_dict(VIN:str,dataframes:pd.DataFrame, type_name:str)->pd.DataFrame
     return -1
 
 
-def from_server_to_parquet(df_server:pd.DataFrame) -> pd.DataFrame:
+def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataFrame:
 # This function will append to the existing parquet, given a dataframe fetched from Ray's
 # server. This function will also filter and append the given data.
 # 
@@ -212,17 +212,15 @@ def from_server_to_parquet(df_server:pd.DataFrame) -> pd.DataFrame:
 # 
 # OUTPUT
 # - Returns the resulting dataframe that has been appended to the rest of data
-
+    
     df_server = df_server.sort_values(by=VIN_COLUMN, ascending=True)
     
     # Create 
     df_buff_trip = pd.DataFrame(columns=df_get_column_tags_dictionary('trip'))
     df_buff_charge = pd.DataFrame(columns=df_get_column_tags_dictionary('charge'))
-
     for unused,row in df_server.iterrows():
         df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])
         df_created = create_df_dict(row[VIN_COLUMN],[df_packet],type_name)
-        
         # The returned value can be a dataframe if it has been completed or a dictionary
         # if else.
         if isinstance(df_created,pd.DataFrame):
@@ -232,17 +230,15 @@ def from_server_to_parquet(df_server:pd.DataFrame) -> pd.DataFrame:
                     df_buff_charge = pd.concat([df_buff_charge,df_created])
 
     # Filter and append both trip and charge dataframes   
-    
-    if type_name == 'trip':
-        df_filtered_trip=df_filter_data(df_buff_trip,type_name)
-        
+    if original_type == 'trip':
+        df_filtered_trip=df_filter_data(df_buff_trip,'trip')
         if isinstance(df_filtered_trip,pd.DataFrame):
-            df_append_data(df_filtered_trip,type_name) 
-            return df_filtered_trip
-        
-
+            df_append_data(df_filtered_trip,'trip') 
+        new_df = pd.read_parquet(generate_df_name("trip"))
+        return new_df
     else:
-        df_filtered_charge=df_filter_data(df_buff_charge,type_name)
+        df_filtered_charge=df_filter_data(df_buff_charge,'charge')
         if isinstance(df_filtered_charge,pd.DataFrame):
-            df_append_data(df_filtered_charge,type_name)
-            return df_filtered_charge
+            df_append_data(df_filtered_charge,'charge')
+        new_df = pd.read_parquet(generate_df_name("charge"))
+        return new_df

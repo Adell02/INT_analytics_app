@@ -221,7 +221,7 @@ def fetch_ray_trip(timestamp_i,timestamp_f):
         else:
             query += " OR "
     
-    query += f" AND TimeStamp >= {timestamp_i} AND TimeStamp < {timestamp_f});"
+    query += f" AND TimeStamp > {timestamp_i} AND TimeStamp < {timestamp_f});"
     
     read_df = pd.read_sql_query(query,conn_ray)
     return read_df
@@ -237,7 +237,7 @@ def fetch_ray_charge(timestamp_i,timestamp_f):
         else:
             query += " OR "
     
-    query += f" AND TimeStamp >= {timestamp_i} AND TimeStamp < {timestamp_f});"
+    query += f" AND TimeStamp > {timestamp_i} AND TimeStamp < {timestamp_f});"
     
     read_df = pd.read_sql_query(query,conn_ray)
     return read_df

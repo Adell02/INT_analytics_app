@@ -100,14 +100,12 @@ def server_process(token,timestamp_i,timestamp_f):
             write_log("OK Updated Database")
 
             cache_dashboard(Config.SERVER_TOKEN)
-            write_log("OK Cache Dashboard")
-
             cache_analytics(Config.SERVER_TOKEN)
-            write_log("OK Cache Analytics")
+
             write_log(" ####### - END SERVER PROCESS - #######")
             return "Server Fetch OK"
-    except:
-        write_log("KO Server Process")
+    except Exception as e:
+        write_log(f"KO - {e}")
         write_log(" ####### - END SERVER PROCESS - #######")
     return "Server KO"
 
@@ -131,9 +129,9 @@ def cache_dashboard(token):
 
         with open(cache_path, "wb") as file:
             file.write(compressed_dashboard)
-        write_log("OK Cache Database")
+        write_log("OK Cache Dashboard")
         return plots
-    write_log("KO Cache Database (Token Confirmation)")
+    write_log("KO Cache Dashboard (Token Confirmation)")
     return "Authentication error"
 
 def compute_dash_from_VIN(token,vin):

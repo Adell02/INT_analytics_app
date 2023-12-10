@@ -64,6 +64,7 @@ def server_process(token,timestamp_i,timestamp_f):
             # 2) timestamp_f has been specified as well --> Fetch with timestamp_i and timestamp_f with theur respective values.
 
             elif(timestamp_i != ''):
+                timestamp_i = int(timestamp_i)
                 if timestamp_f == '':
                     timestamp_f = int(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
 
@@ -78,8 +79,8 @@ def server_process(token,timestamp_i,timestamp_f):
             write_log("OK Data Fetch")
 
             # With df_trip and df_charge, convert them into "depurated" dataframes.
-            df_trip_appended = from_server_to_parquet(df_trip)
-            from_server_to_parquet(df_charge)
+            df_trip_appended = from_server_to_parquet(df_trip,"trip")
+            df_charge_appended = from_server_to_parquet(df_charge,"charge")
 
             write_log("OK Parquet Generation")   
 
@@ -95,7 +96,7 @@ def server_process(token,timestamp_i,timestamp_f):
 
             edit_data("last_timestamp",last_timestamp)
             edit_data("columnes",columns)
-            edit_data("VINs",",".join(vins))
+            edit_data("VINs",vins)
 
             write_log("OK Updated Database")
 

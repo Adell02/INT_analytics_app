@@ -487,3 +487,10 @@ select[multiple] {
 .show {
     display: block;
 }
+
+
+/* GRAPH STYLING */
+
+.legend>.bg{
+    fill-opacity: 0.8!important;
+}

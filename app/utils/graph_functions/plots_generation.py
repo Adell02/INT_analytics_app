@@ -286,10 +286,6 @@ def generate_multi_histogram(dataframe,elements,units='',start=-200,end=200,step
         bargroupgap=0.1 # gap between bars of the same location coordinates
     )
 
-    # Add legend and display it in the top-right corner of the graph
-    fig.update_layout(showlegend=True, legend=dict(x=0.85, y=0.95, traceorder='normal', orientation='v'))
-
-
     return fig
 
 def generate_scatter_plot(dataframe,element_x,elements_y,title='Unnamed Scatter Plot',reg_line=False):

@@ -18,6 +18,7 @@ function load_messages(messages){
 function submit_request(request){
     var request = document.getElementById("userInput").value;
     var chat = document.getElementById("chatMessages");
+    document.getElementById("loading").style.display = "flex";
     $.ajax({
         type: "POST",
         url: "/private/aichat",
@@ -26,6 +27,7 @@ function submit_request(request){
             chat.innerHTML = '';
             load_messages(response);
             document.getElementById("userInput").value = '';
+            document.getElementById("loading").style.display = "none";
         }     
                
     });

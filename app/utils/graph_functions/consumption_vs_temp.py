@@ -97,6 +97,7 @@ def get_consumption_vs_temp(df):
     fig_filtered.update_layout(scene=dict(
         xaxis = dict(range=[min(df[TEMP_COLUMN]),max(df[TEMP_COLUMN])])
     ))
+    
     # 5. Get the correlation between variables
 
     """
@@ -111,11 +112,12 @@ def get_consumption_vs_temp(df):
     
     # Get the position of the top-right corner to display the text in that point
    
-    x_position_filtered = min(df_filtered[TEMP_COLUMN])+TEXT_OFFSET
+    x_position_filtered = min(df_filtered[TEMP_COLUMN])
     y_position_filtered = max(df_filtered[CONSUMPTION_COLUMN])
 
     # Generate text to display the correlation and place it in the legend
     fig_text = f'r: {round(correlation*100,2)}%'
+    
     fig_filtered.add_trace(go.Scatter(x=[x_position_filtered], y=[y_position_filtered], mode="text",name = fig_text ,showlegend=True))
     fig_filtered.update_traces(marker=dict(size=3))
     fig_filtered.update_layout(legend=dict(
@@ -123,7 +125,8 @@ def get_consumption_vs_temp(df):
         y=0.99,
         xanchor="right",
         x=0.99
-))
+    ))
+
     
     return fig_filtered
 

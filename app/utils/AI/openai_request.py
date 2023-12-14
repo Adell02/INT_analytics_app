@@ -2,26 +2,32 @@ import openai
 import pandas
 import numpy
 
+from app.routes.RESTful_API import write_log
+
 def ai_request(df:pandas.DataFrame,request:str,columns:list) -> str:
     error_log = "Service not available"
     not_answerable = "I can't answer your request"
     is_checked = check_user_input(request,columns)
 
     if is_checked == -1:
+        write_log("KO AI - is_checked == -1")
         return error_log
     
     if is_checked == 'No':
+        write_log("KO AI - is_checked == No")
         return not_answerable
     
     python_code = request_python_function(request,columns)
 
     if python_code == -1:
+        write_log("KO AI - Python Code == -1")
         return error_log
     try:
         result_raw = {}  
         exec(python_code+"\nresult = ai_process(df)",locals(),result_raw)    
         return result_raw['result']
-    except:
+    except Exception as e:
+       write_log(f"KO AI - Exception: {e}")
        return error_log
 
     

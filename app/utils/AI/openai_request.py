@@ -28,7 +28,7 @@ def ai_request(df:pandas.DataFrame,request:str,columns:list) -> str:
         return result_raw['result']
     except Exception as e:
        write_log(f"KO AI - Exception: {e}")
-       return error_log + e
+       return error_log +" - " +str(e)
 
     
 def parse_response(response):

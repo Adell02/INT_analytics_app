@@ -9,15 +9,15 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#install">Install</a></li>
-    <li><a href='# Git Frequently Used Commands'> Git Frequently Used Commands</a></li>
+    <li><a href="#Install">Install</a></li>
+    <li><a href='#Git Frequently Used Commands'>Git Frequently Used Commands</a></li>
     <li><a href="#File Structure">File Structure</a></li>
     <li><a href="#User Experience">User Experience</a></li>
     <li><a href="Backend Breakthrough">Backend Breakthrough</a></li>
         <ul>
             <li><a href="#Private MySQL Database">Private MySQL Database</a></li>
-            <li><a href="#">b</a></li>
-            <li><a href="#">c</a></li>
+            <li><a href="#Authenticaiton and Security">Authenticaiton and Security</a></li>
+            <li><a href="#Graphs Computation">Graphs Computation</a></li>
         </ul>
     <li><a href="#roadmap">Roadmap</a></li>
 
@@ -26,6 +26,8 @@
 
 
 <!-- Install -->
+<div id="Install"></div>
+
 ## Install
 
 Install **VSCode** and **Python 3.11.5** in your machine.
@@ -73,6 +75,8 @@ Now, you can start coding!
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Git Frequently Used Commands
+<div id="Git Frequently Used Commands"></div>
+
 [Most of the content in this section has been extracted from the manual page "man"]
 
 **git add <file_name>**
@@ -96,6 +100,7 @@ Update remote refs along with associated objects. This is uploading the commited
 
 
 ## File Structure
+<div id="File Structure"></div>
 
 A breakdown of the file structure is shown next.
 
@@ -180,26 +185,34 @@ A breakdown of the file structure is shown next.
 
 
 ## Backend Breakthrough
+<div id="Backend Breakthrough"></div>
 
 Although the code itself it's meant to be commented and self-explanatory, the following subsections describe meticously each main functionality implemented in the backend code.
 
 #### Private MySQL Database
+<div id="Private MySQL Database"></div>
+
 Electronic Data Services has deployed a MySQL server in the Ubuntu AWS machine used for production deployment. Although other configurations are preferred, it's a valid implmentation for a prototype product. In it, information about users and their data is stored. To access it, a MySQL cursor is used. All functions to add/remove/fetch/edit any field in it is available in "seeder.py". It is worth mentioning that these functions are wrapped with a wrapper that manages the opening and closure of connections. 
 
 #### Authenticaiton and Security
+<div id="Authenticaiton and Security"></div>
+
 Users information such as email, password, role, tokens, organization name and confirmation are stored in our private database. Different fields are stored in different manners, the next bullet points describe how it is done for every parameter:
 - email: Directly stored when registered. Can't be modified.
 - password: Stored when registered, hashed with a secret key. Can be changed with the function "change_password" in "auth.py", accessible through _/change_password/\<token>_ or using the link attached in the settings page for every user (when logged in).
 - role: Automatically assigned to 'user'. Not functional by the moment.
 - tokens: Every user owns a unique token that can be shared with others and it's automatically generated when signs up (available in settings page, when logged in). On the settings page, users can paste a token from another user to build up a shared dashboard. This one is originally set to a _Null_ value.  
-- confirmation: Automatically set to False. Can be changed by an admin, as seen in <a href="#user-experience"> _User Experience.Authentication_
+- confirmation: Automatically set to False. Can be changed by an admin, as seen in <a href="#user-experience"> User Experience.Authentication</a>
 
 #### Graphs Computation
+<div id="Graphs Computation"></div>
+
 In "dash.py", the code ran to compute 
 
 
 
 ## User Experience
+<div id="User Experience"></div>
 
 This app mainly runs on hmtl/js/css frontend with a main Python backend framework.
 
@@ -222,12 +235,13 @@ The developer can see users' available information by accessing _localhost/fetch
 
 <!-- ROADMAP -->
 ## Roadmap
+<div id="Roadmap"></div>
 
 - [x] Basic Functionality - Plot Graphs arranged on a page
 - [x] Deploy on server
 - [x] Basic Functionalities - Analytics, New Graph, Ai Chat
 - [x] Advanced Analytics
-- [ ] Real Time RAY SQL DB 
+- [x] Real Time RAY SQL DB 
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>

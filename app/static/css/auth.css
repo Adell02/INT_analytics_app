@@ -1,0 +1,30 @@
+
+.auth-wrapper{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+
+}
+
+.logo-eds{
+    max-height: 200px;
+    margin-bottom: 2rem;
+}
+
+.container-form{
+    max-width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-wrapper{
+    width: 500px;
+    padding: 2rem;
+    background-color: #0e2e590f;
+    border-radius: 2rem;
+}

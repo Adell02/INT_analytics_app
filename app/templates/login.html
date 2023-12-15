@@ -28,10 +28,10 @@
                         <label for="password">Password:</label>
                         <input type="password" class="form-control" id="password" name="password" required>
                     </div>           
-                    <button type="submit" class="btn btn-primary" id='login_button'>Login</button>
+                    <button type="submit" class="auth-button" id='login_button'>Login</button>
                 </form>
                 <br>
-                <p>Are you new? <a href={{ sign_up_url }}>Sign up</a></p>
+                <p>Are you new? <a href={{ sign_up_url }} class="enlace">Sign up</a></p>
             
                 {{ error | safe}}
             </div>

@@ -225,18 +225,22 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
 
             # Filter and append both trip and charge dataframes   
             if original_type == 'trip':
-                df_filtered_trip=df_filter_data(df_created,'trip')
-                if isinstance(df_filtered_trip,pd.DataFrame):
-                    df_append_data(df_filtered_trip,'trip') 
-                new_df = pd.read_parquet(generate_df_name("trip"))
-                return new_df
+                if isinstance(df_created,pd.DataFrame):
+                    df_filtered_trip=df_filter_data(df_created,'trip')
+                    if isinstance(df_filtered_trip,pd.DataFrame):
+                        df_append_data(df_filtered_trip,'trip') 
             else:
-                df_filtered_charge=df_filter_data(df_created,'charge')
-                if isinstance(df_filtered_charge,pd.DataFrame):
-                    df_append_data(df_filtered_charge,'charge')
-                new_df = pd.read_parquet(generate_df_name("charge"))
-                return new_df
+                if isinstance(df_created,pd.DataFrame):
+                    df_filtered_charge=df_filter_data(df_created,'charge')
+                    if isinstance(df_filtered_charge,pd.DataFrame):
+                        df_append_data(df_filtered_charge,'charge')
 
+        if original_type == 'trip':
+            new_df = pd.read_parquet(generate_df_name("trip"))
+        else:
+            new_df = pd.read_parquet(generate_df_name("charge"))    
+        return new_df
+            
     except Exception:
         with open("log_server.txt","a") as file:
             file.write(str(datetime.now())+f" - {traceback.format_exc()}\n")

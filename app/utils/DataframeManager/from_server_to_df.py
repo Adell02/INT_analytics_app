@@ -236,6 +236,8 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
                         df_buff_charge = pd.concat([df_buff_charge,df_created])
 
         # Filter and append both trip and charge dataframes   
+        with open("log_server.txt","a") as file:
+            file.write(str(datetime.now())+f" - {original_type}\n")
 
         if type_name == 'trip':
             df_filtered_trip=df_filter_data(df_buff_trip,type_name)

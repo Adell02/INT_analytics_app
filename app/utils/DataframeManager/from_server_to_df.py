@@ -222,23 +222,16 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
         for unused,row in df_server.iterrows():
             df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])
             df_created = create_df_dict(row[VIN_COLUMN],[df_packet],type_name)
-            # The returned value can be a dataframe if it has been completed or a dictionary
-            # if else.
-            if isinstance(df_created,pd.DataFrame):
-                if type_name == 'trip':
-                        df_buff_trip = pd.concat([df_buff_trip,df_created])
-                elif type_name == 'charge':
-                        df_buff_charge = pd.concat([df_buff_charge,df_created])
 
             # Filter and append both trip and charge dataframes   
             if original_type == 'trip':
-                df_filtered_trip=df_filter_data(df_buff_trip,'trip')
+                df_filtered_trip=df_filter_data(df_created,'trip')
                 if isinstance(df_filtered_trip,pd.DataFrame):
                     df_append_data(df_filtered_trip,'trip') 
                 new_df = pd.read_parquet(generate_df_name("trip"))
                 return new_df
             else:
-                df_filtered_charge=df_filter_data(df_buff_charge,'charge')
+                df_filtered_charge=df_filter_data(df_created,'charge')
                 if isinstance(df_filtered_charge,pd.DataFrame):
                     df_append_data(df_filtered_charge,'charge')
                 new_df = pd.read_parquet(generate_df_name("charge"))

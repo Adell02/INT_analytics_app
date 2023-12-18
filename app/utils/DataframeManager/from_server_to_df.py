@@ -219,8 +219,6 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
         df_server = df_server.sort_values(by=VIN_COLUMN, ascending=True)
 
         # Create 
-        df_buff_trip = pd.DataFrame(columns=df_get_column_tags_dictionary('trip'))
-        df_buff_charge = pd.DataFrame(columns=df_get_column_tags_dictionary('charge'))
         for unused,row in df_server.iterrows():
             df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])
             df_created = create_df_dict(row[VIN_COLUMN],[df_packet],type_name)

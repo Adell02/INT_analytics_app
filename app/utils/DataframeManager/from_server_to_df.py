@@ -216,26 +216,19 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
 # OUTPUT
 # - Returns the resulting dataframe that has been appended to the rest of data
     try:
+        
         df_server = df_server.sort_values(by=VIN_COLUMN, ascending=True)
 
-        # Create 
         for unused,row in df_server.iterrows():
             df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])
             df_created = create_df_dict(row[VIN_COLUMN],[df_packet],type_name)
 
-            # Filter and append both trip and charge dataframes   
-            if original_type == 'trip':
-                if isinstance(df_created,pd.DataFrame):
-                    df_filtered_trip=df_filter_data(df_created,'trip')
-                    if isinstance(df_filtered_trip,pd.DataFrame):
-                        df_append_data(df_filtered_trip,'trip') 
-            else:
-                if isinstance(df_created,pd.DataFrame):
-                    df_filtered_charge=df_filter_data(df_created,'charge')
-                    if isinstance(df_filtered_charge,pd.DataFrame):
-                        df_append_data(df_filtered_charge,'charge')
-            with open("log_server.txt","a") as file:
-                file.write(str(datetime.now())+f" - {unused}:{original_type}\n")
+            # The returned value can be a dataframe if it has been completed or a dictionary
+            # if else.
+            if isinstance(df_created,pd.DataFrame):
+                df_filtered=df_filter_data(df_created,type_name)
+                if isinstance(df_filtered,pd.DataFrame):
+                    df_appended=df_append_data(df_filtered,type_name)
 
         if original_type == 'trip':
             new_df = pd.read_parquet(generate_df_name("trip"))

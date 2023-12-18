@@ -234,6 +234,8 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
                     df_filtered_charge=df_filter_data(df_created,'charge')
                     if isinstance(df_filtered_charge,pd.DataFrame):
                         df_append_data(df_filtered_charge,'charge')
+            with open("log_server.txt","a") as file:
+                file.write(str(datetime.now())+f" - {unused}:{original_type}\n")
 
         if original_type == 'trip':
             new_df = pd.read_parquet(generate_df_name("trip"))

@@ -224,7 +224,7 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
         df_buff_charge = pd.DataFrame(columns=df_get_column_tags_dictionary('charge'))
 
         with open("log_server.txt","a") as file:
-            file.write(str(datetime.now())+f" - Creating {original_type} DF\n")
+            file.write(str(datetime.now())+f" - Creating {original_type} DF. Rows: {df_server.size}\n")
 
         for unused,row in df_server.iterrows():
             df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])

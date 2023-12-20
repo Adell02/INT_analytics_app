@@ -224,7 +224,7 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
         df_buff_charge = pd.DataFrame(columns=df_get_column_tags_dictionary('charge'))
 
         with open("log_server.txt","a") as file:
-            file.write(str(datetime.now())+f" - Creating {original_type} DF. Rows: {df_server.size}\n")
+            file.write(str(datetime.now())+f" - Creating {original_type} DF. Rows: {df_server.shape[0]}\n")
 
         for unused,row in df_server.iterrows():
             df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])
@@ -233,11 +233,14 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
             # The returned value can be a dataframe if it has been completed or a dictionary
             # if else.
             if isinstance(df_created,pd.DataFrame):
-                if type_name == 'trip':
-                    df_buff_trip = pd.concat([df_buff_trip,df_created])
-                    
-                elif type_name == 'charge':
-                    df_buff_charge = pd.concat([df_buff_charge,df_created])
+                try:
+                    if type_name == 'trip':
+                        df_buff_trip = pd.concat([df_buff_trip,df_created])
+
+                    elif type_name == 'charge':
+                        df_buff_charge = pd.concat([df_buff_charge,df_created])
+                except:
+                    pass
                     
         with open("log_server.txt","a") as file:
             file.write(str(datetime.now())+f"Trip Buff: {df_buff_trip.shape[0]}\n")

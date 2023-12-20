@@ -223,6 +223,9 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
         df_buff_trip = pd.DataFrame(columns=df_get_column_tags_dictionary('trip'))
         df_buff_charge = pd.DataFrame(columns=df_get_column_tags_dictionary('charge'))
 
+        with open("log_server.txt","a") as file:
+            file.write(str(datetime.now())+f" - Creating {original_type} DF\n")
+
         for unused,row in df_server.iterrows():
             df_packet,type_name=df_from_string_to_df(row[DATA_COLUMN])
             df_created = create_df_dict(row[VIN_COLUMN],[df_packet],type_name)
@@ -235,18 +238,23 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
                 elif type_name == 'charge':
                         df_buff_charge = pd.concat([df_buff_charge,df_created])
 
+        with open("log_server.txt","a") as file:
+            file.write(str(datetime.now())+f" - Created {original_type} DF\n")
+
         # Filter and append both trip and charge dataframes   
         if type_name == 'trip':
             df_filtered_trip=df_filter_data(df_buff_trip,type_name)
 
             if isinstance(df_filtered_trip,pd.DataFrame):
-                df_append_data(df_filtered_trip,type_name) 
-
+                df_append_data(df_filtered_trip,type_name)         
 
         else:
             df_filtered_charge=df_filter_data(df_buff_charge,type_name)
             if isinstance(df_filtered_charge,pd.DataFrame):
                 df_append_data(df_filtered_charge,type_name)
+
+        with open("log_server.txt","a") as file:
+            file.write(str(datetime.now())+f" - Appended {original_type} DF\n")        
 
             
     except Exception:

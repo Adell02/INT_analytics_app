@@ -234,9 +234,13 @@ def from_server_to_parquet(df_server:pd.DataFrame,original_type:str) -> pd.DataF
             # if else.
             if isinstance(df_created,pd.DataFrame):
                 if type_name == 'trip':
-                        df_buff_trip = pd.concat([df_buff_trip,df_created])
+                    df_buff_trip = pd.concat([df_buff_trip,df_created])
+                    with open("log_server.txt","a") as file:
+                        file.write(f"{df_buff_trip.size}")
                 elif type_name == 'charge':
-                        df_buff_charge = pd.concat([df_buff_charge,df_created])
+                    df_buff_charge = pd.concat([df_buff_charge,df_created])
+                    with open("log_server.txt","a") as file:
+                        file.write(f"{df_buff_charge.size}")
 
         with open("log_server.txt","a") as file:
             file.write(str(datetime.now())+f" - Created {original_type} DF\n")

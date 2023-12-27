@@ -18,8 +18,8 @@ def generate_cache_dash_name():
     current_month = current_date.month
     current_year = current_date.year
 
-    #current_month = "07"
-    #current_year = "2023"
+    current_month = "10"
+    current_year = "2023"
 
     name = Config.PATH_CACHE_DASHBOARD + "_" + str(current_month) + "_" + str(current_year) +".zlib"
 
@@ -30,8 +30,8 @@ def generate_cache_analytics_name():
     current_month = current_date.month
     current_year = current_date.year
 
-    #current_month = "07"
-    #current_year = "2023"
+    current_month = "10"
+    current_year = "2023"
 
     name = Config.PATH_CACHE_ANALYTICS + "_" + str(current_month) + "_" + str(current_year) +".zlib"
 
@@ -42,8 +42,8 @@ def generate_df_name(type:str) -> str:
     current_month = current_date.month
     current_year = current_date.year
 
-    #current_month = "07"
-    #current_year = "2023"
+    current_month = "10"
+    current_year = "2023"
     
     name = Config.PATH_DATAFRAMES + str(current_year) + "_" + str(current_month) + "_" + type +".parquet"
 
@@ -54,8 +54,8 @@ def generate_map_df_name() -> str:
     current_month = current_date.month
     current_year = current_date.year
 
-    #current_month = "07"
-    #current_year = "2023"
+    current_month = "10"
+    current_year = "2023"
     name = Config.PATH_DATAFRAMES + str(current_year) + "_" + str(current_month) + "_" +"map.parquet"
 
     return name

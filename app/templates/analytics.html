@@ -108,15 +108,15 @@
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const responseData = await response.json();
-            console.log('Response:', responseData);
             plot_aux = [...responseData];
             filtrarPlot();
+            document.getElementById("loading").style.display = "none";
     }
 
     function clickedFilter(){
         var VIN_value = document.getElementById("dropdownInput").value;
         if (VIN_value != ""){
-            console.log(VIN_value)
+            document.getElementById("loading").style.display = "flex";
             postDataAsync(VIN_value);          
 
         }

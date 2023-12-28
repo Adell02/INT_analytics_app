@@ -22,6 +22,14 @@
             <option value="linechart">Line Chart</option>
           </select>
     </div>
+    <div class="graphic-vin-analytics">
+        <div class="dropdown">
+            <input type="text" placeholder="Search VIN..." onclick="showAllOptions('myDropdown','.dropdown')" oninput="filterOptions('myDropdown','dropdownInput')" id="dropdownInput" name="VIN_selector" autocomplete='off'>
+            <div id="myDropdown" class="dropdown-content" onclick="selectOption(event,'myDropdown','dropdownInput','.dropdown')">
+                <!-- Dropdown options will be dynamically added here -->
+            </div>
+        </div>
+    </div>
     <div class="graphic-title-analytics">
         <input type="text" class="new-graphic-input-analytics" id="userInput" name="userInput" placeholder="Enter Graph Title" value="">
     </div>
@@ -65,14 +73,59 @@
         X_dropdownContent.appendChild(a);
     });
 
+    // Populate the dropdown with options
+    const VIN_options = {{available_vin | safe}};
+    var dropdownContent = document.getElementById("myDropdown");
+    VIN_options.forEach(function (option) {
+        var a = document.createElement("a");
+        a.textContent = option;
+        a.href = "#";
+        dropdownContent.appendChild(a);
+    });
+
+    // Set the selected VIN on the dropdown as default
+    var selected_vin = '{{ default_vin | safe}}';
+    document.getElementsByName("VIN_selector")[0].value = selected_vin; 
+
     const plot = {{ plots | tojson | safe }};
+    var plot_aux = [...plot];
     var plotFiltrado=[...plot];
     const containers = document.getElementsByClassName("graph-container");
     var graph_divs = [];
     let pageIndex = 0;
 
-    document.getElementById('filter-button').addEventListener('click', filtrarPlot);
+    document.getElementById('filter-button').addEventListener('click', clickedFilter);
 
+    const postDataAsync = async (VIN_value) => {
+        const response = await fetch(window.location.origin+"/private/analytics", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({vin:VIN_value}),
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const responseData = await response.json();
+            console.log('Response:', responseData);
+            plot_aux = [...responseData];
+            filtrarPlot();
+    }
+
+    function clickedFilter(){
+        var VIN_value = document.getElementById("dropdownInput").value;
+        if (VIN_value != ""){
+            console.log(VIN_value)
+            postDataAsync(VIN_value);          
+
+        }
+        else{
+            plot_aux = [...plot];
+            filtrarPlot();
+        }
+        
+    }
 
     // Función para cargar las gráficas
     function load_page() {

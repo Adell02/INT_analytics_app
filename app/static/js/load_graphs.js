@@ -254,8 +254,10 @@ function load_4(){
 
 function resize_4(){
     // Iterate through each container
-    for (let i = 0; i < Math.min(plotFiltrado.length,graph_divs.length); i++) {    
-        resize_graph(graph_divs[i].id,i)
+    for (let i = 0; i < Math.min(plotFiltrado.length,graph_divs.length); i++) {  
+        if(graph_divs[i].childElementCount){  
+            resize_graph(graph_divs[i].id,i)
+        }
     }  
 }
 
@@ -339,64 +341,39 @@ function filtrarPlot() {
     let dataFilter = document.getElementsByName('graph_data_x')[0].value; 
     let userInput = document.getElementById('userInput').value.trim().toLowerCase();
     let userWords = userInput ? userInput.split(" ") : [];
-    
-    for (let i = 0; i < plot.length; i++) {
-        let elemento = JSON.parse(plot[i]);
-        let cumpleCondicionvariable = false;
-        let cumpleCondiciontype = false;
-        let cumplePalabrasUsuario = userWords.length === 0 ? true : userWords.every(word => 
-        elemento.layout && elemento.layout.title && elemento.layout.title.text && elemento.layout.title.text.toLowerCase().includes(word));
-        
-        for (let y = 0; y < elemento.data.length; y++) {
-            //pongo el or porqueen algunas graficas no se llamama label, sino name
-            if ((elemento.data[y] && elemento.data[y].labels && elemento.data[y].labels.includes(dataFilter)) || (elemento.data[y] && elemento.data[y].name && elemento.data[y].name.includes(dataFilter))) { // Añado elemento.data[y] && elemento.data[y].labels && para verificar que la posicion que busco exista
-                cumpleCondicionvariable = true;
-            }
-            if (elemento.data[y] && elemento.data[y].type === typeFilter) {
-                cumpleCondiciontype = true;
-            }
-            
-        }
-        
-        if (typeFilter==="none" && dataFilter==="none" && userWords.length === 0){
-            plotFiltrado=[...plot];
-        }
-        else if ((typeFilter !== "none" && dataFilter!=="none" && userWords.length !== 0)){
 
-            if (cumpleCondiciontype && cumpleCondicionvariable && cumplePalabrasUsuario) {
-                plotFiltrado.push(plot[i]);
-            } 
-        }
-        else {
-            if ( typeFilter === "none" && dataFilter ==="none"){
-                if (cumplePalabrasUsuario){
-                    plotFiltrado.push(plot[i]);
-                }
-            }
-            else if (typeFilter === "none"){
-                if (cumpleCondicionvariable && cumplePalabrasUsuario){
-                    plotFiltrado.push(plot[i]);
-                }
-
-            }
-            else if(dataFilter==="none"){
-                if (cumpleCondiciontype && cumplePalabrasUsuario){
-                    plotFiltrado.push(plot[i]);
-                }
-
-            }
-            else if(userWords.length === 0){
-                if (cumpleCondiciontype && cumpleCondicionvariable){
-                    plotFiltrado.push(plot[i]);
-                }
-                
-            }
-            
-
-        }
-        
+    if (typeFilter==="none" && dataFilter==="" && userWords.length === 0){
+        plotFiltrado=[...plot_aux];
     }
-    pageIndex=0;    
+    else{
+        for (let i = 0; i < plot_aux.length; i++) {
+            let elemento = JSON.parse(plot_aux[i]);
+            let cumpleCondicionvariable = false;
+            let cumpleCondiciontype = false;
+            let cumplePalabrasUsuario = userWords.length === 0 ? true : userWords.every(word => 
+            elemento.layout && elemento.layout.title && elemento.layout.title.text && elemento.layout.title.text.toLowerCase().includes(word));
+            
+            for (let y = 0; y < elemento.data.length; y++) {
+                //pongo el or porqueen algunas graficas no se llamama label, sino name
+                if ((elemento.data[y] && elemento.data[y].labels && elemento.data[y].labels.includes(dataFilter)) || (elemento.data[y] && elemento.data[y].name && elemento.data[y].name.includes(dataFilter))) { // Añado elemento.data[y] && elemento.data[y].labels && para verificar que la posicion que busco exista
+                    cumpleCondicionvariable = true;
+                }
+                if (elemento.data[y] && elemento.data[y].type == typeFilter) {
+                    cumpleCondiciontype = true;
+                    console.log(elemento)
+                }
+
+            }
+
+
+            if ( (typeFilter == "none" || cumpleCondiciontype) && (dataFilter == "" || cumpleCondicionvariable) && (userWords.length==0 || cumplePalabrasUsuario) ){
+                plotFiltrado.push(plot_aux[i]);
+            }
+
+        }
+    }
+    pageIndex=0;   
+    console.log("filtrado",plotFiltrado); 
     load_4();
     
 }

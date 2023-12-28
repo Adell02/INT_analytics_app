@@ -486,13 +486,14 @@ select[multiple] {
     overflow-y: auto;
 }
 
+
 /* Style for dropdown options */
 .dropdown-content a {
     padding: 12px 16px;
     display: block;
     text-decoration: none;
     color:black;
-    font-size: 1.1vw;
+    font-size: 0.9vw;
 }
 
 .dropdown-content a.selected{

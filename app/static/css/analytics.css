@@ -29,7 +29,21 @@
 .graphic-type-analytics{
     position: relative;
     margin-right: 1rem;
-    width: 22.5%;
+    width: 18%;
+    height: 3rem;
+    background-color: #ffffff;
+    opacity: 90%;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 5px 5px 10px rgba(108, 108, 108, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.graphic-vin-analytics{
+    position: relative;
+    margin-right: 1rem;
+    width: 18%;
     height: 3rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -42,7 +56,7 @@
 .graphic-title-analytics{
     position: relative;
     margin-right: 1rem;
-    width: 22.5%;
+    width: 18%;
     height: 3rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -73,7 +87,7 @@
 .graphic-data-analytics{
     position: relative;
     margin-right: 1rem;
-    width: 22.5%;
+    width: 18%;
     height: 3rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -87,7 +101,7 @@
 .save-filter-analytics{
     position: relative;
     margin-right: 1rem;
-    width: 22.5%;
+    width: 18%;
     height: 3rem;
     background-color: #ffffff;
     opacity: 90%;
@@ -100,7 +114,7 @@
 .contenedorfilter-analytics{
     position: relative;
     margin-right: 1rem;
-    width: 22.5%;
+    width: 18%;
     height: 3rem;
     background-color: #45b3f7;
     opacity: 90%;

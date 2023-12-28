@@ -174,6 +174,20 @@ def cache_analytics(token):
     write_log("KO Cache Analytics (Token Confirmation)")
     return "Authentication error"
 
+def compute_analytics_from_VIN(token,vin):
+    if token == Config.SERVER_TOKEN:
+        parquet_name = generate_df_name("trip")
+        
+        if not check_exists_df(parquet_name):
+            write_log("KO Compute Analytics (No data available)")
+            return "No data available"
+        
+        raw_dataframe = load_current_df_memory()
+        dataframe = raw_dataframe[raw_dataframe.index == vin]
+        plots = generate_analytics_graphics(Config.PATH_ANALYTICS_CONFIG,dataframe)                        
+        return plots
+    write_log("KO Compute Analytics (Token Confirmation)")
+    return "Authentication error"
 
 @api_bp.route("/<token>/production_api", methods=['GET','POST'])
 def production_api_call(token):

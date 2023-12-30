@@ -21,7 +21,7 @@
                                 "function":"generate_pie_chart",
                                 "parameters":["dataframe","elements","title"],
                                 "elements":["City distance","Sport distance","Flow distance"],
-                                "title":"Modos de Conducción por km"
+                                "title":"Driving Modes per km"
                             },
                             {
                                 "height":50,
@@ -30,7 +30,7 @@
                                 "function":"generate_pie_chart",
                                 "parameters":["dataframe","elements","title"],
                                 "elements":["Sail distance","Regen distance"],
-                                "title":"Sail - Regen por km"
+                                "title":"Regeneration and Sail per km"
                             }
                         ]
 
@@ -49,7 +49,7 @@
                                 "function":"generate_pie_chart",
                                 "parameters":["dataframe","elements","title"],
                                 "elements":["City energy","Sport energy","Flow energy"],
-                                "title":"Modos de Conducción por Wh"
+                                "title":"Driving Modes per Wh"
                             },
                             {
                                 "height":50,
@@ -58,7 +58,7 @@
                                 "function":"generate_pie_chart",
                                 "parameters":["dataframe","elements","title"],
                                 "elements":["City regen","Sport regen"],
-                                "title":"Regeneración City vs Sport por Wh"
+                                "title":"City Regen vs Sport Regen"
                             }
                         ]
 
@@ -68,8 +68,7 @@
                     "width":33,
                     "child":false,
                     "function":"generate_note",
-                    "parameters":["dataframe","notes"],
-                    "notes":["Consumo medio: 35 kWh","Temperatura media: 40 ºC"]
+                    "parameters":["dataframe"]
                 }
             ]
 
@@ -89,7 +88,7 @@
                 "parameters":["dataframe","elements","units","title"],
                 "elements":["Total energy","Total regen"],
                 "units":"Wh",
-                "title":"Distribución consumo y regeneración de energía"
+                "title":"Energy Consumption and Regeneration Distribution"
             },
             {
                 "height":50,
@@ -100,7 +99,7 @@
                 "key_user":"",
                 "element_x":"End odometer",
                 "elements_y":["Min cell V","Max cell V"],
-                "title":"Tensiones de celda vs Uso",
+                "title":"User comparison: Cell voltages vs Odometer",
                 "user_reg_line":false,
                 "reg_line":true
             }
@@ -129,7 +128,7 @@
                 "parameters":["dataframe","elements","units","title"],
                 "elements":["Motor min T","Motor max T"],
                 "units":"ºC",
-                "title":"Distribución Temperatura Motor"
+                "title":"Motor Temperature Distribution"
                 
             } 
                 
@@ -150,7 +149,7 @@
                 "parameters":["dataframe","elements","units","title"],
                 "elements":["Inv min T","Inv max T"],
                 "units":"ºC",
-                "title":"Distribución Temperatura Inversor"
+                "title":"Inverter Temperature Distribution"
                 
             } 
                 

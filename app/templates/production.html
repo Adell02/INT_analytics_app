@@ -21,10 +21,11 @@
 
 <script>
     const socket = io.connect('http://127.0.0.1:'+{{port | safe}});
-    const container = document.getElementsByClassName("table_container")[0]
+    var container = document.getElementsByClassName("table_container")[0]
     
     socket.on('html_table', function(table_html)
-    {        
+    {      
+        container.innerHTML = "";
         var table_div = document.getElementsByClassName("table_class")[0]
         if (typeof table_div == 'undefined'){
             table_div = document.createElement("div");
@@ -32,6 +33,8 @@
             container.appendChild(table_div);        
         }
         table_div.innerHTML = table_html;
+        
+        //location.reload();
     });
     
 </script>

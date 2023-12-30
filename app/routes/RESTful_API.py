@@ -1,4 +1,4 @@
-import json,zlib,requests
+import json,zlib,requests,random,string
 from datetime import datetime,timedelta, timezone
 from flask import Blueprint,request,url_for
 import pandas as pd
@@ -199,7 +199,7 @@ def production_api_call(token):
         table = pa.Table.from_pandas(df_received)
         pq.write_table(table,Config.PATH_PRODUCTION_DATA)
 
-        html_table = df_received.to_html(classes="table_class",header=True)    
+        html_table = df_received.to_html(classes="table_class",header=True,index=False)    
         socketio.emit("html_table",html_table)
         return "API - Data received correctly."
     return "API - Authentication Error"
@@ -207,6 +207,17 @@ def production_api_call(token):
 
 @api_bp.route("/production_api_test", methods=['GET','POST'])
 def production_api_call_test():
-    url = "http://13.48.135.195/"+Config.SERVER_TOKEN+"/production_api"
-    response = requests.post(url,json=[{"Data1":1,"Data2":1},{"Data1":2,"Data2":2}])    
+    url = "http://"+Config.SERVER_IP+"/"+Config.SERVER_TOKEN+"/production_api"
+    #url="http://127.0.0.1:5500/"+Config.SERVER_TOKEN+"/production_api"
+    serial = ''.join((random.choice(string.ascii_uppercase) for x in range(30)))
+    voltage = round(random.random()*100,3)
+    temp = round(random.random()*50,1)
+    current = round(random.random()*10,1)
+    soc = round(random.random()*80,1)
+    soh = round(random.random()*80,1)
+    cell_v = round(random.random()*10,1)
+    cell_t = round(random.random()*30,1)
+    
+    data = {"Serial Number":serial,"Voltage":voltage,"Temperature":temp,"Current":current,"SOC":soc,"SOH":soh,"Cell Voltage":cell_v,"Cell Temperature":cell_t}
+    response = requests.post(url,json=[data])    
     return response.text

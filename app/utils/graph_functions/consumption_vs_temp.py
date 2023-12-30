@@ -120,12 +120,7 @@ def get_consumption_vs_temp(df):
     
     fig_filtered.add_trace(go.Scatter(x=[x_position_filtered], y=[y_position_filtered], mode="text",name = fig_text ,showlegend=True))
     fig_filtered.update_traces(marker=dict(size=3))
-    fig_filtered.update_layout(legend=dict(
-        yanchor="top",
-        y=0.99,
-        xanchor="right",
-        x=0.99
-    ))
+    
 
     
     return fig_filtered

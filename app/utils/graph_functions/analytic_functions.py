@@ -26,8 +26,10 @@ def generate_note(dataframe):
             html_note += " km"
         elif "percentage" in key:
             html_note += " %"
-        elif ("charg" in key and "Trips" not in key) or ("consumption" in key):
+        elif ("charg" in key and "Trips" not in key):
             html_note += " Wh"
+        elif "consumption" in key:
+            html_note += " Wh/km"
         
         
         

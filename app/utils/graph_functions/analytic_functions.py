@@ -190,7 +190,7 @@ def batery_temp_vs_distance(df):
     DISTANCE_COLUMN = 'Total distance'
     
     # Divide todos los valores de la columna "average temp" por 100 para convertirlos a grados Celsius
-    df[AVERAGE_TEMP] = df[AVERAGE_TEMP] / 100
+    df[AVERAGE_TEMP] = df[AVERAGE_TEMP]
 
     # Create a new column representing 10 km intervals
     df['Intervalo_10'] = (df[DISTANCE_COLUMN] // 10) * 10

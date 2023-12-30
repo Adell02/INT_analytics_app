@@ -1,7 +1,8 @@
 from app import Config
+from datetime import datetime
 from app.utils.graph_functions.plots_generation import*
 
-def generate_note(dataframe,notes):
+def generate_note(dataframe):
     from app.utils.DataframeManager.load_df import generate_df_name
     critical_data = pd.read_parquet(Config.PATH_CRITICAL_DATA)
     current_df_name = generate_df_name("trip")
@@ -11,7 +12,26 @@ def generate_note(dataframe,notes):
     
     html_note = "<div class='note-container'>"+ "<ul class='list-notes'>"
     for key,note in notes[0].items():
-        html_note += "<li class='list-notes-element'><b>"+key+"</b>: "+str(note)+"</li>"
+        if key == "Max km in month":
+            note = notes[0]['Max km in month VIN']
+        elif key == "Max km in month VIN":
+            note = notes[0]['Max km in month']
+        elif "Date" in key:
+            date_pretty = datetime.strftime(note,"%B")+" "+datetime.strftime(note,"%Y")
+            note = date_pretty
+
+        html_note += "<li class='list-notes-element'><b>"+key+"</b>: "+str(note)
+        
+        if "distance" in key or "range" in key or ("km" in key and "VIN" not in key):
+            html_note += " km"
+        elif "percentage" in key:
+            html_note += " %"
+        elif ("charg" in key and "Trips" not in key) or ("consumption" in key):
+            html_note += " Wh"
+        
+        
+        
+        "</li>"
     html_note += "</ul></div>"
 
     return html_note

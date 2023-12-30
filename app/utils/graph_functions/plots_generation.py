@@ -250,11 +250,11 @@ def generate_multi_histogram(dataframe,elements,units='',start=-200,end=200,step
             x=x_values,
             histnorm='percent',
             name=elements,
-            xbins=dict(
-                start=start,
-                end=end,
-                size=step
-            ),
+            #xbins=dict(
+            #    start=start,
+            #    end=end,
+            #    size=step
+            #),
             opacity=0.85
         ))
     else:
@@ -269,11 +269,11 @@ def generate_multi_histogram(dataframe,elements,units='',start=-200,end=200,step
                 x=x_values,
                 histnorm='percent',
                 name=elements[i],
-                xbins=dict(
-                    start=start,
-                    end=end,
-                    size=step
-                ),
+                #xbins=dict(
+                #    start=start,
+                #    end=end,
+                #    size=step
+                #),
                 opacity=0.85
             ))
     

@@ -14,7 +14,7 @@ def production():
     table=""
     if os.path.isfile(Config.PATH_PRODUCTION_DATA):
         df = pd.read_parquet(Config.PATH_PRODUCTION_DATA)
-        table = df.to_html(classes="table_class",header=True)
+        table = df.to_html(classes="table_class",header=True,index=False)
     else:
         table = "No data available yet in this session."    
 

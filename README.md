@@ -2,7 +2,7 @@
 
 <h1 align="center"> INT - RAY PROJECT (Data Analysis Web App) </h1>
 
-<p align="center">Web app enclosing INT technical project. This repository includes the necessary files and instructions to run the app. The aquitecture is based on a Flask app (running a Python backend and html/css/js based frontend)<br>[The production branch is running on an AWS server @ 13.48.135.195]</p>
+<p align="center">Web app enclosing INT technical project. This repository includes the necessary files and instructions to run the app. The aquitecture is based on a Flask app (running a Python backend and html/css/js based frontend)<br>[The production branch is running on an AWS server @ 51.20.95.113]</p>
 <br />
 
 <!-- TABLE OF CONTENTS -->

@@ -6,6 +6,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv("prod.env")
 
 class Config:
+    SERVER_IP = "51.20.95.113"
+    DEBUG = os.getenv("DEBUG")
     SECRET_KEY = os.getenv("SECRET_KEY")
     SECRET_KEY_PERSONAL_TOKEN = os.getenv("SECRET_KEY_PERSONAL_TOKEN")
     SERVER_TOKEN = os.getenv("SERVER_TOKEN")

@@ -141,11 +141,9 @@ def compute_dash_from_VIN(token,vin):
         
         if not check_exists_df(parquet_name):
             return "No data available"
-        
-        ##### TO BE REPLACED WITH FUNCTION TO GENERATE FROM VIN ########    
+          
         raw_dataframe = load_current_df_memory()        
         dataframe = raw_dataframe[raw_dataframe.index == vin]
-        ################################################################
         plots = generate_dashboard_graphics(Config.PATH_DASHBOARD_CONFIG,dataframe,vin)
                     
         return plots

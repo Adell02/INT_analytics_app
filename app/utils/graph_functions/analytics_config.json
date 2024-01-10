@@ -99,7 +99,7 @@
         "element_x": "End odometer",
         "elements_y": ["Max cell V","Min cell V"],
         "key_user": "",
-        "user_reg_line":"False",
+        "user_reg_line":"True",
         "reg_line": "True"
         
     },

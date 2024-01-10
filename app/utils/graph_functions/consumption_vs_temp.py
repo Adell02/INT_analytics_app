@@ -105,20 +105,7 @@ def get_consumption_vs_temp(df):
     the motorcycle consumption and the battery temperature, to measure by how much these two variables are
     related we'll get the Pearson correlation of them
     """
-    # Get correlation using filtered points
-    correlation = df_filtered[CONSUMPTION_COLUMN].corr(df_filtered[TEMP_COLUMN])
 
-    # 6. Display the correlation on the figures
-    
-    # Get the position of the top-right corner to display the text in that point
-   
-    x_position_filtered = min(df_filtered[TEMP_COLUMN])
-    y_position_filtered = max(df_filtered[CONSUMPTION_COLUMN])
-
-    # Generate text to display the correlation and place it in the legend
-    fig_text = f'r: {round(correlation*100,2)}%'
-    
-    fig_filtered.add_trace(go.Scatter(x=[x_position_filtered], y=[y_position_filtered], mode="text",name = fig_text ,showlegend=True))
     fig_filtered.update_traces(marker=dict(size=3))
     
 

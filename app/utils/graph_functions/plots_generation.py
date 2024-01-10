@@ -315,7 +315,14 @@ def generate_scatter_plot(dataframe,element_x,elements_y,title='Unnamed Scatter 
 
     # From all traces, we generate the figure
     fig = go.Figure(data=data_vector,layout=layout)
+    # If elements_y is only 1, get the correlation between x and y
+    if isinstance(elements_y,str):
+        correlation = dataframe[elements_y].corr(dataframe[element_x])
 
+        # Generate text to display the correlation and place it in the legend
+        fig_text = f'r: {round(correlation*100,2)}%'
+        fig.add_trace(go.Scatter(x=[0,0], y=[0,0], mode="text",name = fig_text ,showlegend=True))
+        
     # Add legend and display it in the top-right corner of the graph
     fig.update_layout(showlegend=True, legend=dict(x=0.85, y=0.95, traceorder='normal', orientation='v'))
     fig.update_traces(marker=dict(size=3))
@@ -372,6 +379,13 @@ def generate_scatter_plot_user(dataframe,key_user,element_x,elements_y,title="Un
 
     # From all traces, we generate the figure
     fig = go.Figure(data=trace_vector,layout=layout)
+    # If elements_y is only 1, get the correlation between x and y
+    if isinstance(elements_y,str):
+        correlation = dataframe[elements_y].corr(dataframe[element_x])
+
+        # Generate text to display the correlation and place it in the legend
+        fig_text = f'r: {round(correlation*100,2)}%'
+        fig.add_trace(go.Scatter(x=[0,0], y=[0,0], mode="text",name = fig_text ,showlegend=True))
 
     # Get the maximum and minimum value of element_x for better graph visualization
     x_max = user_df[element_x].max() 

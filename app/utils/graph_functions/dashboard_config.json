@@ -100,7 +100,7 @@
                 "element_x":"End odometer",
                 "elements_y":["Min cell V","Max cell V"],
                 "title":"User comparison: Cell voltages vs Odometer",
-                "user_reg_line":false,
+                "user_reg_line":true,
                 "reg_line":true
             }
                 

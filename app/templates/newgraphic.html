@@ -21,6 +21,7 @@
                       <option value="Histogram_Distribution">Histogram / Distribution</option>
                       <option value="Scatter_Plot">Scatter Plot</option>
                       <option value="Line_Chart">Line Chart</option>
+                      <option value="Box_Plot">Box Plot</option>
                     </select>
                 </div>
 
@@ -49,7 +50,7 @@
 
                 <div class="custom-select-newgraphic"  >
                     <div class="Ydropdown">
-                        <input type="text" placeholder="Select 'Y' variable(s)..." onclick="Multiple_showAllOptions('Y_dropdown','.Ydropdown')" oninput="filterOptions('Y_dropdown','Y_dropdownInput')" id="Y_dropdownInput" name="graph_data_y" autocomplete='off'>
+                        <input type="text" placeholder="Select 'Y' variable(s)..." onclick="Multiple_showAllOptions('Y_dropdown','.Ydropdown')" oninput="filterOptions('Y_dropdown','Y_dropdownInput')" id="Y_dropdownInput" name="graph_data_y" autocomplete='off' readonly>
                         <div id="Y_dropdown" class="dropdown-content" onclick="Multiple_selectOption(event,'Y_dropdown','Y_dropdownInput','.Ydropdown')">
                             <!-- Dropdown options will be dynamically added here -->
                         </div>
@@ -59,16 +60,22 @@
 
         </div>
         <li class="recuadro-inferior-newgraphic" >
-            <div class="recuadro-in-left-newgraphic">
+            <div class="recuadro-in-left-newgraphic"id="trendline_block1">
                 <div class="new-graphic-superior-left" >
                     <input type="checkbox" id="trendline" name="trendline" class="trendline-newgraphic">
-                      Trendline
+                      VIN Trendline
+                </div>
+            </div>
+            <div class="recuadro-in-left-newgraphic"id="trendline_block2">
+                <div class="new-graphic-superior-left" >
+                    <input type="checkbox" id="trendline_global" name="trendline_global" class="trendline-newgraphic">
+                      General Trendline
                 </div>
             </div>
             <div class="recuadro-in-middle-newgraphic">
                 <button type="submit"  class="new-graphic-save">Generate Graphic</button>
             </div>
-            <div class="recuadro-in-right-newgraphic"> </div>
+            
         </li>
         </form>
         <div class="recuadro-medio-newgraphic" >
@@ -86,6 +93,8 @@
             var graph_data_y;
             var trendline ;
             var trendlineblock ;
+            var trendline_global ;
+            var trendlineblock_global ;
             var VIN_select;
             
             // CHECK IF ELEMENT IN MULTI-SELECTION IS DEFAULT SELECTED
@@ -137,7 +146,7 @@
             
 
             function default_config() {
-                if (graph_type.value == "Pie_Chart" || graph_type.value == "Histogram_Distribution") {
+                if (graph_type.value == "Pie_Chart" || graph_type.value == "Histogram_Distribution" || graph_type.value == "Box_Plot") {
                     graph_data_x.style.display = "none";
                 } else {
                     graph_data_x.style.display = "block"; 
@@ -145,10 +154,14 @@
                 if(graph_type.value == "Scatter_Plot" ){
                     trendline.style.display="flex";
                     trendlineblock.style.display="flex";
+                    trendline_global.style.display="flex";
+                    trendlineblock_global.style.display="flex";
                     
                 } else {
                     trendline.style.display="none"
                     trendlineblock.style.display="none"
+                    trendline_global.style.display="none"
+                    trendlineblock_global.style.display="none"
                 }
             }
             
@@ -160,13 +173,27 @@
                 graph_data_x = document.getElementsByName("graph_data_x")[0];
                 graph_data_y = document.getElementsByName("graph_data_y")[0];
                 trendline = document.getElementById("trendline");
-                trendlineblock = document.querySelector('.new-graphic-superior-left');
+                trendlineblock = document.getElementById('trendline_block1');
+                trendline_global = document.getElementById("trendline_global");
+                trendlineblock_global = document.getElementById('trendline_block2');
 
                 graph_type.value = config[0];
                 graph_title.value = config[1];
                 graph_data_x.value = config[2];
                 graph_data_y.value = config[3];
                 VIN_select.value = config[4];
+
+                if (config[5] == "on"){
+                    trendline.checked = true;
+                }else{
+                    trendline.checked = false;
+                }
+
+                if (config[6] == "on"){
+                    trendline_global.checked = true;
+                }else{
+                    trendline_global.checked = false;
+                }                
 
                 graph_type.addEventListener("change", default_config);
                 default_config();

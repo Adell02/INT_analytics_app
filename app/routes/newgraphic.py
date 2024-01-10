@@ -34,16 +34,28 @@ def new_graph():
         graph_title =request.form['graph_title']
         graph_data_x =request.form['graph_data_x']
         graph_data_y=request.form['graph_data_y']
+        trendline_select = request.form.get('trendline')
+        trendline_global_select = request.form.get("trendline_global")
   
         if VIN_select != "":
             df = df[df.index == VIN_select]
 
-        if request.form.get('trendline'):
+        if trendline_select:
             trendline_check = True
         else:
             trendline_check=False
+        
+        if trendline_global_select:
+            trendline_global_check = True
+        else:
+            trendline_global_check = False
+        
+        if trendline_global_select is None:
+            trendline_global_select = "false"
+        if trendline_select is None:
+            trendline_select = "false"
 
-        config=[graph_type, graph_title, graph_data_x,graph_data_y, VIN_select]
+        config=[graph_type, graph_title, graph_data_x,graph_data_y, VIN_select,trendline_select,trendline_global_select]
 
         fig_vector = []
 
@@ -90,9 +102,9 @@ def new_graph():
                 elif graph_type == "Scatter_Plot" and graph_data_x!="":
                     fig_vector.append(
                         generate_scatter_plot_user(
-                        df,"",
+                        df,VIN_select,
                         graph_data_x,graph_data_y,
-                        graph_title, False,trendline_check)
+                        graph_title, trendline_check,trendline_global_check)
                     )
     
                 elif graph_type == "Line_Chart" and graph_data_x!="":
@@ -101,6 +113,15 @@ def new_graph():
                         df,
                         graph_data_x,graph_data_y,
                         graph_title)
+                    )
+                
+                elif graph_type =="Box_Plot":
+                    fig_vector.append(
+                        generate_box_plot(
+                            df,
+                            graph_data_y,
+                            graph_title
+                        )
                     )
     
                 fig_vector[0].update_layout({'paper_bgcolor': 'rgba(0, 0, 0, 0)'},margin=dict(l=25, r=20, t=55, b=20),legend = dict(bgcolor = 'white'))

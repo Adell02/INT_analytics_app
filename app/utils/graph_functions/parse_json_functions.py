@@ -3,6 +3,8 @@ from app.utils.graph_functions.plots_generation import *
 from app.utils.graph_functions.consumption_vs_temp import *
 from app.utils.graph_functions.analytic_functions import *
 
+
+
 def serialize_figures(fig_vector):
     serialized_figures = []
     for idx,fig in enumerate(fig_vector):
@@ -20,11 +22,15 @@ def serialize_figures(fig_vector):
                 
     return serialized_figures
     
-def build_run_function(element:dict,df,vin):
+def build_run_function(element:dict,df,vin):    
+    if element["function"] == "generate_scatter_plot_user":
+        from app.utils.DataframeManager.load_df import load_current_df_memory
+        df = load_current_df_memory()
+
     func_str = element["function"]+"("
     for param in element["parameters"]:
         if param == "dataframe":
-            func_str += "df"
+            func_str += "df"       
         elif param == "key_user":
             if vin:
                 func_str += ",key_user='"+vin+"'"

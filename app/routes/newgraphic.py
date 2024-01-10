@@ -22,6 +22,7 @@ def new_graph():
     config=["none","","","",""]
 
     df = load_current_df_memory()
+    full_df = df
     available_vin = list(df['Id'].keys().unique())  
 
     columns_list=list(df.columns)
@@ -37,7 +38,7 @@ def new_graph():
         trendline_select = request.form.get('trendline')
         trendline_global_select = request.form.get("trendline_global")
   
-        if VIN_select != "":
+        if VIN_select != "":            
             df = df[df.index == VIN_select]
 
         if trendline_select:
@@ -102,7 +103,7 @@ def new_graph():
                 elif graph_type == "Scatter_Plot" and graph_data_x!="":
                     fig_vector.append(
                         generate_scatter_plot_user(
-                        df,VIN_select,
+                        full_df,VIN_select,
                         graph_data_x,graph_data_y,
                         graph_title, trendline_check,trendline_global_check)
                     )

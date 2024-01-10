@@ -48,14 +48,6 @@ def delta_SoC_vs_Total_Energy(df_trip):
     TOTAL_ENERGY = 'Total energy'
     DELTA_SOC = 'SoC delta'
     fig = generate_scatter_plot(df_trip,TOTAL_ENERGY,DELTA_SOC,title= TITLE, reg_line=True)
-    # Get correlation using filtered points
-    correlation = df_trip[DELTA_SOC].corr(df_trip[TOTAL_ENERGY])
-    # Get the position of the top-right corner to display the text in that point
-    x_position_filtered = min(df_trip[TOTAL_ENERGY])
-    y_position_filtered = max(df_trip[DELTA_SOC])
-    # Generate text to display the correlation and place it in the legend
-    fig_text = f'r: {round(correlation*100,2)}%'
-    fig.add_trace(go.Scatter(x=[x_position_filtered], y=[y_position_filtered], mode="text",name = fig_text ,showlegend=True))
     fig.update_traces(marker=dict(size=3))
     
     return fig

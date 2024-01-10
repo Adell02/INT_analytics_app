@@ -316,6 +316,8 @@ def generate_scatter_plot(dataframe,element_x,elements_y,title='Unnamed Scatter 
     # From all traces, we generate the figure
     fig = go.Figure(data=data_vector,layout=layout)
     # If elements_y is only 1, get the correlation between x and y
+    if isinstance(elements_y,list) and len(elements_y)==1:
+        elements_y = elements_y[0]
     if isinstance(elements_y,str):
         correlation = dataframe[elements_y].corr(dataframe[element_x])
 
@@ -380,6 +382,8 @@ def generate_scatter_plot_user(dataframe,key_user,element_x,elements_y,title="Un
     # From all traces, we generate the figure
     fig = go.Figure(data=trace_vector,layout=layout)
     # If elements_y is only 1, get the correlation between x and y
+    if isinstance(elements_y,list) and len(elements_y)==1:
+        elements_y = elements_y[0]
     if isinstance(elements_y,str):
         correlation = dataframe[elements_y].corr(dataframe[element_x])
 
